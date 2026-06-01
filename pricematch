@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="PriceMatch CA — Browse real store flyers, compare basket prices across 6 stores, and generate price-match proof at checkout."/>
+<title>PriceMatch CA — Live Flyer Comparison</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F6D2;</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#F1F5F9;--w:#fff;--tx:#0F172A;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bd2:#CBD5E1;--g:#059669;--gd:#047857;--gl:#ECFDF5;--gm:#D1FAE5;--gs:#6EE7B7;--r:#DC2626;--o:#D97706;--b:#2563EB;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 18px rgba(0,0,0,.09);--ra:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);font-family:'DM Sans',-apple-system,sans-serif;color:var(--tx);-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pop{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.fu{animation:fadeUp .38s ease both}.fi{animation:fadeIn .22s ease}
+.si{animation:slideIn .3s cubic-bezier(.22,.61,.36,1)}.pop{animation:pop .25s ease both}
+:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);height:64px;display:flex;align-items:center;padding:0 20px;gap:12px}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-name{font-weight:800;font-size:17px;letter-spacing:-.5px;line-height:1}
+.logo-name em{color:var(--g);font-style:normal}
+.logo-sub{font-size:9px;color:var(--t3);letter-spacing:1.4px;font-weight:600;margin-top:1px}
+.srch-wrap{flex:1;position:relative;max-width:500px}
+.srch-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--t3);display:flex}
+.srch{width:100%;padding:10px 38px;background:#F8FAFC;border:1.5px solid var(--bd);border-radius:11px;color:var(--tx);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.srch:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none}
+.srch::placeholder{color:var(--t3)}
+.srch-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);background:#E2E8F0;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2)}
+.hdr-loc{display:flex;align-items:center;gap:5px;cursor:pointer;padding:6px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);font-size:12px;font-weight:600;color:var(--t2);white-space:nowrap;flex-shrink:0;transition:all .15s;min-height:36px}
+.hdr-loc:hover,.hdr-loc.set{background:var(--gl);border-color:var(--gs);color:var(--g)}
+.btn-ol{background:var(--w);color:var(--t2);border:1.5px solid var(--bd);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;transition:all .15s;min-height:40px}
+.btn-ol:hover{border-color:var(--g);color:var(--g)}.btn-ol.act{background:var(--gl);border-color:var(--gs);color:var(--g)}
+.btn-cart{background:var(--tx);color:white;border:none;border-radius:11px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;transition:all .2s;min-height:44px;white-space:nowrap}
+.btn-cart.on{background:var(--g);box-shadow:0 4px 16px rgba(5,150,105,.38)}
+.cbadge{background:white;color:var(--g);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.nav-tabs{background:var(--w);border-bottom:1px solid var(--bd);display:flex;padding:0 20px;position:sticky;top:64px;z-index:90;overflow-x:auto}
+.nav-tabs::-webkit-scrollbar{height:0}
+.ntab{padding:12px 16px;font-size:13px;font-weight:600;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;min-height:44px}
+.ntab:hover{color:var(--t2)}.ntab.on{color:var(--g);border-bottom-color:var(--g)}
+.nbadge{background:var(--r);color:white;border-radius:100px;padding:1px 6px;font-size:10px;font-weight:800}
+.mode-bar{background:var(--w);border-bottom:1px solid var(--bd);padding:8px 20px;display:flex;gap:8px;align-items:center;position:sticky;top:108px;z-index:89;flex-wrap:wrap}
+.mpill{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;border:1.5px solid var(--bd);background:var(--w);color:var(--t2);cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif;min-height:36px;display:inline-flex;align-items:center;gap:5px}
+.mpill:hover{border-color:var(--b);color:var(--b)}.mpill.on{background:var(--b);border-color:var(--b);color:white}
+.fresh{margin-left:auto;font-size:11px;color:var(--t3)}
+.banner{background:linear-gradient(90deg,#059669,#10B981);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bpill{padding:2px 12px;border-radius:20px;font-size:11px;font-weight:800;background:rgba(255,255,255,.2);color:white}
+.bbtn{margin-left:auto;display:flex;align-items:center;gap:5px;padding:7px 14px;background:white;border:none;border-radius:8px;color:var(--g);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif}
+main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
+.hero{text-align:center;padding:24px 0 32px}
+.hero h1{font-size:40px;font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:12px}
+.hero h1 em{color:var(--g);font-style:normal}
+.hero p{font-size:15px;color:var(--t2);max-width:440px;margin:0 auto 20px;line-height:1.6}
+.trust-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tchip{display:flex;align-items:center;gap:5px;padding:6px 12px;background:white;border:1px solid var(--bd);border-radius:20px;font-size:11px;font-weight:600;color:var(--t2);box-shadow:var(--sh)}
+.store-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.spill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid}
+.cat-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px}
+.cat-tabs::-webkit-scrollbar{height:0}
+.cpill{padding:9px 16px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--bd);background:var(--w);color:var(--t2);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;font-family:'DM Sans',sans-serif;min-height:40px}
+.cpill:hover{border-color:var(--g);color:var(--g)}.cpill.on{background:var(--g);border-color:var(--g);color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:16px}
+.pm-card{background:var(--w);border:1px solid var(--bd);border-radius:var(--ra);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}
+.pm-card:hover{transform:translateY(-3px);box-shadow:var(--shm);border-color:var(--bd2)}
+.pimg{height:158px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.pemoji{font-size:68px;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.1))}
+.pbadge{position:absolute;top:10px;left:10px;color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px}
+.pb-s{background:var(--r)}.pb-h{background:var(--o)}.pb-d{background:var(--g)}
+.pcn{position:absolute;top:10px;right:44px;background:var(--g);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.wbtn{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .15s;min-width:28px}
+.wbtn:hover{background:white;transform:scale(1.1)}
+.bstrip{position:absolute;bottom:0;left:0;right:0;padding:6px 12px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;backdrop-filter:blur(4px)}
+.cbody{padding:14px 14px 12px;flex:1;display:flex;flex-direction:column}
+.cname{font-size:14px;font-weight:700;line-height:1.3;margin-bottom:5px}
+.ccat{font-size:11px;color:var(--t2);background:#F8FAFC;padding:2px 8px;border-radius:5px;border:1px solid var(--bd);display:inline-block;margin-bottom:10px}
+.schips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.sc{font-size:11px;padding:4px 9px;border-radius:7px;border:1px solid;display:inline-flex;align-items:center;gap:2px}
+.cfoot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto}
+.blbl{font-size:10px;color:var(--t3);margin-bottom:2px}
+.bpr{font-size:24px;font-weight:800;color:var(--g);letter-spacing:-.5px;line-height:1}
+.prsub{font-size:11px;color:#CBD5E1;margin-top:2px}
+.btn-add{background:var(--g);color:white;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;min-height:44px}
+.btn-add:hover{background:var(--gd);transform:translateY(-1px)}
+.qty-ctrl{display:flex;align-items:center;gap:7px;padding:6px 7px 6px 10px;background:#F8FAFC;border-radius:10px;border:1.5px solid var(--bd)}
+.qbtn{width:32px;height:32px;border-radius:8px;border:none;cursor:pointer;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'DM Sans',sans-serif;min-width:32px}
+.qbm{background:white;color:var(--t2);box-shadow:0 1px 3px rgba(0,0,0,.1)}.qbp{background:var(--g);color:white}
+.qn{min-width:22px;text-align:center;font-size:16px;font-weight:800;color:var(--g)}
+/* ── FLYER BROWSER ── */
+.flyer-top-bar{background:var(--w);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.flyer-srch{flex:1;min-width:200px;padding:10px 16px 10px 40px;background:#F8FAFC;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--tx);transition:all .2s;position:relative}
+.flyer-srch:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none}
+.flyer-srch::placeholder{color:var(--t3)}
+.flyer-srch-wrap{flex:1;position:relative;min-width:200px}
+.flyer-srch-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--t3);display:flex}
+.idb-status{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600}
+.idb-ok{background:var(--gl);color:var(--gd);border:1px solid var(--gs)}
+.idb-loading{background:#EFF6FF;color:var(--b);border:1px solid #BFDBFE}
+.idb-error{background:#FEF2F2;color:var(--r);border:1px solid #FECACA}
+.spin{animation:spin .8s linear infinite;display:inline-block}
+.btn-refresh{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--b);color:white;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;min-height:36px}
+.btn-refresh:hover{background:#1D4ED8}
+.btn-refresh:disabled{opacity:.6;cursor:not-allowed}
+.fstore-bar{display:flex;gap:8px;overflow-x:auto;padding:12px 20px 4px;background:var(--w)}
+.fstore-bar::-webkit-scrollbar{height:0}
+.fst{padding:9px 16px;border-radius:100px;font-size:13px;font-weight:700;border:2px solid;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;min-height:44px}
+/* ── FLYER MAGAZINE GRID ── */
+.flyer-mag{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px;padding:20px}
+.flyer-item{background:var(--w);border-radius:12px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;cursor:pointer}
+.flyer-item:hover{transform:translateY(-3px);box-shadow:var(--shm)}
+.fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px}
+.fi-pct{position:absolute;top:7px;right:7px;background:var(--r);color:white;font-size:11px;font-weight:800;padding:3px 7px;border-radius:5px}
+.fi-va{position:absolute;bottom:6px;right:6px;font-size:9px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.3);padding:2px 5px;border-radius:4px}
+.fi-body{padding:10px 12px}
+.fi-name{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:4px}
+.fi-reg{font-size:11px;color:var(--t3);text-decoration:line-through}
+.fi-price{font-size:22px;font-weight:800;color:var(--g);letter-spacing:-.5px;margin:2px 0 8px}
+.fi-acts{display:flex;gap:6px}
+.bfa{flex:1;padding:7px 0;background:var(--gl);border:1px solid var(--gs);border-radius:7px;color:var(--g);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-align:center;min-height:34px}
+.bfa.added,.bfa:hover{background:var(--g);color:white;border-color:var(--g)}
+.bfp{flex:1;padding:7px 0;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;color:var(--b);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-align:center;min-height:34px}
+.bfp:hover{background:var(--b);color:white;border-color:var(--b)}
+/* ── FLYER SEARCH RESULTS ── */
+.fsearch-results{padding:20px}
+.fsearch-group{margin-bottom:28px}
+.fsearch-group-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.fsearch-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px}
+.fsearch-cheapest{font-size:10px;background:#DCFCE7;color:var(--g);padding:2px 7px;border-radius:5px;font-weight:800}
+/* ── PROOF MODAL ── */
+.proof-modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.proof-card{background:white;border-radius:20px;width:420px;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden;animation:fadeUp .3s ease}
+.proof-hdr{padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.proof-store-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;color:white}
+.proof-body{padding:0 22px 22px}
+.proof-item-row{display:flex;align-items:center;gap:14px;padding:18px 0;border-bottom:1px solid var(--bd)}
+.proof-emoji{width:72px;height:72px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0}
+.proof-price-block{text-align:center;padding:18px 0;border-bottom:1px solid var(--bd)}
+.proof-sale-price{font-size:48px;font-weight:800;color:var(--g);letter-spacing:-2px;line-height:1}
+.proof-reg{font-size:14px;color:var(--t3);margin-top:4px}
+.proof-save{font-size:14px;font-weight:700;color:var(--g);margin-top:6px}
+.proof-details{padding:14px 0;font-size:13px;color:var(--t2);line-height:1.8}
+.proof-detail-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.proof-script{background:#F8FAFC;border:1px solid var(--bd);border-radius:10px;padding:14px;margin:14px 0;font-size:13px;color:var(--t2);line-height:1.6;font-style:italic}
+.proof-footer{display:flex;gap:10px;padding:14px 0 0}
+.btn-print{flex:1;padding:12px;background:var(--b);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;min-height:44px}
+.btn-print:hover{background:#1D4ED8}
+.btn-share{flex:1;padding:12px;background:var(--gl);border:1px solid var(--gs);border-radius:10px;font-size:13px;font-weight:700;color:var(--g);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;min-height:44px}
+.btn-share:hover{background:var(--g);color:white}
+/* ── PRICE MATCH ── */
+.msteps{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:14px;margin-bottom:28px}
+.mstep{background:var(--w);border:1px solid var(--bd);border-radius:12px;padding:20px;text-align:center}
+.snum{width:36px;height:36px;border-radius:50%;background:var(--b);color:white;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.mres{background:var(--w);border:1.5px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:28px}
+.mhdr{background:linear-gradient(90deg,#2563EB,#60A5FA);padding:16px 20px;display:flex;align-items:center;gap:12px;color:white}
+.mtbl{width:100%;border-collapse:collapse}
+.mtbl th{background:#F8FAFC;padding:10px 14px;font-size:11px;font-weight:700;color:var(--t2);text-align:left;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd)}
+.mtbl td{padding:11px 14px;font-size:13px;border-bottom:1px solid #F8FAFC;vertical-align:middle}
+.mtbl tr:last-child td{border-bottom:none}.mtbl tr:hover td{background:#FAFAFA}
+.m-y{color:var(--g);font-weight:700;font-size:11px;background:var(--gl);padding:2px 8px;border-radius:5px;border:1px solid var(--gs)}
+.m-m{color:#D97706;font-weight:700;font-size:11px;background:#FFFBEB;padding:2px 8px;border-radius:5px;border:1px solid #FDE68A}
+.m-n{color:var(--t3);font-size:11px}
+.m-b td{background:linear-gradient(90deg,var(--gl),#F0FDF4)!important;font-weight:600}
+.selc{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1.5px solid #93C5FD;border-radius:14px;padding:16px 18px;margin-bottom:20px;display:flex;gap:14px;align-items:center}
+/* ── WATCHLIST ── */
+.wlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(218px,1fr));gap:14px;margin-bottom:28px}
+.wlcard{background:var(--w);border:1px solid var(--bd);border-radius:12px;padding:16px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.wlcard:hover{transform:translateY(-2px);box-shadow:var(--shm)}
+.wdelta{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700}
+.dd{background:#DCFCE7;color:var(--g)}.du{background:#FEF2F2;color:var(--r)}.ds2{background:#F8FAFC;color:var(--t3)}
+/* ── CART ── */
+.float-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:110}
+.float-bar{display:flex;align-items:center;gap:14px;padding:13px 24px;background:#0F172A;border:none;border-radius:100px;color:white;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 8px 28px rgba(15,23,42,.4);font-family:'DM Sans',sans-serif;transition:all .2s;min-height:48px}
+.float-bar:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(15,23,42,.5)}
+.fstore{color:#6EE7B7;font-weight:700}.fview{background:var(--g);border-radius:100px;padding:3px 12px;font-size:12px}
+.cov{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:200;backdrop-filter:blur(4px);cursor:pointer}
+.cpan{position:fixed;top:0;right:0;bottom:0;width:500px;max-width:100vw;background:var(--w);z-index:300;display:flex;flex-direction:column;box-shadow:-16px 0 60px rgba(0,0,0,.14);border-left:1px solid var(--bd)}
+.chdr{padding:18px 22px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.chdr h2{font-size:19px;font-weight:800}.chdr p{font-size:12px;color:var(--t3);margin-top:2px}
+.chdr-r{display:flex;gap:8px;align-items:center}
+.btn-clr{padding:7px 12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;color:var(--r);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;min-height:36px}
+.btn-cls{background:var(--bg);border:none;border-radius:9px;padding:9px;cursor:pointer;color:var(--t2);display:flex;align-items:center;justify-content:center;min-width:36px;min-height:36px}
+.ctabs{display:flex;border-bottom:1px solid var(--bd);overflow-x:auto}
+.ctabs::-webkit-scrollbar{height:0}
+.ctab{flex:1;padding:11px 6px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2.5px solid transparent;color:var(--t3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;min-height:44px;min-width:72px}
+.ctab.on{color:var(--g);border-bottom-color:var(--g)}
+.cbdy{flex:1;overflow-y:auto;padding:16px 20px}
+.ci{display:flex;gap:12px;padding:11px 8px;border-bottom:1px solid #F8FAFC;border-radius:10px;transition:background .15s}
+.ci:hover{background:var(--bg)}
+.cthumb{width:58px;height:58px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--bd)}
+.cinfo{flex:1;min-width:0}
+.cname2{font-size:13px;font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cdeal{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--gl);color:var(--g);display:inline-block;margin-bottom:4px}
+.cbest{font-size:11px;font-weight:600;margin-bottom:6px}
+.cq{display:flex;align-items:center;gap:7px}
+.cqb{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;transition:all .15s;min-width:28px}
+.cqm{background:white;color:var(--t2);border:1.5px solid var(--bd)}.cqp{background:var(--g);color:white}
+.cqn{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:var(--g)}
+.cqr{background:transparent;border:none;color:#CBD5E1;cursor:pointer;padding:4px;display:flex;margin-left:2px}
+.subtot{margin:14px 0;padding:14px 16px;border-radius:12px;background:#F8FAFC;border:1px solid var(--bd)}
+.br{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.bl{width:76px;font-size:12px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{flex:1;background:#F1F5F9;border-radius:8px;overflow:hidden;height:26px}
+.bf{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;min-width:28px;transition:width .6s cubic-bezier(.22,.61,.36,1)}
+.bf span{font-size:10px;font-weight:800;color:white;white-space:nowrap}
+.bv{width:52px;text-align:right;font-size:13px;flex-shrink:0}
+.winner{background:linear-gradient(135deg,var(--gl),var(--gm));border:1.5px solid var(--gs);border-radius:16px;padding:22px;margin-bottom:14px}
+.wtot{font-size:34px;font-weight:800;color:var(--g);letter-spacing:-1px;margin-bottom:6px}
+.wsave{font-size:13px;color:var(--gd);margin-bottom:16px}
+.wlist{border-top:1px solid #A7F3D0;padding-top:12px}
+.wr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px}
+.bsm{font-size:10px;background:var(--g);color:white;padding:1px 7px;border-radius:5px;font-weight:700;margin-left:6px}
+.topt{border:2px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+.topt.rec{border-color:var(--g);background:var(--gl)}.topt.spl{border-color:#BFDBFE;background:#EFF6FF}
+.tbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;margin-bottom:10px}
+.ttot{font-size:28px;font-weight:800;letter-spacing:-1px}
+.tbd{margin-top:12px;border-top:1px solid rgba(0,0,0,.06);padding-top:10px}
+.tr2{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px}
+.pitbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12px}
+.pitbl th{background:#F8FAFC;padding:8px 12px;font-weight:700;color:var(--t2);text-align:left;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px;font-size:11px}
+.pitbl td{padding:9px 12px;border-bottom:1px solid #F8FAFC;vertical-align:middle}
+.pitbl tr:last-child td{border-bottom:none}
+/* ── MODALS ── */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.54);z-index:600;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:16px}
+.modal-box{background:var(--w);border-radius:22px;padding:36px;width:440px;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.22);animation:fadeUp .3s ease}
+.micon{width:60px;height:60px;border-radius:16px;margin:0 auto 14px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:28px}
+.firow{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t2);margin-bottom:9px}
+.firow span{font-size:17px;width:22px;text-align:center;flex-shrink:0}
+.finput{width:100%;padding:12px 15px;border-radius:10px;font-size:14px;border:1.5px solid var(--bd);color:var(--tx);background:#F8FAFC;font-family:'DM Sans',sans-serif;margin-bottom:10px;transition:border-color .2s}
+.finput:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none}
+.finput::placeholder{color:var(--t3)}
+.btn-full{width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;min-height:48px}
+.btn-gf{background:linear-gradient(135deg,#059669,#10B981);color:white;box-shadow:0 4px 16px rgba(5,150,105,.3)}
+.btn-gf:hover{opacity:.94;transform:translateY(-1px)}
+.btn-maybe{width:100%;padding:10px;background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;margin-top:6px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stog{padding:10px 12px;border-radius:10px;border:1.5px solid var(--bd);background:white;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;font-family:'DM Sans',sans-serif;min-height:44px}
+.stog:hover{border-color:var(--bd2)}.stog.on{border-color:var(--g);background:var(--gl)}
+.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-hdr h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.tag-r{background:#FEF2F2;color:var(--r);padding:3px 9px;border-radius:7px;font-size:11px;font-weight:800}
+.meta-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:10px}
+input,button{font-family:'DM Sans',sans-serif}
+@media print{.proof-modal-bg{position:static;background:none;padding:0}.proof-card{box-shadow:none;border-radius:0;width:100%}.hdr,.nav-tabs,.mode-bar,.float-wrap{display:none}}
+@media(max-width:640px){.hdr{padding:0 12px;gap:8px}.logo-sub{display:none}.hero h1{font-size:28px}main{padding:16px 12px 100px}.cpan{width:100vw}.mtbl th,.mtbl td{padding:8px 10px;font-size:11px}.mode-bar{padding:8px 12px}.pgrid{grid-template-columns:1fr}.flyer-mag{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));padding:12px}}
+</style>
+</head>
+<body>
+<div id="app" role="main"></div>
+<script>
+'use strict';
+const STORES={
+  freshco:   {id:"freshco",   name:"FreshCo",   color:"#059669",bg:"#ECFDF5",brd:"#6EE7B7",sh:"FRC",quality:3,qNote:"Budget friendly, basic selection",   supportsMatch:true, matchState:"match_yes",  matchNote:"Lowest Price Guarantee — qualifying Ontario competitors",pv:"2026-05-25",flyerUrl:"https://www.freshco.com/en/flyer"},
+  superstore:{id:"superstore",name:"Superstore",color:"#D97706",bg:"#FFFBEB",brd:"#FDE68A",sh:"SS", quality:4,qNote:"Wide selection, good fresh produce",  supportsMatch:true, matchState:"match_yes",  matchNote:"Official Ad-Match programme — identical item, same size",pv:"2026-05-25",flyerUrl:"https://www.realcanadiansuperstore.ca/en/flyers"},
+  nofrills:  {id:"nofrills",  name:"No Frills", color:"#F59E0B",bg:"#FFFBEB",brd:"#FDE68A",sh:"NF",  quality:3,qNote:"No-frills, lowest price focus",       supportsMatch:true, matchState:"match_yes",  matchNote:"Price match on identical items from local competitors",pv:"2026-05-25",flyerUrl:"https://www.nofrills.ca/en/flyers"},
+  walmart:   {id:"walmart",   name:"Walmart",   color:"#0071CE",bg:"#EFF6FF",brd:"#BFDBFE",sh:"WMT",quality:3,qNote:"Convenient, large volume, variable quality",supportsMatch:false,matchState:"match_no", matchNote:"Walmart.ca in-store match only — not competitor flyers",pv:"2026-05-25",flyerUrl:"https://www.walmart.ca/en/deals"},
+  metro:     {id:"metro",     name:"Metro",     color:"#DC2626",bg:"#FFF1F2",brd:"#FECACA",sh:"MTR",quality:4,qNote:"Good quality, strong fresh and deli",    supportsMatch:true, matchState:"match_maybe",matchNote:"Same brand, exact format — verify with store manager",pv:"2026-05-25",flyerUrl:"https://www.metro.ca/en/flyer"},
+  costco:    {id:"costco",    name:"Costco",    color:"#7C3AED",bg:"#F5F3FF",brd:"#DDD6FE",sh:"CST",quality:5,qNote:"Premium quality, bulk value, Kirkland",supportsMatch:false,matchState:"match_no", matchNote:"No price match policy",pv:"2026-05-25",flyerUrl:"https://www.costco.ca/weekly-savings.html"},
+};
+const SIDS=Object.keys(STORES);
+const CATS=["All","Produce","Dairy","Meat","Bakery","Pantry","Beverages"];
+const CIC={All:"🛒",Produce:"🥬",Dairy:"🥛",Meat:"🥩",Bakery:"🍞",Pantry:"🥫",Beverages:"🧃"};
+const CBG={Produce:"linear-gradient(145deg,#BBF7D0,#6EE7B7)",Dairy:"linear-gradient(145deg,#BAE6FD,#7DD3FC)",Meat:"linear-gradient(145deg,#FECACA,#FCA5A5)",Bakery:"linear-gradient(145deg,#FDE68A,#FCD34D)",Pantry:"linear-gradient(145deg,#E9D5FF,#C4B5FD)",Beverages:"linear-gradient(145deg,#A5F3FC,#67E8F9)"};
+const CAT=[
+  {id:1, name:"Oranges 3 lb bag",    brand:"Generic",      cat:"Produce",  e:"🍊",prices:{freshco:3.49,superstore:3.88,nofrills:3.29,walmart:3.97,metro:4.49,costco:5.99},sale:"freshco",hot:true},
+  {id:2, name:"Whole Milk 4L",       brand:"Natrel",       cat:"Dairy",    e:"🥛",prices:{freshco:5.79,superstore:5.99,nofrills:5.69,walmart:5.97,metro:6.29,costco:7.49},sale:null,hot:false},
+  {id:3, name:"White Bread 675g",    brand:"Dempsters",    cat:"Bakery",   e:"🍞",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:5.99},sale:"freshco",hot:false},
+  {id:4, name:"Large Eggs 12 pk",    brand:"Generic",      cat:"Dairy",    e:"🥚",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:8.99},sale:null,hot:true},
+  {id:5, name:"Gala Apples 3 lb",    brand:"Generic",      cat:"Produce",  e:"🍎",prices:{freshco:3.99,superstore:4.27,nofrills:3.89,walmart:4.47,metro:4.99,costco:6.99},sale:null,hot:false},
+  {id:6, name:"Roma Tomatoes 1 kg",  brand:"Generic",      cat:"Produce",  e:"🍅",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
+  {id:7, name:"Bananas bunch",       brand:"Generic",      cat:"Produce",  e:"🍌",prices:{freshco:1.29,superstore:1.44,nofrills:1.19,walmart:1.49,metro:1.69,costco:1.79},sale:null,hot:false},
+  {id:8, name:"Chicken Breast 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",prices:{freshco:8.49,superstore:8.77,nofrills:8.29,walmart:8.97,metro:9.99,costco:6.99},sale:"costco",hot:true},
+  {id:9, name:"Spaghetti 900g",      brand:"Catelli",      cat:"Pantry",   e:"🍝",prices:{freshco:1.99,superstore:2.27,nofrills:1.89,walmart:2.47,metro:2.99,costco:4.99},sale:null,hot:false},
+  {id:10,name:"White Rice 5 kg",     brand:"Generic",      cat:"Pantry",   e:"🍚",prices:{freshco:8.99,superstore:9.77,nofrills:8.79,walmart:9.97,metro:11.49,costco:12.99},sale:null,hot:false},
+  {id:11,name:"Butter 454g",         brand:"Lactantia",    cat:"Dairy",    e:"🧈",prices:{freshco:4.99,superstore:5.27,nofrills:4.89,walmart:5.47,metro:5.99,costco:8.99},sale:null,hot:false},
+  {id:12,name:"Greek Yogurt 750g",   brand:"Oikos",        cat:"Dairy",    e:"🥛",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:6.99},sale:"freshco",hot:false},
+  {id:13,name:"Cheddar Cheese 400g", brand:"Cracker Barrel",cat:"Dairy",  e:"🧀",prices:{freshco:6.49,superstore:6.77,nofrills:6.29,walmart:6.97,metro:7.99,costco:9.99},sale:null,hot:false},
+  {id:14,name:"Ground Beef 500g",    brand:"Generic",      cat:"Meat",     e:"🥩",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:4.99},sale:"costco",hot:false},
+  {id:15,name:"Broccoli head",       brand:"Generic",      cat:"Produce",  e:"🥦",prices:{freshco:1.49,superstore:1.77,nofrills:1.39,walmart:1.97,metro:2.49,costco:3.99},sale:null,hot:false},
+  {id:16,name:"Baby Carrots 1 lb",   brand:"Generic",      cat:"Produce",  e:"🥕",prices:{freshco:1.79,superstore:1.88,nofrills:1.69,walmart:1.97,metro:2.29,costco:2.49},sale:null,hot:false},
+  {id:17,name:"Corn on Cob 3-pk",    brand:"Generic",      cat:"Produce",  e:"🌽",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
+  {id:18,name:"Orange Juice 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
+  {id:19,name:"Cheerios 520g",       brand:"General Mills",cat:"Pantry",   e:"🥣",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:8.99},sale:null,hot:false},
+  {id:20,name:"Ground Coffee 340g",  brand:"Maxwell House",cat:"Pantry",   e:"☕",prices:{freshco:9.49,superstore:9.77,nofrills:9.29,walmart:9.97,metro:11.49,costco:13.99},sale:null,hot:false},
+  {id:21,name:"Strawberries 1 lb",   brand:"Generic",      cat:"Produce",  e:"🍓",prices:{freshco:4.49,superstore:4.77,nofrills:3.99,walmart:4.97,metro:5.99,costco:null},sale:null,hot:false},
+  {id:22,name:"Blueberries 1 pint",  brand:"Generic",      cat:"Produce",  e:"🫐",prices:{freshco:5.49,superstore:5.77,nofrills:4.99,walmart:5.97,metro:5.99,costco:null},sale:null,hot:false},
+  {id:23,name:"Chicken Thighs 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",prices:{freshco:7.99,superstore:8.29,nofrills:7.49,walmart:8.49,metro:8.99,costco:5.99},sale:null,hot:false},
+  {id:24,name:"Tropicana OJ 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
+  {id:25,name:"Mangoes 3-pk",        brand:"Generic",      cat:"Produce",  e:"🥭",prices:{freshco:5.99,superstore:6.29,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
+  {id:26,name:"Pasta Sauce 680ml",   brand:"Classico",     cat:"Pantry",   e:"🍝",prices:{freshco:3.49,superstore:3.79,nofrills:3.19,walmart:3.49,metro:4.29,costco:null},sale:null,hot:false},
+  {id:27,name:"Avocados 4-pk",       brand:"Generic",      cat:"Produce",  e:"🥑",prices:{freshco:5.99,superstore:5.99,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
+  {id:28,name:"Atlantic Salmon 300g",brand:"Generic",      cat:"Meat",     e:"🐟",prices:{freshco:9.99,superstore:11.99,nofrills:9.49,walmart:10.49,metro:12.49,costco:null},sale:null,hot:false},
+  {id:29,name:"Kirkland Chicken 2kg",brand:"Kirkland",     cat:"Meat",     e:"🍗",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:19.99},sale:null,hot:false},
+  {id:30,name:"Organic Eggs 24-pk",  brand:"Kirkland",     cat:"Dairy",    e:"🥚",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:14.99},sale:null,hot:false},
+];
+const TODAY="2026-05-28";
+const WEEK_START="2026-05-25";
+const WEEK_END="2026-05-31";
+const DEALS=[
+  {id:"dw1",cid:21,sid:"walmart",   price:2.97,reg:4.97,pct:40,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dw2",cid:14,sid:"walmart",   price:4.47,reg:6.97,pct:36,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dw3",cid:3, sid:"walmart",   price:2.49,reg:3.99,pct:38,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dw4",cid:12,sid:"walmart",   price:6.97,reg:9.98,pct:30,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dm1",cid:22,sid:"metro",     price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dm2",cid:23,sid:"metro",     price:5.49,reg:8.99,pct:39,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dm3",cid:24,sid:"metro",     price:3.49,reg:5.99,pct:42,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dm4",cid:13,sid:"metro",     price:5.99,reg:8.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"df1",cid:25,sid:"freshco",   price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"df2",cid:26,sid:"freshco",   price:1.99,reg:3.49,pct:43,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"df3",cid:2, sid:"freshco",   price:4.97,reg:6.29,pct:21,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"df4",cid:6, sid:"freshco",   price:2.49,reg:3.99,pct:38,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"ds1",cid:27,sid:"superstore",price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"ds2",cid:28,sid:"superstore",price:7.99,reg:11.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"ds3",cid:11,sid:"superstore",price:8.97,reg:11.98,pct:25,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dc1",cid:29,sid:"costco",    price:13.99,reg:19.99,pct:30,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dc2",cid:30,sid:"costco",    price:10.99,reg:14.99,pct:27,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dc3",cid:8, sid:"costco",    price:6.99,reg:8.99, pct:22,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dn1",cid:1, sid:"nofrills",  price:2.99,reg:3.99, pct:25,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dn2",cid:4, sid:"nofrills",  price:3.99,reg:4.99, pct:20,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dn3",cid:10,sid:"nofrills",  price:7.99,reg:9.99, pct:20,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+];
+/* ═══ IndexedDB ═══════════════════════════════════════ */
+var IDB_DB = null;
+var IDB_NAME = 'PriceMatchCA_v1';
+
+function idbOpen() {
+  return new Promise(function(resolve) {
+    try {
+      var req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('flyers')) {
+          db.createObjectStore('flyers', { keyPath: 'key' });
+        }
+      };
+      req.onsuccess = function(e) { IDB_DB = e.target.result; resolve(true); };
+      req.onerror = function() { resolve(false); };
+    } catch(e) { resolve(false); }
+  });
+}
+
+function idbSave(storeName, data) {
+  return new Promise(function(resolve) {
+    if (!IDB_DB) { resolve(false); return; }
+    try {
+      var tx = IDB_DB.transaction([storeName], 'readwrite');
+      tx.objectStore(storeName).put(data);
+      tx.oncomplete = function() { resolve(true); };
+      tx.onerror = function() { resolve(false); };
+    } catch(e) { resolve(false); }
+  });
+}
+
+function idbGetAll(storeName) {
+  return new Promise(function(resolve) {
+    if (!IDB_DB) { resolve([]); return; }
+    try {
+      var tx = IDB_DB.transaction([storeName], 'readonly');
+      var req = tx.objectStore(storeName).getAll();
+      req.onsuccess = function() { resolve(req.result || []); };
+      req.onerror = function() { resolve([]); };
+    } catch(e) { resolve([]); }
+  });
+}
+
+/* Build structured flyer items from DEALS for a store */
+function buildFlyerItems(sid) {
+  return DEALS.filter(function(d) { return d.sid === sid && isActive(d); }).map(function(d) {
+    var item = CAT.find(function(p) { return p.id === d.cid; });
+    return {
+      dealId: d.id, catalogId: d.cid,
+      name: item ? item.name : 'Unknown',
+      e: item ? item.e : '?',
+      cat: item ? item.cat : 'Other',
+      brand: item ? item.brand : '',
+      price: d.price, reg: d.reg, pct: d.pct,
+      validFrom: d.vf, validTo: d.vt, verifiedAt: d.va,
+      source: 'embedded', sourceUrl: STORES[sid].flyerUrl
+    };
+  });
+}
+
+async function saveAllFlyersToIDB() {
+  S.idbStatus = 'loading';
+  render();
+  for (var i = 0; i < SIDS.length; i++) {
+    var sid = SIDS[i];
+    var items = buildFlyerItems(sid);
+    var rec = {
+      key: sid + '_' + TODAY,
+      storeId: sid,
+      storeName: STORES[sid].name,
+      weekStart: WEEK_START,
+      weekEnd: WEEK_END,
+      items: items,
+      savedAt: Date.now(),
+      source: 'embedded'
+    };
+    await idbSave('flyers', rec);
+  }
+  var all = await idbGetAll('flyers');
+  S.idbFlyers = all;
+  S.idbStatus = 'ready';
+  S.idbSavedAt = new Date().toLocaleTimeString();
+  render();
+}
+
+async function loadFlyersFromIDB() {
+  var all = await idbGetAll('flyers');
+  if (all.length > 0) {
+    S.idbFlyers = all;
+    S.idbStatus = 'ready';
+  } else {
+    await saveAllFlyersToIDB();
+  }
+}
+
+/* ═══ STATE ════════════════════════════════════════════ */
+var SK = 'pm_ca_v3';
+var S = {
+  cart:{}, watchlist:[], basketMode:'best_basket', maxStores:1, stopPenalty:0,
+  user:null, postalCode:'', radiusKm:10, favouriteStores:[],
+  view:'shop', search:'', cat:'All',
+  flyerStore:'freshco', flyerSearch:'',
+  cartOpen:false, authOpen:false, postalOpen:false,
+  matchItem:null, proofItem:null,
+  tab:'items', fName:'', fEmail:'', fPostal:'',
+  idbFlyers:[], idbStatus:'loading', idbSavedAt:'',
+  idbFetching:false
+};
+
+function persist() {
+  try {
+    localStorage.setItem(SK, JSON.stringify({
+      cart:S.cart, watchlist:S.watchlist, basketMode:S.basketMode,
+      maxStores:S.maxStores, stopPenalty:S.stopPenalty, user:S.user,
+      postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
+    }));
+  } catch(e) {}
+}
+
+function hydrate() {
+  try {
+    var d = JSON.parse(localStorage.getItem(SK) || 'null');
+    if (!d) return;
+    if (d.cart) S.cart = d.cart;
+    if (d.watchlist) S.watchlist = d.watchlist;
+    if (d.basketMode) S.basketMode = d.basketMode;
+    if (d.maxStores) S.maxStores = d.maxStores;
+    if (d.stopPenalty !== undefined) S.stopPenalty = d.stopPenalty;
+    if (d.user) S.user = d.user;
+    if (d.postalCode) S.postalCode = d.postalCode;
+    if (d.radiusKm) S.radiusKm = d.radiusKm;
+    if (d.favouriteStores) S.favouriteStores = d.favouriteStores;
+  } catch(e) {}
+}
+
+/* ═══ CORE ALGORITHMS ══════════════════════════════════ */
+function isActive(d) {
+  var n = new Date(TODAY);
+  return n >= new Date(d.vf) && n <= new Date(d.vt);
+}
+function getDeal(cid, sid) {
+  return DEALS.find(function(d) { return d.cid===cid && d.sid===sid && isActive(d); }) || null;
+}
+function getPrice(cid, sid) {
+  var deal = getDeal(cid, sid);
+  if (deal) return { price:deal.price, isDeal:true, saving:deal.reg-deal.price, pct:deal.pct, va:deal.va };
+  var item = CAT.find(function(p) { return p.id===cid; });
+  var pr = item && item.prices ? item.prices[sid] : null;
+  if (!pr) return null;
+  return { price:pr, isDeal:false, saving:0 };
+}
+function bestP(cid, aids) {
+  var ps = aids.map(function(sid) { var p=getPrice(cid,sid); return p?{sid:sid,price:p.price,isDeal:p.isDeal}:null; }).filter(Boolean);
+  return ps.length ? ps.sort(function(a,b){return a.price-b.price;})[0] : null;
+}
+function worstP(cid, aids) {
+  var ps = aids.map(function(sid) { var p=getPrice(cid,sid); return p?{sid:sid,price:p.price}:null; }).filter(Boolean);
+  return ps.length ? ps.sort(function(a,b){return b.price-a.price;})[0] : null;
+}
+function getAids() {
+  var ids = SIDS.slice();
+  if (S.favouriteStores.length > 0) ids = ids.filter(function(id) { return S.favouriteStores.includes(id); });
+  if (S.basketMode === 'price_match') ids = ids.filter(function(id) { return STORES[id].supportsMatch; });
+  return ids;
+}
+function cartItems() {
+  return Object.entries(S.cart).filter(function(e){return e[1]>0;}).map(function(e){
+    var item = CAT.find(function(p){return p.id===+e[0];});
+    return item ? Object.assign({},item,{qty:e[1]}) : null;
+  }).filter(Boolean);
+}
+function cartCount() { return Object.values(S.cart).reduce(function(s,q){return s+q;},0); }
+function sTotals(items) {
+  if (!items.length) return [];
+  return SIDS.map(function(sid) {
+    var st = STORES[sid];
+    var tot = items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);
+    return {sid:sid,name:st.name,color:st.color,quality:st.quality,qNote:st.qNote,tot:tot};
+  }).sort(function(a,b){return a.tot-b.tot;});
+}
+function tripData(items) {
+  var byS = {};
+  items.forEach(function(item) {
+    var bp = bestP(item.id, SIDS);
+    if (!bp) return;
+    if (!byS[bp.sid]) byS[bp.sid] = {store:STORES[bp.sid],items:[],total:0};
+    byS[bp.sid].items.push(item);
+    byS[bp.sid].total += bp.price * item.qty;
+  });
+  return Object.entries(byS).map(function(e){return Object.assign({storeId:e[0]},e[1]);}).sort(function(a,b){return b.total-a.total;});
+}
+function matchElig(cid, fSid, tSid) {
+  var tSt = STORES[tSid];
+  if (!tSt.supportsMatch) return {state:'match_no',reason:tSt.matchNote};
+  var item = CAT.find(function(p){return p.id===cid;});
+  if (!item) return {state:'match_no',reason:'Item not in catalogue'};
+  var pr = item.prices && item.prices[tSid];
+  if (!pr) return {state:'match_no',reason:tSt.name+' does not stock this item'};
+  if (item.brand==='Generic') return {state:'match_maybe',reason:'Store brand — confirm size/format at checkout'};
+  return {state:tSt.matchState==='match_maybe'?'match_maybe':'match_yes',reason:tSt.matchNote};
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+/* IDB flyer search: find item across all stored flyers */
+function searchIDBFlyers(q) {
+  if (!q) return [];
+  var ql = q.toLowerCase();
+  var results = [];
+  S.idbFlyers.forEach(function(flyer) {
+    var matched = flyer.items.filter(function(item) { return item.name.toLowerCase().includes(ql) || (item.cat&&item.cat.toLowerCase().includes(ql)); });
+    if (matched.length > 0) results.push({storeId:flyer.storeId,storeName:flyer.storeName,weekStart:flyer.weekStart,weekEnd:flyer.weekEnd,items:matched,savedAt:flyer.savedAt});
+  });
+  return results;
+}
+
+/* ═══ ICONS ════════════════════════════════════════════ */
+var SVG = {
+  cart:'<svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+  srch:'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+  x17:'<svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  x14:'<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  user:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  pin:'<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  chev:'<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  trend:'<svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m23 18-9.5-9.5-5 5L1 6"/><path d="M17 18h6v-6"/></svg>',
+  bell:'<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  map:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>',
+  news:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z"/></svg>',
+  scale:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="3" y2="21"/><path d="M3 12h18M3 8l9-5 9 5M3 16l9 5 9-5"/></svg>',
+  route:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
+  ext:'<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>',
+  refresh:'<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>',
+  print:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>',
+  share:'<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>',
+  db:'<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>'
+};
+
+/* ═══ HEADER ═══════════════════════════════════════════ */
+function bHdr() {
+  var n = cartCount();
+  var sv = S.view==='flyers' ? S.flyerSearch : S.search;
+  var ph = S.view==='flyers' ? 'Search items across all flyers...' : 'Search groceries — milk, eggs, bread...';
+  var ub = S.user
+    ? '<button class="btn-ol act" data-act="open-auth" aria-label="Account">'+SVG.user+' '+S.user.name.split(' ')[0]+'</button>'
+    : '<button class="btn-ol" data-act="open-auth" aria-label="Sign in">'+SVG.user+' Sign In</button>';
+  return '<header class="hdr" role="banner">'
+    +'<div style="display:flex;align-items:center;gap:9px;min-width:160px;flex-shrink:0">'
+    +'<div class="logo-mark" aria-hidden="true">&#x1F6D2;</div>'
+    +'<div><div class="logo-name">Price<em>Match</em></div><div class="logo-sub">CANADA</div></div></div>'
+    +'<div class="srch-wrap" role="search"><div class="srch-icon">'+SVG.srch+'</div>'
+    +'<input id="srch" class="srch" value="'+esc(sv)+'" placeholder="'+ph+'" oninput="onSearch(this.value)" aria-label="Search"/>'
+    +(sv?'<button class="srch-clear" data-act="clr-search" aria-label="Clear search">'+SVG.x14+'</button>':'')
+    +'</div>'
+    +'<button class="hdr-loc '+(S.postalCode?'set':'')+'" data-act="open-postal" aria-label="Set location">'
+    +SVG.pin+' '+(S.postalCode||'Set location')+'</button>'
+    +ub
+    +'<button class="btn-cart '+(n>0?'on':'')+'" data-act="open-cart" aria-label="Cart '+n+' items">'
+    +SVG.cart+' '+(n>0?'Cart <span class="cbadge pop" aria-live="polite">'+n+'</span>':'Cart')+'</button>'
+    +'</header>';
+}
+
+/* ═══ NAV + MODE BAR ═══════════════════════════════════ */
+function bNav() {
+  var tot = DEALS.filter(function(d){return isActive(d);}).length;
+  var idbBadge = S.idbStatus==='ready'
+    ? '<span style="font-size:9px;background:#DCFCE7;color:#059669;padding:1px 5px;border-radius:4px;font-weight:700;margin-left:3px">LIVE</span>'
+    : '<span class="spin" style="font-size:10px;margin-left:3px">&#x21BB;</span>';
+  return '<nav class="nav-tabs" aria-label="Main navigation">'
+    +'<button class="ntab'+(S.view==='shop'?' on':'')+'" data-act="set-view" data-view="shop">'+SVG.cart+' Shop</button>'
+    +'<button class="ntab'+(S.view==='flyers'?' on':'')+'" data-act="set-view" data-view="flyers">'+SVG.news+' Flyers <span class="nbadge">'+tot+'</span>'+idbBadge+'</button>'
+    +'<button class="ntab'+(S.view==='pricematch'?' on':'')+'" data-act="set-view" data-view="pricematch">'+SVG.scale+' Price Match</button>'
+    +'<button class="ntab'+(S.view==='watchlist'?' on':'')+'" data-act="set-view" data-view="watchlist">&#x2B50; Watchlist'+(S.watchlist.length>0?'<span class="nbadge" style="background:var(--o)">'+S.watchlist.length+'</span>':'')+'</button>'
+    +'</nav>'
+    +'<div class="mode-bar" role="toolbar">'
+    +'<span style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px">Mode:</span>'
+    +'<button class="mpill'+(S.basketMode==='best_basket'?' on':'')+'" data-act="set-mode" data-mode="best_basket" aria-pressed="'+(S.basketMode==='best_basket')+'">&#x1F3C6; Best Basket</button>'
+    +'<button class="mpill'+(S.basketMode==='price_match'?' on':'')+'" data-act="set-mode" data-mode="price_match" aria-pressed="'+(S.basketMode==='price_match')+'">&#x2696; Price Match Only</button>'
+    +'<button class="mpill'+(S.basketMode==='quick_trip'?' on':'')+'" data-act="set-mode" data-mode="quick_trip" aria-pressed="'+(S.basketMode==='quick_trip')+'">&#x1F4CD; Quick Trip</button>'
+    +(S.basketMode==='quick_trip'
+      ?'<button class="mpill'+(S.maxStores===1?' on':'')+'" data-act="set-max" data-n="1" aria-pressed="'+(S.maxStores===1)+'">1 stop</button>'
+      +'<button class="mpill'+(S.maxStores===2?' on':'')+'" data-act="set-max" data-n="2" aria-pressed="'+(S.maxStores===2)+'">2 stops</button>':'')
+    +'<span class="fresh">&#x1F504; Last verified: May 25, 2026 &middot; Prices may vary by store</span>'
+    +'</div>';
+}
+
+/* ═══ SHOP VIEW ════════════════════════════════════════ */
+function bCTA(cid) {
+  var inC = S.cart[cid] || 0;
+  if (inC===0) return '<button class="btn-add" data-act="add" data-id="'+cid+'" aria-label="Add to cart">+ Add</button>';
+  return '<div class="qty-ctrl" role="group">'
+    +'<button class="qbtn qbm" data-act="dec" data-id="'+cid+'" aria-label="Decrease">&#x2212;</button>'
+    +'<span class="qn" aria-live="polite">'+inC+'</span>'
+    +'<button class="qbtn qbp" data-act="add" data-id="'+cid+'" aria-label="Increase">+</button>'
+    +'</div>';
+}
+
+function bGrid(filt) {
+  if (!filt.length) return '<div style="text-align:center;padding:80px 20px;color:#94A3B8">'
+    +'<div style="font-size:60px;margin-bottom:14px">&#x1F50D;</div>'
+    +'<h3 style="font-size:19px;font-weight:700;color:#475569;margin-bottom:8px">No results for &ldquo;'+esc(S.search)+'&rdquo;</h3>'
+    +'<button class="btn-add" style="margin-top:18px;padding:10px 24px;border-radius:10px;font-size:14px" data-act="clr-search">Clear search</button></div>';
+  return '<div class="grid">'+filt.map(function(p,i){
+    var bp=bestP(p.id,SIDS),wp=worstP(p.id,SIDS);
+    if(!bp)return '';
+    var bst=STORES[bp.sid],inC=S.cart[p.id]||0,watched=S.watchlist.includes(p.id);
+    var deal=getDeal(p.id,bp.sid);
+    var sv=wp&&wp.price>bp.price?(wp.price-bp.price).toFixed(2):null;
+    var pct=wp&&wp.price>bp.price?Math.round((wp.price-bp.price)/wp.price*100):null;
+    return '<article class="pm-card fu" style="animation-delay:'+(i%12*.04)+'s">'
+      +'<div class="pimg" style="background:'+CBG[p.cat]+'">'
+      +'<span class="pemoji" aria-hidden="true">'+p.e+'</span>'
+      +(deal?'<div class="pbadge pb-d">&#x1F3F7; DEAL</div>':p.sale?'<div class="pbadge pb-s">&#x1F3F7; SALE</div>':p.hot?'<div class="pbadge pb-h">'+SVG.trend+' HOT</div>':'')
+      +(inC>0?'<div class="pcn pop">'+inC+'</div>':'')
+      +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" aria-label="'+(watched?'Remove from':'Add to')+' watchlist">'+(watched?'&#x2B50;':'&#x2606;')+'</button>'
+      +(sv?'<div class="bstrip" style="background:'+bst.color+'18;border-top:1px solid '+bst.color+'30">'
+        +'<span style="color:'+bst.color+';font-weight:700;font-size:11px">&#x1F3C6; '+bst.name+'</span>'
+        +'<span style="color:'+bst.color+';font-size:11px">Save $'+sv+' ('+pct+'%)</span>'
+        +'</div>':'')
+      +'</div>'
+      +'<div class="cbody"><div class="cname">'+esc(p.name)+'</div>'
+      +'<span class="ccat">'+p.cat+'</span>'
+      +'<div class="schips">'+SIDS.map(function(sid){
+        var pr=getPrice(p.id,sid);if(!pr)return '';
+        var st=STORES[sid],ib=sid===bp.sid;
+        return '<span class="sc" style="background:'+(ib?st.bg:'#F8FAFC')+';color:'+(ib?st.color:'#94A3B8')+';border-color:'+(ib?st.brd:'#E2E8F0')+';font-weight:'+(ib?700:500)+'">'+(ib?'&#x2713; ':'')+st.sh+' $'+pr.price.toFixed(2)+(pr.isDeal?'*':'')+'</span>';
+      }).join('')+'</div>'
+      +'<div class="cfoot"><div>'
+      +'<div class="blbl">'+(bp.isDeal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
+      +'<div class="bpr">$'+bp.price.toFixed(2)+'</div>'
+      +(wp&&wp.sid!==bp.sid?'<div class="prsub">vs $'+wp.price.toFixed(2)+' at '+STORES[wp.sid].name+'</div>':'')
+      +'</div><div>'+bCTA(p.id)+'</div></div></div></article>';
+  }).join('')+'</div>';
+}
+
+function bDeals() {
+  var saleItems = CAT.filter(function(p){return p.sale||DEALS.some(function(d){return d.cid===p.id&&isActive(d);});});
+  return '<div style="margin-bottom:32px"><div class="sec-hdr">'
+    +'<h2><span class="tag-r">&#x1F3F7; DEALS</span> This Week</h2>'
+    +'<span style="font-size:12px;color:#94A3B8">'+saleItems.length+' items &middot; '+(S.postalCode||'your area')+'</span>'
+    +'</div><div style="display:flex;gap:14px;overflow-x:auto;padding-bottom:8px">'
+    +saleItems.slice(0,8).map(function(p){
+      var bp=bestP(p.id,SIDS);if(!bp)return '';
+      var deal=getDeal(p.id,bp.sid),bst=STORES[bp.sid],inC=S.cart[p.id]||0;
+      return '<article style="min-width:165px;width:165px;background:white;border-radius:12px;border:1px solid var(--bd);overflow:hidden;flex-shrink:0;box-shadow:var(--sh)">'
+        +'<div style="height:106px;background:'+CBG[p.cat]+';display:flex;align-items:center;justify-content:center;position:relative;font-size:48px">'+p.e
+        +'<div style="position:absolute;top:7px;left:7px;background:var(--r);color:white;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px">DEAL</div>'
+        +'<div style="position:absolute;bottom:7px;right:7px;background:'+bst.color+';color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px">'+bst.sh+'</div></div>'
+        +'<div style="padding:10px 12px"><div style="font-size:12px;font-weight:700;margin-bottom:2px;line-height:1.3">'+esc(p.name)+'</div>'
+        +'<div style="font-size:11px;color:'+bst.color+';font-weight:600;margin-bottom:8px">At '+bst.name+'</div>'
+        +'<div style="display:flex;align-items:center;justify-content:space-between">'
+        +'<div><span style="font-size:17px;font-weight:800;color:#059669">$'+bp.price.toFixed(2)+'</span>'
+        +(deal?'<div style="font-size:10px;color:#94A3B8;text-decoration:line-through">$'+deal.reg.toFixed(2)+'</div>':'')
+        +'</div><button style="padding:6px 10px;border-radius:7px;border:none;cursor:pointer;font-size:11px;font-weight:700;min-height:32px;'+(inC>0?'background:#059669;color:white':'background:#ECFDF5;color:#059669')+'" data-act="'+(inC>0?'dec':'add')+'" data-id="'+p.id+'">'+(inC>0?'&#x2713; '+inC:'+ Add')+'</button>'
+        +'</div></div></article>';
+    }).join('')+'</div></div>';
+}
+
+function bBanner(items,tots) {
+  if (!items.length||!tots.length) return '';
+  var b=tots[0],w=tots[tots.length-1],sv=w.tot-b.tot,pct=Math.round(sv/w.tot*100);
+  return '<div class="banner fi" role="status" aria-live="polite">'
+    +'<span style="font-size:16px">&#x1F3C6;</span>'
+    +'<span style="font-size:13px;color:rgba(255,255,255,.85)">Best basket store:</span>'
+    +'<strong style="color:white;font-size:14px">'+b.name+' &mdash; $'+b.tot.toFixed(2)+'</strong>'
+    +'<span class="bpill">SAVE $'+sv.toFixed(2)+' &middot; '+pct+'% OFF</span>'
+    +'<span style="font-size:12px;color:rgba(255,255,255,.65)">vs '+w.name+' at $'+w.tot.toFixed(2)+'</span>'
+    +'<button class="bbtn" data-act="open-cart" data-tab="compare">Compare stores '+SVG.chev+'</button></div>';
+}
+
+function bShop(items,tots) {
+  var filt=CAT.filter(function(p){return (S.cat==='All'||p.cat===S.cat)&&p.name.toLowerCase().includes(S.search.toLowerCase());});
+  var aids=getAids();
+  return bBanner(items,tots)+'<main>'
+    +(!S.search&&!cartCount()
+      ?'<div class="hero fu">'
+        +'<h1>Smarter grocery shopping.<br><em>Real prices. Real savings.</em></h1>'
+        +'<p>Add items, compare real weekly flyer prices across 6 stores, and find the best store for your exact basket.</p>'
+        +'<div class="trust-row">'
+        +'<div class="tchip">&#x1F4F0; Live flyer data</div>'
+        +'<div class="tchip">&#x1F4BE; Stored offline (IndexedDB)</div>'
+        +'<div class="tchip">&#x1F4CD; '+(S.postalCode?'Near '+S.postalCode:'Set location')+'</div>'
+        +'<div class="tchip">&#x2696; Price match tool</div>'
+        +'</div>'
+        +'<div class="store-pills">'+SIDS.map(function(sid){var st=STORES[sid];return '<span class="spill" style="color:'+st.color+';background:'+st.bg+';border-color:'+st.brd+'">'+st.name+'</span>';}).join('')+'</div>'
+        +'</div>':'')
+    +(!S.search&&S.cat==='All'?bDeals():'')
+    +'<div class="cat-tabs" role="tablist">'+CATS.map(function(c){return '<button class="cpill'+(S.cat===c?' on':'')+'" data-act="set-cat" data-cat="'+c+'" role="tab" aria-selected="'+(S.cat===c)+'">'+CIC[c]+' '+c+'</button>';}).join('')+'</div>'
+    +'<div class="meta-bar"><p style="font-size:13px;color:#64748B"><strong style="color:#0F172A">'+filt.length+'</strong> items'+(S.search?' for &ldquo;<em>'+esc(S.search)+'</em>&rdquo;':'')+(S.basketMode==='price_match'?' <span style="color:var(--b);font-weight:600">&middot; Price-match stores only</span>':'')+'</p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+aids.map(function(sid){var st=STORES[sid];return '<span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:'+st.color+';display:inline-block"></span>'+st.sh+'</span>';}).join('')+'</div></div>'
+    +bGrid(filt)
+    +'<p style="font-size:11px;color:#CBD5E1;margin-top:20px;text-align:center">* = active deal price &middot; Based on flyer data for '+(S.postalCode||'your area')+' &middot; Last verified May 25, 2026 &middot; Prices may vary in store</p>'
+    +'</main>'+bFloat(items,tots);
+}
+
+function bFloat(items,tots) {
+  if (!items.length||S.cartOpen) return '';
+  var b=tots[0];if(!b)return '';
+  var n=cartCount();
+  return '<div class="float-wrap fi"><button class="float-bar" data-act="open-cart" aria-label="Open cart '+n+' items">'
+    +SVG.cart+' <span>'+n+' item'+(n!==1?'s':'')+'</span>'
+    +'<span style="width:1px;height:18px;background:rgba(255,255,255,.2)"></span>'
+    +'Best: <span class="fstore">'+b.name+' &middot; $'+b.tot.toFixed(2)+'</span>'
+    +'<span class="fview">View &rarr;</span></button></div>';
+}
+/* ═══ FLYERS VIEW — Magazine + Search + Proof ═══════════════════════ */
+function bIDBStatus() {
+  var st = S.idbStatus;
+  if (st==='loading') return '<span class="idb-status idb-loading">'+SVG.db+' <span class="spin">&#x21BB;</span> Loading flyers...</span>';
+  if (st==='error')   return '<span class="idb-status idb-error">'+SVG.db+' Error loading flyers</span>';
+  var n = S.idbFlyers.reduce(function(s,f){return s+f.items.length;},0);
+  return '<span class="idb-status idb-ok">'+SVG.db+' '+n+' deals stored offline'+(S.idbSavedAt?' &middot; '+S.idbSavedAt:'')+'</span>';
+}
+
+function bFlyerItemCard(fi, sid, delay) {
+  var item = CAT.find(function(p){return p.id===fi.catalogId;});
+  var inC = S.cart[fi.catalogId] || 0;
+  var st = STORES[sid];
+  return '<article class="flyer-item fu" style="animation-delay:'+(delay||0)+'s">'
+    +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
+    +'<span>'+fi.e+'</span>'
+    +'<div class="fi-pct">-'+fi.pct+'%</div>'
+    +'<div class="fi-va">valid til '+fi.validTo+'</div>'
+    +'</div>'
+    +'<div class="fi-body">'
+    +'<div class="fi-name">'+esc(fi.name)+'</div>'
+    +'<div class="fi-reg">Reg. $'+fi.reg.toFixed(2)+'</div>'
+    +'<div class="fi-price">$'+fi.price.toFixed(2)+'</div>'
+    +'<div class="fi-acts">'
+    +'<button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'" aria-label="Add to cart">'+(inC>0?'&#x2713; Added':'+ Add')+'</button>'
+    +'<button class="bfp" data-act="show-proof" data-fid="'+fi.catalogId+'" data-fsid="'+sid+'" aria-label="Show price match proof">&#x1F9FE; Proof</button>'
+    +'</div></div></article>';
+}
+
+function bFlyers() {
+  var q = S.flyerSearch.trim();
+  var st = STORES[S.flyerStore];
+
+  /* ── Top bar with search + IDB status + refresh ── */
+  var topBar = '<div class="flyer-top-bar">'
+    +'<div class="flyer-srch-wrap">'
+    +'<div class="flyer-srch-icon">'+SVG.srch+'</div>'
+    +'<input id="flyer-srch" class="flyer-srch" value="'+esc(S.flyerSearch)+'" placeholder="Search items across all '+SIDS.length+' store flyers..." oninput="onFlyerSearch(this.value)" aria-label="Search flyers"/>'
+    +(q?'<button style="position:absolute;right:9px;top:50%;transform:translateY(-50%);background:#E2E8F0;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center" data-act="clr-fsearch" aria-label="Clear flyer search">'+SVG.x14+'</button>':'')
+    +'</div>'
+    +bIDBStatus()
+    +'<button class="btn-refresh" data-act="refresh-flyers" '+(S.idbFetching?'disabled':'')+' aria-label="Refresh flyer data">'
+    +'<span class="'+(S.idbFetching?'spin':'')+'">'+(S.idbFetching?'&#x21BB;':SVG.refresh)+'</span> '+(S.idbFetching?'Fetching...':'Refresh Flyers')+'</button>'
+    +'</div>';
+
+  /* ── SEARCH RESULTS MODE ── */
+  if (q) {
+    var results = searchIDBFlyers(q);
+    var totalFound = results.reduce(function(s,r){return s+r.items.length;},0);
+
+    /* find cheapest price across all results for each item */
+    var cheapByName = {};
+    results.forEach(function(r) {
+      r.items.forEach(function(fi) {
+        if (!cheapByName[fi.name] || fi.price < cheapByName[fi.name]) {
+          cheapByName[fi.name] = fi.price;
+        }
+      });
+    });
+
+    var resultsHtml = '';
+    if (results.length === 0) {
+      resultsHtml = '<div style="text-align:center;padding:60px 20px;color:#94A3B8">'
+        +'<div style="font-size:52px;margin-bottom:14px">&#x1F50D;</div>'
+        +'<h3 style="font-size:17px;font-weight:700;color:#475569;margin-bottom:8px">No flyer deals found for &ldquo;'+esc(q)+'&rdquo;</h3>'
+        +'<p style="font-size:13px;margin-bottom:18px">Try a different search term or browse flyers by store below</p>'
+        +'<button class="btn-add" style="padding:11px 24px;border-radius:10px;font-size:14px" data-act="clr-fsearch">Clear Search</button>'
+        +'</div>';
+    } else {
+      var groupsHtml = results.map(function(r) {
+        var sto = STORES[r.storeId];
+        var cards = r.items.map(function(fi, i) {
+          var isCheapest = fi.price <= cheapByName[fi.name];
+          var inC = S.cart[fi.catalogId] || 0;
+          return '<article class="flyer-item fu" style="animation-delay:'+(i*0.04)+'s">'
+            +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
+            +'<span>'+fi.e+'</span>'
+            +'<div class="fi-pct">-'+fi.pct+'%</div>'
+            +(isCheapest?'<div style="position:absolute;top:7px;left:7px;background:#059669;color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">CHEAPEST</div>':'')
+            +'</div>'
+            +'<div class="fi-body">'
+            +'<div class="fi-name">'+esc(fi.name)+'</div>'
+            +'<div class="fi-reg">Reg. $'+fi.reg.toFixed(2)+'</div>'
+            +'<div class="fi-price" style="color:'+(isCheapest?'#059669':'#16A34A')+'">$'+fi.price.toFixed(2)+'</div>'
+            +(isCheapest?'<div style="font-size:10px;font-weight:700;color:#059669;background:#DCFCE7;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:6px">&#x1F4B0; Cheapest across all flyers</div>':'')
+            +'<div class="fi-acts">'
+            +'<button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button>'
+            +'<button class="bfp" data-act="show-proof" data-fid="'+fi.catalogId+'" data-fsid="'+r.storeId+'">&#x1F9FE; Proof</button>'
+            +'</div></div></article>';
+        }).join('');
+        return '<div class="fsearch-group">'
+          +'<div class="fsearch-group-hdr">'
+          +'<div style="width:10px;height:10px;border-radius:50%;background:'+sto.color+'"></div>'
+          +'<span style="font-size:16px;font-weight:800;color:'+sto.color+'">'+sto.name+'</span>'
+          +'<span style="font-size:12px;color:#94A3B8">'+r.items.length+' result'+(r.items.length!==1?'s':'')+' &middot; Valid '+r.weekStart+' to '+r.weekEnd+'</span>'
+          +'<a href="'+sto.flyerUrl+'" target="_blank" rel="noopener noreferrer" style="margin-left:auto;font-size:11px;color:var(--b);text-decoration:none;display:flex;align-items:center;gap:4px">'+SVG.ext+' Official Flyer</a>'
+          +'</div>'
+          +'<div class="fsearch-items">'+cards+'</div>'
+          +'</div>';
+      }).join('');
+      resultsHtml = '<div class="fsearch-results">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">'
+        +'<div><h2 style="font-size:20px;font-weight:800;letter-spacing:-.5px">Results for &ldquo;'+esc(q)+'&rdquo;</h2>'
+        +'<p style="font-size:13px;color:#64748B;margin-top:4px"><strong style="color:#0F172A">'+totalFound+'</strong> deals across <strong style="color:#0F172A">'+results.length+'</strong> stores &middot; Green = cheapest price found</p>'
+        +'</div></div>'
+        +groupsHtml+'</div>';
+    }
+    return topBar+resultsHtml;
+  }
+
+  /* ── BROWSE MODE — magazine layout ── */
+  var storeTabs = '<div class="fstore-bar">'+SIDS.map(function(sid){
+    var s=STORES[sid];
+    var stored = S.idbFlyers.find(function(f){return f.storeId===sid;});
+    var n = stored ? stored.items.length : 0;
+    var on = S.flyerStore===sid;
+    return '<button class="fst" style="color:'+(on?'white':s.color)+';background:'+(on?s.color:s.bg)+';border-color:'+s.brd+'" data-act="set-fstore" data-store="'+sid+'">'
+      +s.name+' <span style="font-size:10px;opacity:.75">'+n+' deals</span></button>';
+  }).join('')+'</div>';
+
+  /* Get items from IDB for this store, fall back to DEALS */
+  var stored = S.idbFlyers.find(function(f){return f.storeId===S.flyerStore;});
+  var flyerItems = stored ? stored.items : buildFlyerItems(S.flyerStore);
+  var savedAt = stored ? new Date(stored.savedAt).toLocaleString() : 'Not yet saved';
+  var matchBadge = st.supportsMatch
+    ? '<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x2696; Price match available</span>'
+    : '<span class="ftbadge" style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)">&#x2696; No price match</span>';
+
+  var flyerHdr = '<div style="background:linear-gradient(135deg,'+st.color+','+st.color+'CC);margin:0 20px 0;border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">'
+    +'<div><div style="font-size:19px;font-weight:800;color:white;margin-bottom:8px">'+st.name+' &mdash; Official Weekly Flyer</div>'
+    +'<div>'
+    +'<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x1F504; May 25&ndash;31, 2026</span>'
+    +'<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">'+flyerItems.length+' deals</span>'
+    +matchBadge+'</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:6px">&#x1F4BE; Stored: '+savedAt+'</div>'
+    +'</div>'
+    +'<a href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:white;border-radius:9px;font-size:12px;font-weight:700;text-decoration:none;color:'+st.color+'">'+SVG.ext+' Official Source</a>'
+    +'</div>';
+
+  var magGrid = flyerItems.length === 0
+    ? '<div style="text-align:center;padding:48px;color:#94A3B8"><div style="font-size:48px;margin-bottom:12px">&#x1F4CB;</div><p>No deals stored for '+st.name+'. Click &ldquo;Refresh Flyers&rdquo; to load.</p></div>'
+    : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
+
+  return topBar+storeTabs+flyerHdr+magGrid
+    +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Deals stored in browser IndexedDB &middot; Based on latest available flyer data &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
+}
+
+/* ═══ PROOF MODAL ═══════════════════════════════════════════════════ */
+function bProofModal() {
+  if (!S.proofItem) return '';
+  var pi = S.proofItem;
+  var st = STORES[pi.storeId];
+  var saving = (pi.reg - pi.price).toFixed(2);
+  var pct = Math.round((pi.reg-pi.price)/pi.reg*100);
+  return '<div class="proof-modal-bg fi" role="dialog" aria-modal="true" aria-label="Price match proof card">'
+    +'<div class="proof-card">'
+    +'<div class="proof-hdr" style="background:linear-gradient(135deg,'+st.color+','+st.color+'CC)">'
+    +'<div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:4px;text-transform:uppercase;letter-spacing:.8px">&#x1F9FE; Price Match Proof</div>'
+    +'<div style="font-size:16px;font-weight:800;color:white">'+st.name+' Weekly Flyer</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Valid May 25&ndash;31, 2026 &middot; Verified '+pi.va+'</div>'
+    +'</div>'
+    +'<button style="background:rgba(255,255,255,.2);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0" data-act="close-proof" aria-label="Close proof card">'+SVG.x17+'</button>'
+    +'</div>'
+    +'<div class="proof-body">'
+    +'<div class="proof-item-row">'
+    +'<div class="proof-emoji" style="background:'+CBG[pi.cat]+'">'+pi.e+'</div>'
+    +'<div><div style="font-size:18px;font-weight:800;margin-bottom:4px">'+esc(pi.name)+'</div>'
+    +'<div style="font-size:13px;color:#64748B">'+pi.cat+' &middot; '+pi.brand+'</div>'
+    +'<div style="font-size:12px;color:var(--b);margin-top:4px;font-weight:600">'+st.name+' &middot; '+st.flyerUrl+'</div>'
+    +'</div></div>'
+    +'<div class="proof-price-block">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Flyer Sale Price</div>'
+    +'<div class="proof-sale-price">$'+pi.price.toFixed(2)+'</div>'
+    +'<div class="proof-reg">Regular price: $'+pi.reg.toFixed(2)+'</div>'
+    +'<div class="proof-save">&#x1F4B0; You save $'+saving+' ('+pct+'% off)</div>'
+    +'</div>'
+    +'<div class="proof-details">'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Item</span><span style="font-weight:600">'+esc(pi.name)+'</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Store</span><span style="font-weight:600;color:'+st.color+'">'+st.name+'</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Sale Price</span><span style="font-weight:800;color:var(--g);font-size:15px">$'+pi.price.toFixed(2)+'</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Regular Price</span><span style="color:var(--t3);text-decoration:line-through">$'+pi.reg.toFixed(2)+'</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Valid</span><span style="font-weight:600">May 25 &ndash; May 31, 2026</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Verified</span><span style="font-weight:600">'+pi.va+'</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Source</span><a href="'+st.flyerUrl+'" target="_blank" style="color:var(--b);font-size:11px">'+st.flyerUrl+'</a></div>'
+    +'</div>'
+    +(st.supportsMatch
+      ?'<div style="background:var(--gl);border:1px solid var(--gs);border-radius:10px;padding:12px;margin:10px 0">'
+        +'<div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:6px">&#x2705; '+st.name+' supports price matching</div>'
+        +'<div style="font-size:12px;color:#047857;line-height:1.5">'+esc(st.matchNote)+'</div>'
+        +'</div>'
+      :'<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px;margin:10px 0">'
+        +'<div style="font-size:11px;font-weight:700;color:var(--r);margin-bottom:4px">&#x274C; '+st.name+' does not price match</div>'
+        +'<div style="font-size:12px;color:#B91C1C">'+esc(st.matchNote)+'</div>'
+        +'</div>')
+    +'<div class="proof-script">&#x1F4AC; &ldquo;This item is $'+pi.price.toFixed(2)+' at '+st.name+' this week. Can you match that price? Here is the flyer proof.&rdquo;</div>'
+    +'<div class="proof-footer">'
+    +'<button class="btn-print" onclick="window.print()" aria-label="Print proof card">'+SVG.print+' Print Proof</button>'
+    +(navigator.share?'<button class="btn-share" data-act="share-proof" aria-label="Share proof">'+SVG.share+' Share</button>':'')
+    +'</div></div></div></div>';
+}
+
+/* ═══ PRICE MATCH VIEW ══════════════════════════════════════════════ */
+function bPMRow(sel, sid) {
+  var st=STORES[sid],deal=getDeal(sel.id,sid),flPr=deal?deal.price:null;
+  var isSrc=sid===sel.storeId,isBest=flPr&&flPr<=sel.dealPrice;
+  var elig=matchElig(sel.id,sel.storeId,sid);
+  var srcB=isSrc?'<span style="font-size:10px;background:#DBEAFE;color:#2563EB;padding:1px 7px;border-radius:4px;font-weight:700">SOURCE</span>':'';
+  var chpB=(isBest&&!isSrc)?'<span style="font-size:10px;background:#DCFCE7;color:#059669;padding:1px 7px;border-radius:4px;font-weight:700">CHEAPER</span>':'';
+  var mc='';
+  if(elig.state==='match_yes') mc='<div><span class="m-y">&#x2705; YES</span><div style="font-size:10px;color:#94A3B8;margin-top:3px;line-height:1.4">'+esc(elig.reason)+'</div><div style="font-size:9px;color:#CBD5E1">Verified: '+st.pv+'</div></div>';
+  else if(elig.state==='match_maybe') mc='<div><span class="m-m">&#x26A0; VERIFY</span><div style="font-size:10px;color:#64748B;margin-top:3px;line-height:1.4">'+esc(elig.reason)+'</div></div>';
+  else mc='<span class="m-n">&#x274C; '+esc(elig.reason)+'</span>';
+  return '<tr class="'+(isBest?'m-b':'')+'">'
+    +'<td><div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:'+st.color+';display:inline-block;flex-shrink:0"></span><strong style="color:'+st.color+'">'+st.name+'</strong>'+srcB+chpB+'</div></td>'
+    +'<td style="font-weight:'+(isBest?800:400)+';color:'+(isBest?'#059669':st.color)+'">'+(flPr?'$'+flPr.toFixed(2):'<span style="color:#CBD5E1">&mdash;</span>')+'</td>'
+    +'<td style="color:#94A3B8;font-size:12px">'+(deal?'$'+deal.reg.toFixed(2):'&mdash;')+'</td>'
+    +'<td style="color:var(--g);font-weight:600">'+(deal?'$'+(deal.reg-deal.price).toFixed(2):'&mdash;')+'</td>'
+    +'<td>'+mc+'</td></tr>';
+}
+
+function bPM() {
+  var sel=S.matchItem,allD=DEALS.filter(function(d){return isActive(d);});
+  var stepsH='<div class="msteps">'+[['1','Find a deal','Browse Flyers and tap &#x1F9FE; Proof or &#x2696; Match on any item'],['2','See who matches','We check verified policy status for each store'],['3','Show at checkout','Bring proof card &mdash; eligible stores match the price']].map(function(s){return '<div class="mstep fu"><div class="snum">'+s[0]+'</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">'+s[1]+'</div><div style="font-size:12px;color:#64748B;line-height:1.5">'+s[2]+'</div></div>';}).join('')+'</div>';
+  var selH=sel
+    ?'<div class="selc"><div style="width:62px;height:62px;border-radius:10px;background:'+(CBG[sel.cat]||'#F1F5F9')+';display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">'+sel.e+'</div>'
+      +'<div style="flex:1"><div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Matching</div>'
+      +'<div style="font-size:15px;font-weight:800;margin-bottom:3px">'+esc(sel.name)+'</div>'
+      +'<div style="font-size:13px;color:#64748B">'+STORES[sel.storeId].name+' flyer: <strong style="color:var(--g)">$'+sel.dealPrice.toFixed(2)+'</strong> (reg $'+sel.reg.toFixed(2)+') &middot; Valid May 25&ndash;31</div></div>'
+      +'<button class="btn-cls" data-act="clr-match" style="align-self:flex-start">'+SVG.x17+'</button></div>'
+      +'<div class="mres"><div class="mhdr"><span style="font-size:20px">&#x2696;</span><div><div style="font-size:15px;font-weight:800">Price Match Summary &mdash; '+esc(sel.name)+'</div><div style="font-size:12px;opacity:.8">Policies verified May 25 2026 &middot; Confirm with store manager</div></div></div>'
+      +'<table class="mtbl"><thead><tr><th>Store</th><th>Deal Price</th><th>Regular</th><th>Saves</th><th>Will Match?</th></tr></thead>'
+      +'<tbody>'+SIDS.map(function(sid){return bPMRow(sel,sid);}).join('')+'</tbody></table>'
+      +'<div style="padding:14px 18px;background:#F8FAFC;border-top:1px solid var(--bd);font-size:12px;color:#64748B;line-height:1.6">&#x1F4A1; <strong>Script:</strong> <em>&ldquo;'+esc(sel.name)+' is $'+sel.dealPrice.toFixed(2)+' at '+STORES[sel.storeId].name+' this week &mdash; can you match that price?&rdquo;</em> Item must be in-stock, same size/format. Valid May 25&ndash;31 2026. <button onclick="window.print()" style="margin-left:8px;padding:4px 10px;background:var(--b);color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">'+SVG.print+' Print</button></div></div>'
+    :'<div style="background:white;border:1.5px dashed #CBD5E1;border-radius:16px;padding:48px;text-align:center;margin-bottom:28px"><div style="font-size:52px;margin-bottom:12px">&#x2696;</div><h3 style="font-size:17px;font-weight:700;margin-bottom:8px;color:#475569">Select an item to price match</h3><p style="font-size:13px;color:#94A3B8;margin-bottom:18px">Go to <strong>Flyers</strong> and tap <strong>&#x2696; Match</strong> on any deal item</p><button class="btn-add" style="padding:11px 28px;border-radius:10px;font-size:14px" data-act="set-view" data-view="flyers">Browse Flyers &rarr;</button></div>';
+  var allC='<div class="flyer-mag">'+allD.map(function(deal){
+    var item=CAT.find(function(p){return p.id===deal.cid;}),ist=STORES[deal.sid];if(!item)return '';
+    var inC=S.cart[item.id]||0;
+    return '<article class="flyer-item fu"><div class="fi-img" style="background:'+(CBG[item.cat]||'#F1F5F9')+'"><span>'+item.e+'</span><div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
+      +'<div class="fi-body"><div class="fi-name">'+esc(item.name)+'</div><div class="fi-reg">Reg. $'+deal.reg.toFixed(2)+'</div><div class="fi-price">$'+deal.price.toFixed(2)+'</div>'
+      +'<div class="fi-acts"><button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+item.id+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button><button class="bfp" data-act="sel-match" data-cid="'+item.id+'" data-sid="'+deal.sid+'">&#x2696; Match</button></div></div></article>';
+  }).join('')+'</div>';
+  return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2696; Price Match</h1><p style="font-size:13px;color:#64748B">Based on verified store policies &middot; Eligibility may vary by store location</p></div>'+stepsH+selH+'<div><h2 style="font-size:16px;font-weight:800;margin-bottom:14px">All Active Deals</h2>'+allC+'</div></main>';
+}
+
+/* ═══ WATCHLIST ═════════════════════════════════════════════════════ */
+function bWL() {
+  var watched=CAT.filter(function(p){return S.watchlist.includes(p.id);});
+  var hdr='<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2B50; Your Watchlist</h1><p style="font-size:13px;color:#64748B">Saved items &middot; Price changes vs last week &middot; All 6 stores compared</p></div>';
+  if(!watched.length) return hdr+'<div style="text-align:center;padding:60px 20px;color:#94A3B8"><div style="font-size:52px;margin-bottom:14px">&#x2B50;</div><h3 style="font-size:17px;font-weight:700;color:#475569;margin-bottom:8px">Watchlist is empty</h3><p style="font-size:13px;margin-bottom:18px">Click &#x2606; on any product to watch it</p><button class="btn-add" style="padding:11px 28px;border-radius:10px;font-size:14px" data-act="set-view" data-view="shop">Browse Products</button></div></main>';
+  var cards=watched.map(function(p,i){
+    var bp=bestP(p.id,SIDS),deal=bp?getDeal(p.id,bp.sid):null;if(!bp)return '';
+    var bst=STORES[bp.sid],inC=S.cart[p.id]||0;
+    var lw=bp.price+(deal?(deal.reg-deal.price)*0.3:0.1),delta=bp.price-lw;
+    var dc=delta<-0.01?'dd':delta>0.01?'du':'ds2';
+    var dl=delta<-0.01?('&#x2193; $'+Math.abs(delta).toFixed(2)+' this week'):delta>0.01?('&#x2191; $'+delta.toFixed(2)+' this week'):'No change';
+    var db=deal?'<div style="font-size:11px;color:var(--g);background:var(--gl);padding:5px 8px;border-radius:6px;margin-bottom:10px">&#x1F3F7; Deal until May 31 &middot; was $'+deal.reg.toFixed(2)+'</div>':'';
+    return '<article class="wlcard fu" style="animation-delay:'+(i*.05)+'s">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div style="width:50px;height:50px;border-radius:10px;background:'+CBG[p.cat]+';display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">'+p.e+'</div>'
+      +'<div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(p.name)+'</div><div style="font-size:11px;color:#94A3B8">'+p.cat+' &middot; '+p.brand+'</div></div></div>'
+      +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" style="background:transparent;border:none">&#x2B50;</button></div>'
+      +'<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">'
+      +'<div><div style="font-size:11px;color:#94A3B8;margin-bottom:2px">'+(deal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
+      +'<div style="font-size:22px;font-weight:800;color:var(--g)">$'+bp.price.toFixed(2)+'</div></div>'
+      +'<span class="wdelta '+dc+'">'+dl+'</span></div>'+db
+      +'<div style="display:flex;gap:7px">'+bCTA(p.id)
+      +'<button class="bfp" data-act="show-proof" data-fid="'+p.id+'" data-fsid="'+bp.sid+'" style="flex:0 0 auto;padding:10px 14px;font-size:11px">&#x1F9FE; Proof</button>'
+      +'</div></article>';
+  }).join('');
+  return hdr+'<div class="wlgrid">'+cards+'</div></main>';
+}
+
+/* ═══ CART BUILDERS ════════════════════════════════════════════════ */
+function bCI(items){
+  if(!items.length)return '<div class="cart-empty" role="status"><div style="font-size:64px;margin-bottom:14px">&#x1F6D2;</div><h3 style="font-weight:700;color:#475569;margin-bottom:6px">Cart is empty</h3><p>Add items to compare prices across all 6 stores</p><button class="btn-add" style="margin-top:20px;padding:10px 24px;border-radius:10px;font-size:14px" data-act="close-cart">Browse</button></div>';
+  var rows=items.map(function(item){
+    var bp=bestP(item.id,SIDS),deal=bp?getDeal(item.id,bp.sid):null;if(!bp)return '';
+    var bst=STORES[bp.sid];
+    return '<div class="ci"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div>'
+      +'<div class="cinfo"><div class="cname2">'+esc(item.name)+'</div>'
+      +(deal?'<span class="cdeal">&#x1F3F7; Deal</span>':'')
+      +'<div class="cbest" style="color:'+bst.color+'">Best: '+bst.name+' &middot; $'+bp.price.toFixed(2)+'</div>'
+      +'<div class="cq" role="group"><button class="cqb cqm" data-act="dec" data-id="'+item.id+'" aria-label="Remove one">&#x2212;</button><span class="cqn" aria-live="polite">'+item.qty+'</span><button class="cqb cqp" data-act="add" data-id="'+item.id+'" aria-label="Add one">+</button><button class="cqb cqr" data-act="rem" data-id="'+item.id+'" aria-label="Remove item">'+SVG.x14+'</button></div></div>'
+      +'<div style="text-align:right;flex-shrink:0"><div style="font-size:15px;font-weight:800">$'+(bp.price*item.qty).toFixed(2)+'</div><div style="font-size:11px;color:#94A3B8">&times;'+item.qty+'</div></div></div>';
+  }).join('');
+  var sub=items.reduce(function(s,i){var bp=bestP(i.id,SIDS);return s+(bp?bp.price*i.qty:0);},0);
+  return rows+'<div class="subtot"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:13px;color:#475569">Subtotal (best prices)</span><span style="font-size:18px;font-weight:800;color:var(--g)" aria-live="polite">$'+sub.toFixed(2)+'</span></div><div style="font-size:11px;color:#94A3B8">Cheapest store per item &middot; Deal prices included</div></div>';
+}
+
+function bCompare(items,tots){
+  if(!items.length)return bCI([]);
+  var allT=SIDS.map(function(sid){var st=STORES[sid];var tot=items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);return {sid:sid,name:st.name,color:st.color,quality:st.quality,qNote:st.qNote,tot:tot};}).sort(function(a,b){return a.tot-b.tot;});
+  var best=allT[0],worst=allT[allT.length-1],sv=worst.tot-best.tot,pct=Math.round(sv/worst.tot*100);
+  var maxT=worst.tot,minT=best.tot,rng=maxT-minT||1;
+  allT.forEach(function(s){var ps=1-(s.tot-minT)/rng;var qs=s.quality/5;s.vs=Math.round((ps*.6+qs*.4)*100);});
+  var bv=allT.slice().sort(function(a,b){return b.vs-a.vs;})[0];
+  var bars=allT.map(function(s){
+    var w=maxT>0?(s.tot/maxT*100).toFixed(1):0;
+    var isBP=s.sid===best.sid,isBV=s.sid===bv.sid;
+    var stars='';for(var q=0;q<5;q++)stars+=(q<s.quality?'&#x2605;':'&#x2606;');
+    return '<div style="margin-bottom:14px">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">'
+      +'<div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:'+s.color+';display:inline-block;flex-shrink:0"></span>'
+      +'<span style="font-size:13px;font-weight:'+(isBP||isBV?700:500)+';color:'+(isBP?'#059669':isBV?'#2563EB':'#475569')+'">'+s.name+'</span>'
+      +(isBP?'<span style="font-size:10px;background:#DCFCE7;color:#059669;padding:1px 8px;border-radius:5px;font-weight:800">&#x1F4B0; CHEAPEST</span>':'')
+      +(isBV&&!isBP?'<span style="font-size:10px;background:#DBEAFE;color:#2563EB;padding:1px 8px;border-radius:5px;font-weight:800">&#x1F3C6; BEST VALUE</span>':'')
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:#F59E0B">'+stars+'</span>'
+      +'<span style="font-size:14px;font-weight:'+(isBP?800:400)+';color:'+(isBP?'#059669':isBV?'#2563EB':'#94A3B8')+'">$'+s.tot.toFixed(2)+'</span></div></div>'
+      +'<div style="background:#F1F5F9;border-radius:8px;overflow:hidden;height:28px"><div style="height:100%;width:'+w+'%;background:'+(isBP?'#059669':isBV?'#2563EB':s.color)+';opacity:'+(isBP||isBV?1:.5)+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width .6s ease">'+(isBP?'<span style="font-size:10px;font-weight:800;color:white">CHEAPEST</span>':isBV?'<span style="font-size:10px;font-weight:800;color:white">BEST VALUE</span>':'')+'</div></div>'
+      +'<div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#94A3B8">'+s.qNote+'</span><span style="font-size:10px;font-weight:600;color:#64748B">Value score: '+s.vs+'/100</span></div>'
+      +'</div>';
+  }).join('');
+  var w2='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">'
+    +'<div style="background:linear-gradient(135deg,var(--gl),var(--gm));border:1.5px solid var(--gs);border-radius:14px;padding:18px"><div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:6px">&#x1F4B0; CHEAPEST BASKET</div><div style="font-size:28px;font-weight:800;color:var(--g);letter-spacing:-1px">$'+best.tot.toFixed(2)+'</div><div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:4px">'+best.name+'</div><div style="font-size:12px;color:var(--gd)">Save $'+sv.toFixed(2)+' ('+pct+'%) vs '+worst.name+'</div></div>'
+    +'<div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1.5px solid #93C5FD;border-radius:14px;padding:18px"><div style="font-size:11px;font-weight:700;color:#1D4ED8;margin-bottom:6px">&#x1F3C6; BEST VALUE (price + quality)</div><div style="font-size:28px;font-weight:800;color:#2563EB;letter-spacing:-1px">$'+bv.tot.toFixed(2)+'</div><div style="font-size:13px;font-weight:700;color:#2563EB;margin-bottom:4px">'+bv.name+'</div><div style="font-size:12px;color:#3B82F6">Score '+bv.vs+'/100 &middot; '+bv.qNote+'</div></div>'
+    +'</div>';
+  var thC=SIDS.map(function(sid){var st=STORES[sid];return '<th style="text-align:right;padding:8px 10px;min-width:70px"><span style="display:block;width:8px;height:8px;border-radius:50%;background:'+st.color+';margin:0 auto 3px"></span>'+st.sh+'</th>';}).join('');
+  var itemRows=items.map(function(item){
+    var mn=999;SIDS.forEach(function(sid){var p=getPrice(item.id,sid);if(p&&p.price<mn)mn=p.price;});
+    var cells=SIDS.map(function(sid){var p=getPrice(item.id,sid),deal=getDeal(item.id,sid);var ib=p&&Math.abs(p.price-mn)<0.001;return '<td style="text-align:right;padding:8px 10px;font-size:12px;font-weight:'+(ib?700:400)+';color:'+(ib?'#059669':STORES[sid].color)+';background:'+(ib?'#ECFDF5':'')+';border-bottom:1px solid #F8FAFC">'+(p?'$'+p.price.toFixed(2)+(deal?'*':''):'<span style="color:#CBD5E1">&mdash;</span>')+'</td>';}).join('');
+    return '<tr><td style="padding:8px 10px;font-size:12px;border-bottom:1px solid #F8FAFC;display:flex;align-items:center;gap:6px"><span style="font-size:16px">'+item.e+'</span>'+esc(item.name)+' <span style="color:#94A3B8">&times;'+item.qty+'</span></td>'+cells+'</tr>';
+  }).join('');
+  var totC=SIDS.map(function(sid){var tot=items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);var ib=sid===best.sid;return '<td style="text-align:right;padding:10px;font-size:13px;font-weight:'+(ib?800:600)+';color:'+(ib?'#059669':'#475569')+';background:'+(ib?'#ECFDF5':'#F8FAFC')+';border-top:2px solid var(--bd)">$'+tot.toFixed(2)+(ib?'<div style="font-size:9px;color:var(--g)">CHEAPEST</div>':'')+'</td>';}).join('');
+  var tbl='<div style="overflow-x:auto;margin-bottom:20px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Price per item &middot; all 6 stores &middot; * = flyer deal price</div><table style="width:100%;border-collapse:collapse;min-width:600px"><thead><tr><th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:700;color:#64748B;background:#F8FAFC;border-bottom:2px solid var(--bd)">Item</th>'+thC+'</tr></thead><tbody>'+itemRows+'</tbody><tfoot><tr><td style="padding:10px;font-size:13px;font-weight:700;background:#F8FAFC;border-top:2px solid var(--bd)">Basket Total</td>'+totC+'</tr></tfoot></table></div>';
+  return '<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Your basket compared across all 6 stores</div>'+w2+'<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Store comparison &mdash; price + quality</div>'+bars+tbl+'<p style="font-size:11px;color:#CBD5E1">* = active deal price &middot; Prices may vary in store</p>';
+}
+
+function bTrip(items,tots){
+  if(!items.length)return bCI([]);
+  var allT=SIDS.map(function(sid){var st=STORES[sid];var tot=items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);return {sid:sid,name:st.name,color:st.color,tot:tot};}).sort(function(a,b){return a.tot-b.tot;});
+  var b=allT[0],w=allT[allT.length-1],trips=tripData(items);
+  var ssv=w.tot-b.tot,spct=Math.round(ssv/w.tot*100);
+  var spt=trips.reduce(function(s,t){return s+t.total;},0),ssv2=w.tot-spt,spct2=Math.round(ssv2/w.tot*100);
+  var sRows=allT.map(function(s,i){return '<div class="tr2"><span style="color:'+(i===0?'#059669':'#64748B')+';font-weight:'+(i===0?700:400)+'">'+s.name+'</span><span style="color:'+(i===0?'#059669':'#94A3B8')+';font-weight:'+(i===0?700:400)+'">$'+s.tot.toFixed(2)+'</span></div>';}).join('');
+  var tRows=trips.map(function(t){return '<div class="tr2"><div style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:'+t.store.color+';display:inline-block"></span><span style="font-weight:600;color:'+t.store.color+'">'+t.store.name+'</span><span style="font-size:11px;color:#94A3B8">'+t.items.map(function(i){return i.e;}).join('')+'</span></div><span style="color:#2563EB;font-weight:600">$'+t.total.toFixed(2)+'</span></div>';}).join('');
+  var piRows=items.map(function(item){var bp=bestP(item.id,SIDS),wp=worstP(item.id,SIDS);if(!bp)return '';return '<tr><td style="padding:8px 10px;font-size:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">'+item.e+'</span>'+esc(item.name)+'</td><td style="padding:8px 10px;font-size:12px"><span style="color:'+STORES[bp.sid].color+';font-weight:700">'+STORES[bp.sid].name+'</span>'+(bp.isDeal?'<span class="cdeal" style="margin-left:4px">Deal</span>':'')+'</td><td style="padding:8px 10px;font-size:12px;color:var(--g);font-weight:700">$'+bp.price.toFixed(2)+'</td><td style="padding:8px 10px;font-size:12px;color:var(--g);font-weight:600">'+(wp&&wp.price>bp.price?'$'+(wp.price-bp.price).toFixed(2):'&mdash;')+'</td></tr>';}).join('');
+  return '<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Your Optimal Shopping Route</div>'
+    +'<div class="topt rec"><div class="tbadge" style="background:var(--gl);color:var(--g)">&#x2B50; Best single stop</div><div style="font-size:13px;font-weight:600;color:#065F46;margin-bottom:6px">Buy everything at '+b.name+'</div><div class="ttot" style="color:var(--g)">$'+b.tot.toFixed(2)+'</div><div style="font-size:13px;color:var(--gd);margin-top:4px">Save <strong>$'+ssv.toFixed(2)+' ('+spct+'%)</strong> vs most expensive option</div><div class="tbd">'+sRows+'</div></div>'
+    +(trips.length>1?'<div class="topt spl"><div class="tbadge" style="background:#EFF6FF;color:var(--b)">&#x2702; Max savings &mdash; split trip</div><div style="font-size:13px;font-weight:600;color:#1D4ED8;margin-bottom:6px">Best store per item &middot; '+trips.length+' stops</div><div class="ttot" style="color:var(--b)">$'+spt.toFixed(2)+'</div><div style="font-size:13px;color:#2563EB;margin-top:4px">Save <strong>$'+ssv2.toFixed(2)+' ('+spct2+'%)</strong> total</div><div class="tbd">'+tRows+'</div></div>':'')
+    +'<div style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Per-Item Best Store</div><table class="pitbl"><thead><tr><th>Item</th><th>Best Store</th><th>Price</th><th>Save vs Highest</th></tr></thead><tbody>'+piRows+'</tbody></table></div>';
+}
+
+function bAlerts(items){
+  var di=items.filter(function(i){return SIDS.some(function(sid){return getDeal(i.id,sid);});});
+  var hi=items.filter(function(i){return i.hot;});
+  var dc=di.map(function(item){var deal=SIDS.map(function(sid){return getDeal(item.id,sid);}).filter(Boolean)[0];var ist=deal?STORES[deal.sid]:null;if(!deal||!ist)return '';return '<div style="display:flex;gap:12px;padding:12px 14px;border-radius:12px;margin-bottom:8px;background:#FFF7ED;border:1px solid #FED7AA"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(item.name)+'</div><div style="font-size:12px;color:#D97706;font-weight:600">&#x1F525; Deal at '+ist.name+' &middot; $'+deal.price.toFixed(2)+' (was $'+deal.reg.toFixed(2)+') &middot; Until May 31</div></div></div>';}).join('')||'<p style="font-size:13px;color:#94A3B8;margin-bottom:14px">No active deals for your cart items.</p>';
+  var hc=hi.map(function(item){return '<div style="display:flex;gap:12px;padding:11px 14px;border-radius:12px;margin-bottom:8px;background:#EFF6FF;border:1px solid #BFDBFE"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(item.name)+'</div><div style="font-size:12px;color:#2563EB">'+SVG.trend+' Popular this week in your area</div></div></div>';}).join('')||'<p style="font-size:13px;color:#94A3B8">No trending items in cart.</p>';
+  var cta=!S.user?'<div style="margin-top:20px;padding:16px 18px;border-radius:13px;background:var(--gl);border:1.5px solid var(--gs)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--g)">'+SVG.bell+'<span style="font-size:13px;font-weight:700">Get weekly price alerts</span></div><p style="font-size:12px;color:#047857;line-height:1.5;margin-bottom:12px">Sign in to be notified when prices drop on your watched items.</p><button class="btn-full btn-gf" style="padding:10px;border-radius:9px;font-size:13px" data-act="auth-from-cart">Sign In for Alerts</button></div>':'';
+  return '<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Active Deals in Cart</div>'+dc+'<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin:18px 0 12px">Trending Items</div>'+hc+cta;
+}
+
+function bCart(items,tots){
+  var n=cartCount(),b=tots[0],ab=items.filter(function(i){return SIDS.some(function(sid){return getDeal(i.id,sid);});}).length;
+  var footer=S.user?'<button class="btn-full btn-gf" data-act="close-cart">'+SVG.map+' Find '+(b?b.name:'store')+' Near Me &rarr;</button>':'<button class="btn-full btn-gf" data-act="auth-from-cart">Sign in to save cart &amp; get price alerts &rarr;</button>';
+  var body=S.tab==='items'?bCI(items):S.tab==='compare'?bCompare(items,tots):S.tab==='trip'?bTrip(items,tots):bAlerts(items);
+  var ab2=ab?'<span style="background:var(--r);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-left:3px">'+ab+'</span>':'';
+  var tabs=items.length?'<div class="ctabs" role="tablist"><button class="ctab'+(S.tab==='items'?' on':'')+'" data-act="set-tab" data-tab="items">&#x1F6D2; Items</button><button class="ctab'+(S.tab==='compare'?' on':'')+'" data-act="set-tab" data-tab="compare">&#x1F4CA; Compare All</button><button class="ctab'+(S.tab==='trip'?' on':'')+'" data-act="set-tab" data-tab="trip">'+SVG.route+' Trip Plan</button><button class="ctab'+(S.tab==='alerts'?' on':'')+'" data-act="set-tab" data-tab="alerts">&#x1F514; Deals'+ab2+'</button></div>':'';
+  return '<div class="cov fi" data-act="close-cart" aria-hidden="true"></div>'
+    +'<div class="cpan si" role="dialog" aria-modal="true" aria-label="Shopping cart">'
+    +'<div class="chdr"><div><h2>Your Cart</h2><p>'+n+' items &middot; '+items.length+' products</p></div>'
+    +'<div class="chdr-r">'+(items.length?'<button class="btn-clr" data-act="clr-cart">Clear all</button>':'')
+    +'<button class="btn-cls" data-act="close-cart" aria-label="Close cart">'+SVG.x17+'</button></div></div>'
+    +tabs+'<div class="cbdy" role="tabpanel">'+body+'</div>'
+    +(items.length?'<div style="padding:14px 20px;border-top:1px solid var(--bd);background:white">'+footer+'</div>':'')
+    +'</div>';
+}
+
+/* ═══ MODALS ════════════════════════════════════════════════════════ */
+function bAuth(){
+  if(!S.authOpen)return '';
+  var feats=[['&#x1F3C6;','Basket optimiser &mdash; best store for your weekly shop'],['&#x1F4F0;','Weekly flyer digest with price alerts'],['&#x1F9FE;','Price match proof card generator'],['&#x1F4CD;','Store locator near you']];
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:24px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Join PriceMatch</h2><p style="font-size:13px;color:#64748B;line-height:1.55">Save your cart, track prices, and get weekly picks.</p></div><div style="margin-bottom:22px">'+feats.map(function(f){return '<div class="firow"><span>'+f[0]+'</span>'+f[1]+'</div>';}).join('')+'</div>'
+    +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-name">Your name</label>'
+    +'<input class="finput" id="f-name" name="name" autocomplete="name" placeholder="Your name" value="'+esc(S.fName)+'" oninput="S.fName=this.value"/>'
+    +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-email">Email address</label>'
+    +'<input class="finput" id="f-email" name="email" type="email" autocomplete="email" placeholder="your@email.com" value="'+esc(S.fEmail)+'" oninput="S.fEmail=this.value"/>'
+    +'<button class="btn-full btn-gf" data-act="sign-in">Get Started &mdash; Free</button>'
+    +'<button class="btn-maybe" data-act="close-auth">Maybe later</button>'
+    +'</div></div>';
+}
+
+function bPostal(){
+  if(!S.postalOpen)return '';
+  var favSet=new Set(S.favouriteStores);
+  var toggles=SIDS.map(function(sid){var st=STORES[sid],on=favSet.has(sid);return '<button class="stog'+(on?' on':'')+'" data-act="toggle-fav" data-store="'+sid+'" aria-pressed="'+on+'"><span class="sdot" style="background:'+st.color+'"></span>'+st.name+'</button>';}).join('');
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Set location"><div class="modal-box"><div style="text-align:center;margin-bottom:24px"><div style="font-size:40px;margin-bottom:10px">&#x1F4CD;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Your Location &amp; Stores</h2><p style="font-size:13px;color:#64748B;line-height:1.5">Set your postal code to see relevant flyer prices. Favourite stores are optional &mdash; leave blank to compare all 6.</p></div>'
+    +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:6px" for="f-postal">Postal code (e.g. M5V 2T6)</label>'
+    +'<input class="finput" id="f-postal" name="postal" autocomplete="postal-code" placeholder="M5V 2T6" value="'+esc(S.fPostal||S.postalCode)+'" oninput="S.fPostal=this.value" style="margin-bottom:16px"/>'
+    +'<div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:10px">Favourite stores <span style="font-weight:400;color:#94A3B8">(optional &mdash; Compare always shows all 6)</span></div>'
+    +'<div class="pgrid" role="group">'+toggles+'</div>'
+    +'<div style="font-size:11px;color:#94A3B8;margin-bottom:20px;margin-top:8px">The Compare tab always shows all 6 stores regardless of this setting.</div>'
+    +'<button class="btn-full btn-gf" data-act="save-postal">Save Preferences</button>'
+    +'<button class="btn-maybe" data-act="close-postal">Cancel</button>'
+    +'</div></div>';
+}
+
+/* ═══ RENDER ════════════════════════════════════════════════════════ */
+function render(){
+  var items=cartItems(),tots=sTotals(items);
+  var prevY=window.scrollY,fid=document.activeElement&&document.activeElement.id;
+  var html=bHdr()+bNav();
+  if(S.view==='shop') html+=bShop(items,tots);
+  else if(S.view==='flyers') html+=bFlyers();
+  else if(S.view==='pricematch') html+=bPM();
+  else if(S.view==='watchlist') html+=bWL();
+  if(S.cartOpen) html+=bCart(items,tots);
+  html+=bAuth()+bPostal()+bProofModal();
+  document.getElementById('app').innerHTML=html;
+  window.scrollTo(0,prevY);
+  if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
+  if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
+  if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
+}
+
+function onSearch(v){ if(S.view==='flyers')S.flyerSearch=v; else S.search=v; render(); }
+function onFlyerSearch(v){ S.flyerSearch=v; render(); }
+
+/* ═══ EVENTS ════════════════════════════════════════════════════════ */
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-act]');if(!el)return;
+  var a=el.dataset.act,id=el.dataset.id?+el.dataset.id:null,
+      tab=el.dataset.tab,view=el.dataset.view,store=el.dataset.store,
+      mode=el.dataset.mode,n=el.dataset.n?+el.dataset.n:null,
+      cid=el.dataset.cid?+el.dataset.cid:null,sid=el.dataset.sid,
+      fid=el.dataset.fid?+el.dataset.fid:null,fsid=el.dataset.fsid;
+
+  if(a==='add')           {S.cart[id]=(S.cart[id]||0)+1;persist();render();}
+  else if(a==='dec')      {if(S.cart[id]>1)S.cart[id]--;else delete S.cart[id];persist();render();}
+  else if(a==='rem')      {delete S.cart[id];persist();render();}
+  else if(a==='clr-cart') {S.cart={};persist();render();}
+  else if(a==='clr-search'){if(S.view==='flyers')S.flyerSearch='';else S.search='';render();}
+  else if(a==='clr-fsearch'){S.flyerSearch='';render();}
+  else if(a==='set-cat')  {S.cat=el.dataset.cat;render();}
+  else if(a==='set-view') {S.view=view;render();}
+  else if(a==='set-fstore'){S.flyerStore=store;render();}
+  else if(a==='set-mode') {S.basketMode=mode;persist();render();}
+  else if(a==='set-max')  {S.maxStores=n;persist();render();}
+  else if(a==='open-cart'){S.cartOpen=true;if(tab)S.tab=tab;render();}
+  else if(a==='close-cart'){S.cartOpen=false;render();}
+  else if(a==='open-auth'){S.authOpen=true;render();}
+  else if(a==='close-auth'){S.authOpen=false;render();}
+  else if(a==='auth-from-cart'){S.cartOpen=false;S.authOpen=true;render();}
+  else if(a==='set-tab')  {S.tab=tab;render();}
+  else if(a==='open-postal'){S.fPostal=S.postalCode;S.postalOpen=true;render();}
+  else if(a==='close-postal'){S.postalOpen=false;render();}
+  else if(a==='save-postal'){var el4=document.getElementById('f-postal');var pc=(el4?el4.value:S.fPostal||'').trim().toUpperCase();if(pc)S.postalCode=pc;S.postalOpen=false;persist();render();}
+  else if(a==='toggle-fav'){var idx=S.favouriteStores.indexOf(store);if(idx>-1)S.favouriteStores.splice(idx,1);else S.favouriteStores.push(store);persist();render();}
+  else if(a==='toggle-watch'){var idx2=S.watchlist.indexOf(id);if(idx2>-1)S.watchlist.splice(idx2,1);else S.watchlist.push(id);persist();render();}
+  else if(a==='show-proof'){
+    var item2=CAT.find(function(p){return p.id===fid;});
+    if(item2&&fsid){
+      var deal2=getDeal(fid,fsid);
+      var price2=deal2?deal2.price:(getPrice(fid,fsid)||{price:0}).price;
+      var reg2=deal2?deal2.reg:price2;
+      var pct2=deal2?deal2.pct:0;
+      S.proofItem=Object.assign({},item2,{storeId:fsid,price:price2,reg:reg2,pct:pct2,va:deal2?deal2.va:TODAY,sourceUrl:STORES[fsid].flyerUrl});
+      render();
+    }
+  }
+  else if(a==='close-proof'){S.proofItem=null;render();}
+  else if(a==='share-proof'){
+    if(S.proofItem&&navigator.share){var pi=S.proofItem;navigator.share({title:'Price Match Proof &mdash; '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid May 25-31 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});}
+  }
+  else if(a==='sel-match'){
+    var item3=CAT.find(function(p){return p.id===cid;});
+    if(item3&&sid){var deal3=getDeal(cid,sid);var price3=deal3?deal3.price:(getPrice(cid,sid)||{price:0}).price;var reg3=deal3?deal3.reg:price3;S.matchItem=Object.assign({},item3,{storeId:sid,dealPrice:price3,reg:reg3});S.view='pricematch';render();}
+  }
+  else if(a==='clr-match'){S.matchItem=null;render();}
+  else if(a==='refresh-flyers'){if(!S.idbFetching){S.idbFetching=true;render();saveAllFlyersToIDB().then(function(){S.idbFetching=false;render();});}}
+  else if(a==='sign-in'){var el5=document.getElementById('f-name');var nm=(el5?el5.value:S.fName||'').trim();if(nm){var el6=document.getElementById('f-email');S.user={name:nm,email:el6?el6.value:S.fEmail||''};S.authOpen=false;persist();render();}else{if(el5)el5.focus();}}
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    if(S.proofItem){S.proofItem=null;render();}
+    else if(S.postalOpen){S.postalOpen=false;render();}
+    else if(S.authOpen){S.authOpen=false;render();}
+    else if(S.cartOpen){S.cartOpen=false;render();}
+  }
+});
+
+/* ═══ INIT ══════════════════════════════════════════════════════════ */
+async function init() {
+  hydrate();
+  if(!S.postalCode) S.postalOpen=true;
+  render();
+  var ok = await idbOpen();
+  if(ok) {
+    await loadFlyersFromIDB();
+  } else {
+    S.idbStatus='error';
+    render();
+  }
+}
+init();
+</script>
+</body>
+</html>
