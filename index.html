@@ -619,6 +619,8 @@ function cartRecommendations(items) {
     var prefBoost=itemMatchesPrefs(item)?2:0, prefNote=itemMatchesPrefs(item)?' Matches your saved interests.':'';
     if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.'+prefNote,score:ins.spread*item.qty+prefBoost});
     if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.'+prefNote,score:deal.reg-deal.price+prefBoost});
+    if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.',score:ins.spread*item.qty});
+    if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.',score:deal.reg-deal.price});
   });
   return recs.sort(function(a,b){return b.score-a.score;}).slice(0,5);
 }
@@ -1107,6 +1109,7 @@ function bFlyers() {
     : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
 
   return topBar+dietBar+storeTabs+flyerHdr+magGrid
+  return topBar+storeTabs+flyerHdr+magGrid
     +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Flyers downloaded to this browser via IndexedDB &middot; Search works after the local flyer download finishes &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
 }
 
