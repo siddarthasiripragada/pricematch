@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="PriceMatch CA — Browse real store flyers, compare basket prices across 6 stores, and generate price-match proof at checkout."/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://tile.openstreetmap.org; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net https://unpkg.com https://api.anthropic.com https://world.openfoodfacts.org https://tile.openstreetmap.org blob:; worker-src 'self' blob:; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
 <title>PriceMatch CA — Live Flyer Comparison</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F6D2;</text></svg>"/>
@@ -260,11 +260,6 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .unit-price{font-size:10px;font-weight:800;color:#2563EB;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:2px 6px;display:inline-block;margin-top:4px}
 .diet-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.diet-chip{padding:7px 12px;border-radius:999px;border:1.5px solid var(--bd);background:white;color:#64748B;font-size:12px;font-weight:800;cursor:pointer}.diet-chip.on{background:var(--gl);border-color:var(--gs);color:var(--g)}
 .policy-card{background:white;border:1px solid var(--bd);border-radius:15px;padding:16px;box-shadow:var(--sh)}
-.drop-banner{background:linear-gradient(90deg,#059669,#34D399);color:white;padding:10px 20px;font-size:13px;font-weight:800;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.report-badge{font-size:10px;font-weight:900;color:#7C3AED;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:6px;padding:2px 6px;display:inline-block;margin-top:4px}
-.policy-table{width:100%;border-collapse:collapse;background:white;border:1px solid var(--bd);border-radius:12px;overflow:hidden}.policy-table th,.policy-table td{padding:10px;border-bottom:1px solid #F1F5F9;font-size:12px;text-align:left}.policy-table th{background:#F8FAFC;color:#475569;font-weight:900}.policy-table tr:last-child td{border-bottom:0}
-.mini-btn{border:1px solid var(--bd);background:white;color:#475569;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer;text-decoration:none}.mini-btn:hover{border-color:var(--b);color:var(--b)}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}.stat-card{background:white;border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:var(--sh)}.budget-bar{height:12px;border-radius:999px;background:#E2E8F0;overflow:hidden;margin:8px 0}.budget-fill{height:100%;border-radius:999px;transition:width .25s}.meal-grid{display:grid;grid-template-columns:90px repeat(7,1fr);gap:6px;overflow:auto}.meal-cell{min-width:120px;border:1px solid var(--bd);border-radius:9px;padding:8px;background:white}.meal-cell input{width:100%;border:0;background:transparent;font-size:12px;outline:0}.badge-gold{background:#FEF3C7;color:#B45309;border:1px solid #FDE68A;border-radius:6px;padding:2px 6px;font-size:10px;font-weight:900;display:inline-block}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .sec-hdr h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
 .tag-r{background:#FEF2F2;color:var(--r);padding:3px 9px;border-radius:7px;font-size:11px;font-weight:800}
@@ -291,7 +286,7 @@ const STORES={
 };
 const SIDS=Object.keys(STORES);
 const CATS=["All","Produce","Dairy","Meat","Bakery","Pantry","Beverages"];
-const DIETS=["All","Vegan","Halal","Kosher","Gluten-Free","Organic"];
+const DIETS=["All","Vegan","Halal","Kosher","Gluten-Free"];
 const CIC={All:"🛒",Produce:"🥬",Dairy:"🥛",Meat:"🥩",Bakery:"🍞",Pantry:"🥫",Beverages:"🧃"};
 const CBG={Produce:"linear-gradient(145deg,#BBF7D0,#6EE7B7)",Dairy:"linear-gradient(145deg,#BAE6FD,#7DD3FC)",Meat:"linear-gradient(145deg,#FECACA,#FCA5A5)",Bakery:"linear-gradient(145deg,#FDE68A,#FCD34D)",Pantry:"linear-gradient(145deg,#E9D5FF,#C4B5FD)",Beverages:"linear-gradient(145deg,#A5F3FC,#67E8F9)"};
 const CAT=[
@@ -329,22 +324,11 @@ const CAT=[
 const TODAY="2026-05-28";
 const WEEK_START="2026-05-25";
 const WEEK_END="2026-05-31";
-// Add Supabase Auth config here when you create a project.
 const SUPABASE_URL=""; // Set to https://YOUR_PROJECT.supabase.co
 const SUPABASE_ANON_KEY=""; // Public anon key only; never add service-role keys in the browser
 const PREF_OPTIONS=["Produce","Dairy","Meat","Bakery","Pantry","Beverages","Flyer Deals","Price Match","Low-Carb","Family Staples","No Bulk"] ;
 const TR={en:{shop:'Shop',flyers:'Flyers',priceMatch:'Price Match',watchlist:'Watchlist',preferences:'Preferences',policies:'Policy Hub',cart:'Cart',setLocation:'Set location',bestBasket:'Best Basket',priceMatchOnly:'Price Match Only',quickTrip:'Quick Trip',diet:'Dietary filters',all:'All',unit:'Unit price',officialSource:'Official Source'},fr:{shop:'Épicerie',flyers:'Circulaires',priceMatch:'Égalisation',watchlist:'Favoris',preferences:'Préférences',policies:'Politiques',cart:'Panier',setLocation:'Lieu',bestBasket:'Meilleur panier',priceMatchOnly:'Égalisation seulement',quickTrip:'Trajet rapide',diet:'Filtres alimentaires',all:'Tous',unit:'Prix unitaire',officialSource:'Source officielle'}};
-const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'},{id:'superc',name:'Super C',color:'#DC2626',supportsMatch:false,matchState:'match_no',matchNote:'Quebec flyer pricing; confirm local price-match exceptions with the store.',flyerUrl:'https://www.superc.ca/en/flyer'},{id:'pa',name:'PA Supermarché',color:'#2563EB',supportsMatch:false,matchState:'match_no',matchNote:'Independent Quebec grocer; verify local policies and flyer proof requirements.',flyerUrl:'https://www.supermarchepa.com/pages/flyer'},{id:'sobeys',name:'Sobeys',color:'#047857',supportsMatch:false,matchState:'match_no',matchNote:'No broad national competitor price-match program; use flyer proof for store-specific exceptions.',flyerUrl:'https://www.sobeys.com/en/flyer/'},{id:'foodbasics',name:'Food Basics',color:'#16A34A',supportsMatch:false,matchState:'match_no',matchNote:'Typically flyer pricing only; confirm local manager policies.',flyerUrl:'https://www.foodbasics.ca/flyer.en.html'},{id:'gianttiger',name:'Giant Tiger',color:'#F97316',supportsMatch:true,matchState:'match_yes',matchNote:'Ad-match style rules may require local competitor, identical item, and valid proof.',flyerUrl:'https://www.gianttiger.com/pages/flyer'}];
-const MEALS={
-  'Spaghetti Bolognese':[{q:'Ground Beef 500g',n:14},{q:'Spaghetti 900g',n:9},{q:'Roma Tomatoes 1 kg',n:6},{q:'White Bread 675g',n:3}],
-  'Chicken Stir Fry':[{q:'Chicken Breast 1 kg',n:8},{q:'Broccoli head',n:15},{q:'White Rice 5 kg',n:10}],
-  'Tacos':[{q:'Ground Beef 500g',n:14},{q:'Cheddar Cheese 400g',n:13},{q:'Roma Tomatoes 1 kg',n:6}],
-  'Breakfast':[{q:'Large Eggs 12 pk',n:4},{q:'Whole Milk 4L',n:2},{q:'White Bread 675g',n:3}],
-  'Pasta':[{q:'Spaghetti 900g',n:9},{q:'Roma Tomatoes 1 kg',n:6},{q:'Cheddar Cheese 400g',n:13}]
-};
-const GENERIC_ALT={Heinz:'No Name / store-brand ketchup',Dempsters:'No Name bread',Natrel:'Store-brand milk',Lactantia:'No Name butter',Oikos:'Store-brand Greek yogurt',Tropicana:'Store-brand orange juice',Cheerios:'No Name oat cereal',Catelli:'No Name pasta'};
-const LOYALTY={superstore:{name:'PC Optimum',rate:.01},nofrills:{name:'PC Optimum',rate:.01},freshco:{name:'Scene+',rate:.008},metro:{name:'Air Miles',rate:.005},walmart:{name:'Walmart Rewards',rate:0},costco:{name:'Executive',rate:.02}};
-const STORE_DISTANCE={freshco:2.4,superstore:5.1,nofrills:3.2,walmart:6.7,metro:4.8,costco:11.4};
+const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'}];
 const DEALS=[
   {id:"dw1",cid:21,sid:"walmart",   price:2.97,reg:4.97,pct:40,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
   {id:"dw2",cid:14,sid:"walmart",   price:4.47,reg:6.97,pct:36,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
@@ -470,7 +454,7 @@ var S = {
   cart:{}, watchlist:[], basketMode:'best_basket', maxStores:1, stopPenalty:0,
   user:null, postalCode:'', radiusKm:10, favouriteStores:[],
   preferences:{interests:['Produce','Dairy','Flyer Deals'],budget:'balanced',maxStops:2},
-  lang:'en', dietFilter:'All', policySearch:'', splitMode:'split', reportItem:null, receiptItems:[], mealPlan:{}, loyaltyOn:false, budget:0, bulkItem:null, scannerOpen:false, scannerResult:'', barcodeReader:null, aiKey:'', aiSettingsOpen:false, aiQuestion:'', aiAnswer:'', expiringSoon:false, installReady:false, genericItem:null, protectItem:null,
+  lang:'en', dietFilter:'All', policySearch:'',
   view:'shop', search:'', cat:'All',
   flyerStore:'freshco', flyerSearch:'',
   cartOpen:false, authOpen:false, postalOpen:false, chatOpen:false,
@@ -503,7 +487,7 @@ function persist() {
     localStorage.setItem(SK, JSON.stringify({
       cart:S.cart, watchlist:S.watchlist, basketMode:S.basketMode,
       maxStores:S.maxStores, stopPenalty:S.stopPenalty, user:sanitizeUser(S.user), preferences:sanitizePreferences(S.preferences),
-      lang:S.lang, dietFilter:S.dietFilter, splitMode:S.splitMode, mealPlan:S.mealPlan, loyaltyOn:S.loyaltyOn, budget:S.budget, aiKey:S.aiKey, priceReports:loadLocal('pm_reports',[]), priceHistory:loadLocal('pm_price_history',[]), postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
+      lang:S.lang, dietFilter:S.dietFilter, postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
     }));
   } catch(e) {}
 }
@@ -521,11 +505,6 @@ function hydrate() {
     if (d.preferences) S.preferences = sanitizePreferences(d.preferences);
     if (d.lang==='fr'||d.lang==='en') S.lang=d.lang;
     if (DIETS.indexOf(d.dietFilter)>-1) S.dietFilter=d.dietFilter;
-    if (d.splitMode==='single'||d.splitMode==='split') S.splitMode=d.splitMode;
-    if (d.mealPlan) S.mealPlan=d.mealPlan;
-    if (d.loyaltyOn!==undefined) S.loyaltyOn=!!d.loyaltyOn;
-    if (+d.budget>=0) S.budget=+d.budget;
-    if (d.aiKey) S.aiKey=d.aiKey;
     if (d.postalCode) S.postalCode = d.postalCode;
     if (d.radiusKm) S.radiusKm = d.radiusKm;
     if (d.favouriteStores) S.favouriteStores = d.favouriteStores;
@@ -643,6 +622,8 @@ function cartRecommendations(items) {
     var prefBoost=itemMatchesPrefs(item)?2:0, prefNote=itemMatchesPrefs(item)?' Matches your saved interests.':'';
     if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.'+prefNote,score:ins.spread*item.qty+prefBoost});
     if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.'+prefNote,score:deal.reg-deal.price+prefBoost});
+    if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.',score:ins.spread*item.qty});
+    if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.',score:deal.reg-deal.price});
   });
   return recs.sort(function(a,b){return b.score-a.score;}).slice(0,5);
 }
@@ -660,38 +641,6 @@ function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function tr(k) { return (TR[S.lang]&&TR[S.lang][k])||TR.en[k]||k; }
-function loadLocal(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch(e) { return fallback; } }
-function saveLocal(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {} }
-function currentBestRecord(item) { var bp=bestP(item.id,SIDS); return bp?{productName:item.name,store:STORES[bp.sid].name,storeId:bp.sid,price:bp.price,date:new Date().toISOString().slice(0,10)}:null; }
-function savePriceRecord(item, sid) { var p=sid?getPrice(item.id,sid):null, rec=sid&&p?{productName:item.name,store:STORES[sid].name,storeId:sid,price:p.price,date:new Date().toISOString().slice(0,10)}:currentBestRecord(item); if(!rec)return; var hist=loadLocal('pm_price_history',[]); var sig=rec.productName+'|'+rec.storeId+'|'+rec.date; if(!hist.some(function(h){return h.productName+'|'+h.storeId+'|'+h.date===sig;})){hist.push(rec);saveLocal('pm_price_history',hist.slice(-600));} }
-function recordVisiblePrices(items) { (items||[]).slice(0,30).forEach(function(item){savePriceRecord(item);}); }
-function watchSnapshot(cid) { var item=CAT.find(function(p){return p.id===cid;}), bp=item&&bestP(cid,SIDS); return item&&bp?{id:cid,price:bp.price,storeId:bp.sid,date:new Date().toISOString().slice(0,10)}:null; }
-function watchMeta() { return loadLocal('pm_watch_meta',{}); }
-function priceDrops() { var meta=watchMeta(); return S.watchlist.map(function(id){var item=CAT.find(function(p){return p.id===id;}), bp=item&&bestP(id,SIDS), old=meta[id]; return item&&bp&&old&&bp.price<old.price?{item:item,old:old.price,now:bp.price,store:STORES[bp.sid].name}:null;}).filter(Boolean); }
-function reportRows() { return loadLocal('pm_reports',[]); }
-function hasReport(id) { return reportRows().some(function(r){return +r.productId===+id;}); }
-function encodeBasket() { return btoa(unescape(encodeURIComponent(JSON.stringify(S.cart)))); }
-function decodeBasketParam() { var v=new URLSearchParams(location.search).get('basket'); if(!v)return; try{var cart=JSON.parse(decodeURIComponent(escape(atob(v)))); if(cart&&typeof cart==='object'){S.cart=cart;persist();history.replaceState(null,'',location.pathname);}}catch(e){} }
-function instacartSlug(sid) { return ({walmart:'walmart-canada',superstore:'real-canadian-superstore',nofrills:'no-frills',freshco:'freshco',metro:'metro',costco:'costco-canada'})[sid]||sid; }
-function netPrice(sid, price) { return price * (1-((LOYALTY[sid]&&LOYALTY[sid].rate)||0)); }
-function bestTimeText(item) { var h=loadLocal('pm_price_history',[]).filter(function(x){return x.productName===item.name;}); if(h.length<3)return 'Not enough data yet'; var low=h.slice().sort(function(a,b){return a.price-b.price;})[0], avg=h.reduce(function(s,x){return s+x.price;},0)/h.length; return 'Best time: '+new Date(low.date).toLocaleString('en',{month:'long'})+' (low $'+(+low.price).toFixed(2)+', avg $'+avg.toFixed(2)+')'; }
-function genericAlt(item) { var k=Object.keys(GENERIC_ALT).find(function(b){return item.brand&&item.brand.indexOf(b)>-1;}); return k?GENERIC_ALT[k]:''; }
-function bulkRows(item, price) { var u=itemMeasure(item), sizes=[.5,1,1.5,2,3].map(function(m){return {label:Math.round(u.amount*m)+(u.unit==='ea'?' ct':u.unit),unit:(price*m)/(u.amount*m)*u.base,price:price*m};}); var best=Math.min.apply(null,sizes.map(function(x){return x.unit;})); return sizes.map(function(x){return '<tr style="background:'+(Math.abs(x.unit-best)<.001?'#FEF3C7':'white')+'"><td>'+x.label+'</td><td>$'+x.price.toFixed(2)+'</td><td>$'+x.unit.toFixed(2)+' / '+u.label+'</td><td>'+(Math.round((u.amount/100)*7))+' weeks*</td></tr>';}).join(''); }
-function savingsStats() { var proofs=loadLocal('pm_proofs',[]), drops=priceDrops(), visits=+localStorage.getItem('pm_visits')||0; return {saved:proofs.reduce(function(s,p){return s+(p.reg-p.price||0);},0),proofs:proofs.length,drops:drops.length,tracked:S.watchlist.length,streak:visits}; }
-
-function daysLeft(dateStr) { var end=new Date(dateStr+'T23:59:59'), now=new Date(); return Math.ceil((end-now)/86400000); }
-function expiryPill(dateStr) { var d=daysLeft(dateStr), color=d>=4?'#059669':d>=2?'#D97706':'#DC2626', bg=d>=4?'#DCFCE7':d>=2?'#FEF3C7':'#FEE2E2'; var txt=d<0?'Expired':d===0?'Expires today':d===1?'1 day left':d+' days left'; return '<span style="font-size:10px;font-weight:900;color:'+color+';background:'+bg+';border-radius:999px;padding:3px 7px">'+txt+'</span>'; }
-function updateVisitStreak() { var today=new Date().toISOString().slice(0,10), last=localStorage.getItem('pm_last_visit'), streak=+localStorage.getItem('pm_visits')||0; if(last!==today){var prev=last?new Date(last):null, y=new Date(Date.now()-86400000).toISOString().slice(0,10); streak=(last===y)?streak+1:1; localStorage.setItem('pm_visits',streak); localStorage.setItem('pm_last_visit',today);} }
-function protectDrops() { var rows=loadLocal('pm_price_protect',[]), drops=priceDrops(), now=Date.now(); return rows.map(function(p){var d=drops.find(function(x){return x.item.id===p.id;}); var active=(now-new Date(p.date).getTime()) <= (p.days||14)*86400000; return active&&d?Object.assign({},d,{purchase:p}):null;}).filter(Boolean); }
-function openDeliveryTabs(items) { tripData(items).forEach(function(t){t.items.forEach(function(i){window.open('https://www.instacart.ca/store/'+instacartSlug(t.storeId)+'/search_v3/'+encodeURIComponent(i.name),'_blank','noopener');});}); }
-function basketBudget(items) { return items.reduce(function(s,i){var bp=bestP(i.id,SIDS);return s+(bp?bp.price*i.qty:0);},0); }
-function bestSubstitution(items) { return items.slice().sort(function(a,b){var ap=bestP(a.id,SIDS),bp=bestP(b.id,SIDS);return ((bp?bp.price:0)/(b.qty||1))-((ap?ap.price:0)/(a.qty||1));})[0]; }
-function buildMealBasket() { var add={}; Object.keys(S.mealPlan||{}).forEach(function(k){var meal=(S.mealPlan[k]||'').trim().toLowerCase(); if(!meal)return; var key=Object.keys(MEALS).find(function(m){return meal.indexOf(m.toLowerCase())>-1;}); (key?MEALS[key]:[{name:meal,qty:1}]).forEach(function(ing){var match=CAT.find(function(p){return p.name.toLowerCase().indexOf(ing.name.toLowerCase().split(' ')[0])>-1 || ing.name.toLowerCase().indexOf(p.name.toLowerCase().split(' ')[0])>-1;}); if(match)add[match.id]=(add[match.id]||0)+(ing.qty||1);});}); return add; }
-function storeDistanceLabel(sid) { var km=STORE_DISTANCE[sid]||8; return km+' km'; }
-function nearbySids() { return SIDS.filter(function(sid){return (STORE_DISTANCE[sid]||99)<=S.radiusKm;}); }
-function aiContext() { var items=cartItems(); return items.map(function(i){var bp=bestP(i.id,SIDS);return i.name+' x'+i.qty+' best '+(bp?STORES[bp.sid].name+' $'+bp.price.toFixed(2):'n/a');}).join('\n'); }
-async function askClaude(q) { if(!S.aiKey)return 'Add your Anthropic API key in Ask AI Beta settings first.'; var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.aiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:'You are PriceMatch CA. Answer only from this basket/store context and be concise.\n'+aiContext(),messages:[{role:'user',content:q}]})}); if(!res.ok)throw new Error('Claude API request failed: '+res.status); var data=await res.json(); return (data.content&&data.content[0]&&data.content[0].text)||'No response.'; }
-function initPWA() { try{var manifest={name:'PriceMatch CA',short_name:'PriceMatch',start_url:location.pathname,display:'standalone',background_color:'#ffffff',theme_color:'#d40000',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#d40000"/><text x="96" y="118" text-anchor="middle" font-size="92">🏷️</text></svg>'),sizes:'192x192',type:'image/svg+xml'},{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="90" fill="#d40000"/><text x="256" y="330" text-anchor="middle" font-size="250">🏷️</text></svg>'),sizes:'512x512',type:'image/svg+xml'}]}; var link=document.createElement('link'); link.rel='manifest'; link.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest)); document.head.appendChild(link); if('serviceWorker' in navigator){var sw='self.addEventListener("install",e=>{e.waitUntil(caches.open("pm-ca-v1").then(c=>c.addAll(["./"])));self.skipWaiting()});self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{let copy=res.clone();caches.open("pm-ca-v1").then(c=>c.put(e.request,copy));return res}).catch(()=>r)))})'; navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'text/javascript'}))).catch(function(){});} window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.pmInstallPrompt=e;S.installReady=true;render();}); }catch(e){} }
 function itemMeasure(item) {
   var n=(item.name||'').toLowerCase(), m;
   if ((m=n.match(/(\d+(?:\.\d+)?)\s*kg/))) return {amount:+m[1]*1000,unit:'g',base:100,label:'100g'};
@@ -714,7 +663,6 @@ function dietTags(item) {
   if (['Produce','Dairy','Meat','Pantry','Beverages'].indexOf(item.cat)>-1) tags.push('Kosher');
   if (['Produce','Meat','Dairy','Beverages'].indexOf(item.cat)>-1 || /rice|corn|potato/.test(n)) tags.push('Gluten-Free');
   if (item.cat==='Meat') tags.push('Halal');
-  if (/organic|bio/.test(n) || (item.cat==='Produce' && (item.hot||item.sale))) tags.push('Organic');
   return tags;
 }
 function matchesDiet(item) { return S.dietFilter==='All' || dietTags(item).indexOf(S.dietFilter)>-1; }
@@ -791,7 +739,7 @@ function proofCardBlob(pi) {
     x.fillStyle='#F8FAFC';x.fillRect(0,0,c.width,c.height);
     x.fillStyle=st.color;x.fillRect(0,0,c.width,120);
     x.fillStyle='white';x.font='800 34px DM Sans, Arial';x.fillText('PriceMatch CA',40,54);
-    x.font='700 20px DM Sans, Arial';x.fillText('PriceMatch CA – Verified • '+st.name,40,92);
+    x.font='700 20px DM Sans, Arial';x.fillText('Price Match Proof • '+st.name,40,92);
     x.fillStyle='#0F172A';x.font='800 34px DM Sans, Arial';x.fillText(pi.name,40,180);
     x.font='700 22px DM Sans, Arial';x.fillStyle='#475569';x.fillText(pi.cat+' • '+pi.brand,40,218);
     x.fillStyle='#059669';x.font='900 76px DM Sans, Arial';x.fillText('$'+pi.price.toFixed(2),40,315);
@@ -802,11 +750,6 @@ function proofCardBlob(pi) {
     x.fillStyle='#94A3B8';x.font='600 18px DM Sans, Arial';x.fillText('Source: '+st.flyerUrl,40,475);
     c.toBlob(resolve,'image/png',0.95);
   });
-}
-async function copyProofImage(pi) {
-  var blob=await proofCardBlob(pi);
-  if (navigator.clipboard && window.ClipboardItem) return navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pricematch-proof-'+pi.id+'.png';a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
 }
 async function shareProofImage(pi) {
   var blob=await proofCardBlob(pi), file=new File([blob], 'pricematch-proof-'+pi.id+'.png', {type:'image/png'});
@@ -884,8 +827,6 @@ function bNav() {
     +'<button class="ntab'+(S.view==='watchlist'?' on':'')+'" data-act="set-view" data-view="watchlist">&#x2B50; '+tr('watchlist')+(S.watchlist.length>0?'<span class="nbadge" style="background:var(--o)">'+S.watchlist.length+'</span>':'')+'</button>'
     +'<button class="ntab'+(S.view==='preferences'?' on':'')+'" data-act="set-view" data-view="preferences">&#x2728; '+tr('preferences')+'</button>'
     +'<button class="ntab'+(S.view==='policies'?' on':'')+'" data-act="set-view" data-view="policies">&#x1F4DC; '+tr('policies')+'</button>'
-    +'<button class="ntab'+(S.view==='inflation'?' on':'')+'" data-act="set-view" data-view="inflation">&#x1F4C8; Inflation</button>'
-    +'<button class="ntab'+(S.view==='meal'?' on':'')+'" data-act="set-view" data-view="meal">&#x1F37D; Meal Planner</button>'
     +'</nav>'
     +'<div class="mode-bar" role="toolbar">'
     +'<span style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px">Mode:</span>'
@@ -945,7 +886,7 @@ function bGrid(filt) {
         +'</div>':'')
       +'</div>'
       +'<div class="cbody"><div class="cname">'+esc(p.name)+'</div>'
-      +'<span class="ccat">'+p.cat+'</span> '+dietTags(p).map(function(t){return '<span class="unit-price" style="color:#047857;background:#ECFDF5;border-color:#A7F3D0">'+t+'</span>';}).join(' ') +(hasReport(p.id)?'<div class="report-badge">Community reported</div>':'')+'<div class="unit-price">'+tr('unit')+': '+unitPriceText(p,bp.price)+'</div>'
+      +'<span class="ccat">'+p.cat+'</span><div class="unit-price">'+tr('unit')+': '+unitPriceText(p,bp.price)+'</div>'
       +'<div class="schips">'+SIDS.map(function(sid){
         var pr=getPrice(p.id,sid);if(!pr)return '';
         var st=STORES[sid],ib=sid===bp.sid;
@@ -1162,7 +1103,7 @@ function bFlyers() {
 
   /* Get items from IDB for this store, fall back to DEALS */
   var stored = S.idbFlyers.find(function(f){return f.storeId===S.flyerStore;});
-  var flyerItems = (stored ? stored.items : buildFlyerItems(S.flyerStore)).filter(function(fi){return matchesDiet(CAT.find(function(p){return p.id===fi.catalogId;})||fi) && (!S.expiringSoon || daysLeft(fi.validTo)<=2);});
+  var flyerItems = (stored ? stored.items : buildFlyerItems(S.flyerStore)).filter(function(fi){return matchesDiet(CAT.find(function(p){return p.id===fi.catalogId;})||fi);});
   var savedAt = stored ? new Date(stored.savedAt).toLocaleString() : 'Not yet saved';
   var matchBadge = st.supportsMatch
     ? '<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x2696; Price match available</span>'
@@ -1184,6 +1125,7 @@ function bFlyers() {
     : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
 
   return topBar+dietBar+storeTabs+flyerHdr+magGrid
+  return topBar+storeTabs+flyerHdr+magGrid
     +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Flyers downloaded to this browser via IndexedDB &middot; Search works after the local flyer download finishes &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
 }
 
@@ -1237,7 +1179,7 @@ function bProofModal() {
     +'<div class="proof-script">&#x1F4AC; &ldquo;This item is $'+pi.price.toFixed(2)+' at '+st.name+' this week. Can you match that price? Here is the flyer proof.&rdquo;</div>'
     +'<div class="proof-footer">'
     +'<button class="btn-print" onclick="window.print()" aria-label="Print proof card">'+SVG.print+' Print Proof</button>'
-    +'<button class="btn-share" data-act="copy-proof" aria-label="Copy proof image">Copy as Image</button><button class="btn-share" data-act="share-proof" aria-label="Share proof image">'+SVG.share+' Share</button>'
+    +'<button class="btn-share" data-act="share-proof" aria-label="Share proof image">'+SVG.share+' Share Image</button>'
     +'</div></div></div></div>';
 }
 
@@ -1305,7 +1247,7 @@ function bWL() {
       +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" style="background:transparent;border:none">&#x2B50;</button></div>'
       +'<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">'
       +'<div><div style="font-size:11px;color:#94A3B8;margin-bottom:2px">'+(deal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
-      +'<div style="font-size:22px;font-weight:800;color:var(--g)">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div>'+(drop?'<div style="font-size:10px;font-weight:900;color:#047857;background:#DCFCE7;border-radius:6px;padding:2px 6px;margin-top:4px">PRICE DROP</div>':'')+'</div>'
+      +'<div style="font-size:22px;font-weight:800;color:var(--g)">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div></div>'
       +'<span class="wdelta '+dc+'">'+dl+'</span></div>'+db
       +'<div style="display:flex;gap:7px">'+bCTA(p.id)
       +'<button class="bfp" data-act="show-proof" data-fid="'+p.id+'" data-fsid="'+bp.sid+'" style="flex:0 0 auto;padding:10px 14px;font-size:11px">&#x1F9FE; Proof</button>'
@@ -1372,12 +1314,6 @@ function bCompare(items,tots){
   return '<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Your basket compared across all 6 stores</div>'+w2+recHtml+'<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Store comparison &mdash; price + quality</div>'+bars+tbl+'<p style="font-size:11px;color:#CBD5E1">* = active deal price &middot; Prices may vary in store</p>';
 }
 
-function bDeliveryLinks(items) {
-  var trips=tripData(items);
-  if(!items.length)return '';
-  return '<div style="margin-top:14px;padding:14px;border:1px solid #BFDBFE;background:#EFF6FF;border-radius:12px"><div style="font-size:12px;font-weight:900;color:#1D4ED8;margin-bottom:8px">&#x1F6D2; Order for Delivery <span title="You\'ll be taken to Instacart to complete your order." style="cursor:help">ⓘ</span></div>'+trips.map(function(t){return '<div style="margin:8px 0"><strong style="color:'+t.store.color+'">'+t.store.name+'</strong><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px">'+t.items.map(function(i){return '<a class="mini-btn" target="_blank" rel="noopener noreferrer" href="https://www.instacart.ca/store/'+instacartSlug(t.storeId)+'/search_v3/'+encodeURIComponent(i.name)+'">Instacart '+esc(i.name)+'</a>';}).join('')+'</div></div>';}).join('')+'</div>';
-}
-
 function bTrip(items,tots){
   if(!items.length)return bCI([]);
   var allT=singleStoreTotals(items);
@@ -1389,11 +1325,11 @@ function bTrip(items,tots){
   var twoRows=two&&two.stops?two.stops.map(function(t){return '<div class="tr2"><div style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:'+t.store.color+';display:inline-block"></span><span style="font-weight:700;color:'+t.store.color+'">'+t.store.name+'</span><span style="font-size:11px;color:#94A3B8">'+t.items.map(function(i){return i.e+' '+i.qty+'x';}).join(' &middot; ')+'</span></div><span style="color:#7C3AED;font-weight:700">$'+t.total.toFixed(2)+'</span></div>';}).join(''):'';
   var twoSave=two?two.savings:0;
   var piRows=items.map(function(item){var bp=bestP(item.id,SIDS),wp=worstP(item.id,SIDS);if(!bp)return '';return '<tr><td style="padding:8px 10px;font-size:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">'+item.e+'</span>'+esc(item.name)+'</td><td style="padding:8px 10px;font-size:12px"><span style="color:'+STORES[bp.sid].color+';font-weight:700">'+STORES[bp.sid].name+'</span>'+(bp.isDeal?'<span class="cdeal" style="margin-left:4px">Deal</span>':'')+'</td><td style="padding:8px 10px;font-size:12px;color:var(--g);font-weight:700">$'+bp.price.toFixed(2)+'</td><td style="padding:8px 10px;font-size:12px;color:var(--g);font-weight:600">'+(wp&&wp.price>bp.price?'$'+((wp.price-bp.price)*item.qty).toFixed(2):'&mdash;')+'</td></tr>';}).join('');
-  return '<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Your Optimal Shopping Route</div><div style="display:flex;gap:8px;margin-bottom:12px"><button class="mpill'+(S.splitMode==='split'?' on':'')+'" data-act="set-split" data-mode="split">Split across stores</button><button class="mpill'+(S.splitMode==='single'?' on':'')+'" data-act="set-split" data-mode="single">Best single store</button></div>'
+  return '<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Your Optimal Shopping Route</div>'
     +'<div class="topt rec"><div class="tbadge" style="background:var(--gl);color:var(--g)">&#x2B50; Best single stop</div><div style="font-size:13px;font-weight:600;color:#065F46;margin-bottom:6px">Buy everything at '+b.name+'</div><div class="ttot" style="color:var(--g)">$'+b.tot.toFixed(2)+'</div><div style="font-size:13px;color:var(--gd);margin-top:4px">Save <strong>$'+ssv.toFixed(2)+' ('+spct+'%)</strong> vs most expensive option</div><div class="tbd">'+sRows+'</div></div>'
-    +(S.splitMode!=='single'&&two&&two.stops.length>1?'<div class="topt spl" style="border-color:#C4B5FD;background:#F5F3FF"><div class="tbadge" style="background:#EDE9FE;color:#7C3AED">&#x2702; Recommended 2-shop split</div><div style="font-size:13px;font-weight:600;color:#6D28D9;margin-bottom:6px">Buy from '+two.stops.map(function(t){return t.store.name;}).join(' + ')+'</div><div class="ttot" style="color:#7C3AED">$'+two.total.toFixed(2)+'</div><div style="font-size:13px;color:#6D28D9;margin-top:4px">'+(twoSave>0?'Saves <strong>$'+twoSave.toFixed(2)+'</strong> vs '+b.name+'.':'Does not beat the best single stop, so keep it as a convenience option.')+'</div><div class="tbd">'+twoRows+'</div></div>':'')
-    +(S.splitMode!=='single'&&trips.length>1?'<div class="topt spl"><div class="tbadge" style="background:#EFF6FF;color:var(--b)">&#x1F4B8; Absolute max savings</div><div style="font-size:13px;font-weight:600;color:#1D4ED8;margin-bottom:6px">Best store per item &middot; '+trips.length+' stops</div><div class="ttot" style="color:var(--b)">$'+spt.toFixed(2)+'</div><div style="font-size:13px;color:#2563EB;margin-top:4px">Save <strong>$'+ssv2.toFixed(2)+' ('+spct2+'%)</strong> total vs most expensive store</div><div class="tbd">'+tRows+'</div></div>':'')
-    +'<div style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Per-Item Best Store</div><table class="pitbl"><thead><tr><th>Item</th><th>Best Store</th><th>Price</th><th>Save vs Highest</th></tr></thead><tbody>'+piRows+'</tbody></table></div>'+bDeliveryLinks(items);
+    +(two&&two.stops.length>1?'<div class="topt spl" style="border-color:#C4B5FD;background:#F5F3FF"><div class="tbadge" style="background:#EDE9FE;color:#7C3AED">&#x2702; Recommended 2-shop split</div><div style="font-size:13px;font-weight:600;color:#6D28D9;margin-bottom:6px">Buy from '+two.stops.map(function(t){return t.store.name;}).join(' + ')+'</div><div class="ttot" style="color:#7C3AED">$'+two.total.toFixed(2)+'</div><div style="font-size:13px;color:#6D28D9;margin-top:4px">'+(twoSave>0?'Saves <strong>$'+twoSave.toFixed(2)+'</strong> vs '+b.name+'.':'Does not beat the best single stop, so keep it as a convenience option.')+'</div><div class="tbd">'+twoRows+'</div></div>':'')
+    +(trips.length>1?'<div class="topt spl"><div class="tbadge" style="background:#EFF6FF;color:var(--b)">&#x1F4B8; Absolute max savings</div><div style="font-size:13px;font-weight:600;color:#1D4ED8;margin-bottom:6px">Best store per item &middot; '+trips.length+' stops</div><div class="ttot" style="color:var(--b)">$'+spt.toFixed(2)+'</div><div style="font-size:13px;color:#2563EB;margin-top:4px">Save <strong>$'+ssv2.toFixed(2)+' ('+spct2+'%)</strong> total vs most expensive store</div><div class="tbd">'+tRows+'</div></div>':'')
+    +'<div style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Per-Item Best Store</div><table class="pitbl"><thead><tr><th>Item</th><th>Best Store</th><th>Price</th><th>Save vs Highest</th></tr></thead><tbody>'+piRows+'</tbody></table></div>';
 }
 
 function bAlerts(items){
@@ -1421,30 +1357,11 @@ function bCart(items,tots){
     +'</div>';
 }
 
-function bMealPlanner(){
-  var days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], slots=['Breakfast','Lunch','Dinner'];
-  var head='<div class="meal-grid"><div></div>'+days.map(function(d){return '<strong style="font-size:12px">'+d+'</strong>';}).join('');
-  var grid=slots.map(function(slot){return '<strong style="font-size:12px;padding-top:10px">'+slot+'</strong>'+days.map(function(day){var k=day+'-'+slot;return '<div class="meal-cell" draggable="true"><input data-meal="'+k+'" value="'+esc(S.mealPlan[k]||'')+'" placeholder="Spaghetti Bolognese" oninput="S.mealPlan[this.dataset.meal]=this.value;persist()"></div>';}).join('');}).join('')+'</div>';
-  return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:900">&#x1F37D; Weekly Meal Planner</h1><p style="font-size:13px;color:#64748B">Type meals like Spaghetti Bolognese, Chicken Stir Fry, Tacos, Breakfast, or Pasta, then generate a basket.</p></div>'+head+grid+'<div style="margin-top:16px;display:flex;gap:10px"><button class="btn-full btn-gf" style="max-width:260px" data-act="generate-meals">Generate Grocery List</button><button class="mini-btn" data-act="clear-meals">Clear Planner</button></div></main>';
-}
-
-function bInflation(){
-  var hist=loadLocal('pm_price_history',[]), names=Array.from(new Set(hist.map(function(h){return h.productName;}))).slice(0,8);
-  var latest=cartItems().reduce(function(s,i){var bp=bestP(i.id,SIDS);return s+(bp?bp.price*i.qty:0);},0), old=latest*0.89, pct=old?Math.round((latest-old)/old*100):0;
-  var rows=hist.slice(-12).reverse().map(function(h){return '<tr><td>'+esc(h.date)+'</td><td>'+esc(h.productName)+'</td><td>'+esc(h.store)+'</td><td>$'+(+h.price).toFixed(2)+'</td></tr>';}).join('');
-  return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x1F4C8; Personal Inflation Tracker</h1><p style="font-size:13px;color:#64748B">Price history is saved locally when you view or add products, and receipt scans can feed this history.</p></div><div style="display:grid;grid-template-columns:1fr 320px;gap:16px"><section style="background:white;border:1px solid var(--bd);border-radius:16px;padding:18px"><canvas id="inflation-chart" height="220"></canvas></section><aside style="background:white;border:1px solid var(--bd);border-radius:16px;padding:18px"><div style="font-size:11px;font-weight:900;color:#94A3B8;text-transform:uppercase">Basket change</div><div style="font-size:34px;font-weight:900;color:'+(pct>=0?'#DC2626':'#059669')+'">'+(pct>=0?'+':'')+pct+'%</div><p style="font-size:12px;color:#64748B">Your basket costs '+Math.abs(pct)+'% '+(pct>=0?'more':'less')+' than the 3-month baseline estimate.</p><label class="mini-btn" style="display:block;text-align:center;margin-top:12px">Scan Receipt<input type="file" accept="image/*" id="receipt-file" style="display:none"></label><div id="receipt-output" style="font-size:12px;color:#64748B;margin-top:10px">Upload a receipt image to OCR item prices.</div></aside></div><div style="overflow:auto;margin-top:16px"><table class="policy-table"><thead><tr><th>Date</th><th>Product</th><th>Store</th><th>Price</th></tr></thead><tbody>'+rows+'</tbody></table></div></main>';
-}
-function drawInflationChart(){
-  var c=document.getElementById('inflation-chart'); if(!c)return; var hist=loadLocal('pm_price_history',[]).slice(-30), labels=hist.map(function(h){return h.date+' '+h.productName.slice(0,8);}), data=hist.map(function(h){return +h.price;});
-  if(window.Chart){new Chart(c,{type:'line',data:{labels:labels,datasets:[{label:'Local price history',data:data,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,.12)',tension:.25}]},options:{plugins:{legend:{display:false}},scales:{x:{display:false}}}});}else{var x=c.getContext('2d');x.fillStyle='#64748B';x.font='14px sans-serif';x.fillText('Chart.js loading... '+data.length+' records saved.',20,40);}
-}
-
 function bPolicies(){
   var q=(S.policySearch||'').toLowerCase();
   var rows=policyRows().filter(function(st){return !q || st.name.toLowerCase().indexOf(q)>-1 || st.matchNote.toLowerCase().indexOf(q)>-1 || st.matchState.toLowerCase().indexOf(q)>-1;});
-  var table='<details open style="margin-bottom:18px"><summary style="cursor:pointer;font-weight:900;margin-bottom:10px">Store Policies</summary><div style="overflow:auto"><table class="policy-table"><thead><tr><th>Retailer</th><th>Price-match accepted</th><th>Requires printed flyer</th><th>Same city only</th><th>Online flyers accepted</th><th>Notes</th><th>Policy</th></tr></thead><tbody>'+rows.map(function(st){var yes=st.supportsMatch;return '<tr><td><strong style="color:'+st.color+'">'+esc(st.name)+'</strong></td><td>'+(yes?'Yes':'No/varies')+'</td><td>'+(yes?'No, digital usually OK':'Varies')+'</td><td>'+(yes?'Usually':'N/A')+'</td><td>'+(yes?'Yes':'Flyer only')+'</td><td>'+esc(st.matchNote)+'</td><td><a href="'+safeUrl(st.flyerUrl)+'" target="_blank" rel="noopener noreferrer">Link</a></td></tr>';}).join('')+'</tbody></table></div></details>';
   return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x1F4DC; Store Price-Match Policy Hub</h1><p style="font-size:13px;color:#64748B">Search Canadian retailer rules, proof requirements, and geographic limits before checkout. Always confirm with the local store manager.</p></div>'
-    +'<div class="srch-wrap" style="max-width:640px;margin-bottom:18px"><div class="srch-icon">'+SVG.srch+'</div><input class="srch" id="policy-srch" value="'+esc(S.policySearch)+'" placeholder="Search Walmart, FreshCo, printed flyer, local competitor..." oninput="onPolicySearch(this.value)"/></div>'+table
+    +'<div class="srch-wrap" style="max-width:640px;margin-bottom:18px"><div class="srch-icon">'+SVG.srch+'</div><input class="srch" id="policy-srch" value="'+esc(S.policySearch)+'" placeholder="Search Walmart, FreshCo, printed flyer, local competitor..." oninput="onPolicySearch(this.value)"/></div>'
     +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">'+rows.map(function(st){var yes=st.supportsMatch;return '<article class="policy-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px"><span style="width:11px;height:11px;border-radius:50%;background:'+st.color+';display:inline-block"></span><h2 style="font-size:17px;font-weight:900;color:'+st.color+'">'+esc(st.name)+'</h2></div><span style="font-size:10px;font-weight:900;border-radius:999px;padding:3px 8px;background:'+(yes?'#DCFCE7':'#FEF2F2')+';color:'+(yes?'#047857':'#B91C1C')+'">'+(yes?'MATCHES':'NO MATCH')+'</span></div><div style="font-size:12px;color:#64748B;line-height:1.55;margin-bottom:10px">'+esc(st.matchNote)+'</div><ul style="font-size:12px;color:#475569;line-height:1.7;padding-left:18px;margin-bottom:10px"><li>Bring current flyer proof: printed or digital screenshot.</li><li>Item must be identical brand, size, format, and in stock.</li><li>Geographic limits usually mean local competitors only.</li></ul><a href="'+safeUrl(st.flyerUrl)+'" target="_blank" rel="noopener noreferrer" style="font-size:12px;font-weight:800;color:var(--b);text-decoration:none">'+SVG.ext+' '+tr('officialSource')+'</a></article>';}).join('')+'</div></main>';
 }
 
@@ -1465,18 +1382,15 @@ function bChatbot(){
   return (S.chatOpen?'<div class="chat-panel fi" role="dialog" aria-label="Price assistant"><div class="chat-head"><div><div style="font-weight:900">PriceMatch Assistant</div><div style="font-size:11px;opacity:.85">Local flyer answers + official source links</div></div><button data-act="toggle-chat" style="border:none;background:rgba(255,255,255,.2);color:white;border-radius:50%;width:30px;height:30px;cursor:pointer">&times;</button></div><div class="chat-body" id="chat-body">'+body+'</div><div class="chat-input"><input id="chat-input" value="'+esc(S.chatInput)+'" placeholder="Ask about prices, stores, flyers..." oninput="S.chatInput=this.value"/><button data-act="send-chat">Ask</button></div><div style="padding:0 12px 12px;background:white;font-size:10px;color:#94A3B8">For live web pages, use the official source links shown in answers; this static app does not scrape third-party sites.</div></div>':'')
     +'<button class="chat-fab" data-act="toggle-chat" aria-label="Open price assistant">&#x1F916; Ask prices</button>';
 }
-function bReportModal(){
-  if(!S.reportItem)return ''; var item=CAT.find(function(p){return p.id===S.reportItem;}); if(!item)return ''; var bp=bestP(item.id,SIDS), sid=bp?bp.sid:SIDS[0];
-  return '<div class="modal-bg fi" role="dialog" aria-modal="true"><div class="modal-box"><div style="text-align:center;margin-bottom:18px"><div style="font-size:40px">&#x1F4DD;</div><h2 style="font-size:22px;font-weight:900">Report a Price</h2><p style="font-size:12px;color:#64748B">Creates a pre-filled GitHub Issue for community price corrections.</p></div><label style="font-size:12px;font-weight:800">Store</label><select class="finput" id="r-store">'+SIDS.map(function(s){return '<option value="'+s+'" '+(s===sid?'selected':'')+'>'+STORES[s].name+'</option>';}).join('')+'</select><label style="font-size:12px;font-weight:800">Product</label><input class="finput" id="r-product" value="'+esc(item.name)+'"><label style="font-size:12px;font-weight:800">Price</label><input class="finput" id="r-price" type="number" step="0.01" value="'+(bp?bp.price.toFixed(2):'')+'"><label style="font-size:12px;font-weight:800">Date</label><input class="finput" id="r-date" type="date" value="'+new Date().toISOString().slice(0,10)+'"><button class="btn-full btn-gf" data-act="submit-report">Open GitHub Issue</button><button class="btn-maybe" data-act="close-report">Cancel</button></div></div>';
-}
-
 /* ═══ MODALS ════════════════════════════════════════════════════════ */
 function bAuth(){
   if(!S.authOpen)return '';
   var isSign=S.authMode!=='signin';
+  var feats=[['&#x1F512;','Supabase-ready email/password auth with no service keys in the browser'],['&#x2728;','Preference-based recommendations after signup'],['&#x1F4F0;','Downloaded flyer search and price alerts'],['&#x1F916;','Chat assistant for price and flyer questions']];
   var msg=S.authMsg?'<div class="auth-msg '+(S.authMsg.indexOf('Error')===0?'err':'ok')+'">'+esc(S.authMsg)+'</div>':'';
-  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:20px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">'+(isSign?'Create your PriceMatch account':'Welcome back')+'</h2><p style="font-size:13px;color:#64748B;line-height:1.55">'+(isSign?'Create an account to save your cart and preferences.':'Sign in to continue saving your cart and preferences.')+'</p></div>'
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:20px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">'+(isSign?'Create your PriceMatch account':'Welcome back')+'</h2><p style="font-size:13px;color:#64748B;line-height:1.55">'+(supabaseConfigured()?'Connected to Supabase auth.':'Supabase is not configured yet. Add your project URL and anon key to enable real signup/login.')+'</p></div>'
     +'<div class="auth-tabs"><button class="auth-tab'+(isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signup">Sign up</button><button class="auth-tab'+(!isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signin">Login</button></div>'+msg
+    +'<div style="margin-bottom:18px">'+feats.map(function(f){return '<div class="firow"><span>'+f[0]+'</span>'+f[1]+'</div>';}).join('')+'</div>'
     +(isSign?'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-name">Your name</label><input class="finput" id="f-name" name="name" autocomplete="name" placeholder="Your name" value="'+esc(S.fName)+'" oninput="S.fName=this.value"/>':'')
     +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-email">Email address</label>'
     +'<input class="finput" id="f-email" name="email" type="email" autocomplete="email" placeholder="your@email.com" value="'+esc(S.fEmail)+'" oninput="S.fEmail=this.value"/>'
@@ -1524,10 +1438,8 @@ function render(){
   else if(S.view==='watchlist') html+=bWL();
   else if(S.view==='preferences') html+=bPreferences();
   else if(S.view==='policies') html+=bPolicies();
-  else if(S.view==='inflation') html+=bInflation();
-  else if(S.view==='meal') html+=bMealPlanner();
   if(S.cartOpen) html+=bCart(items,tots);
-  html+=bChatbot()+bAuth()+bPostal()+bProofModal()+bReportModal()+bBulkModal()+bGenericModal()+bScannerModal()+bAISettings()+bProtectModal();
+  html+=bChatbot()+bAuth()+bPostal()+bProofModal();
   document.getElementById('app').innerHTML=html;
   window.scrollTo(0,prevY);
   if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
@@ -1535,7 +1447,6 @@ function render(){
   if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
   if(fid==='policy-srch'){var el9=document.getElementById('policy-srch');if(el9){el9.focus();el9.setSelectionRange(S.policySearch.length,S.policySearch.length);}}
   if(fid==='chat-input'){var el7=document.getElementById('chat-input');if(el7){el7.focus();el7.setSelectionRange(S.chatInput.length,S.chatInput.length);}}
-  if(S.view==='inflation') setTimeout(drawInflationChart,60);
 }
 
 function onSearch(v){ if(S.view==='flyers')S.flyerSearch=v; else S.search=v; render(); }
@@ -1575,40 +1486,13 @@ document.addEventListener('click',async function(e){
   else if(a==='close-postal'){S.postalOpen=false;render();}
   else if(a==='save-postal'){var el4=document.getElementById('f-postal');var pc=(el4?el4.value:S.fPostal||'').trim().toUpperCase();if(pc)S.postalCode=pc;S.postalOpen=false;persist();render();}
   else if(a==='toggle-fav'){var idx=S.favouriteStores.indexOf(store);if(idx>-1)S.favouriteStores.splice(idx,1);else S.favouriteStores.push(store);persist();render();}
-  else if(a==='toggle-watch'){var idx2=S.watchlist.indexOf(id), meta=watchMeta();if(idx2>-1){S.watchlist.splice(idx2,1);delete meta[id];}else{S.watchlist.push(id);var snap=watchSnapshot(id);if(snap)meta[id]=snap;}saveLocal('pm_watch_meta',meta);persist();render();}
+  else if(a==='toggle-watch'){var idx2=S.watchlist.indexOf(id);if(idx2>-1)S.watchlist.splice(idx2,1);else S.watchlist.push(id);persist();render();}
   else if(a==='toggle-pref'){var ints=prefInterests().slice();var idxp=ints.indexOf(pref);if(idxp>-1)ints.splice(idxp,1);else ints.push(pref);S.preferences.interests=ints;persist();render();}
   else if(a==='set-budget'){S.preferences.budget=budget;persist();render();}
-  else if(a==='set-split'){S.splitMode=mode;persist();render();}
-  else if(a==='toggle-loyalty'){S.loyaltyOn=!S.loyaltyOn;persist();render();}
-  else if(a==='order-delivery'){S.tab='trip';openDeliveryTabs(cartItems());render();}
-  else if(a==='set-radius'){S.radiusKm=n||10;persist();render();}
-  else if(a==='toggle-expiring'){S.expiringSoon=!S.expiringSoon;render();}
-  else if(a==='install-pwa'){if(window.pmInstallPrompt){window.pmInstallPrompt.prompt();}localStorage.setItem('pm_install_dismissed','1');render();}
-  else if(a==='dismiss-install'){localStorage.setItem('pm_install_dismissed','1');render();}
-  else if(a==='open-bulk'){S.bulkItem=id;render();}
-  else if(a==='close-bulk'){S.bulkItem=null;render();}
-  else if(a==='show-generic'){S.genericItem=id;render();}
-  else if(a==='close-generic'){S.genericItem=null;render();}
-  else if(a==='open-protect'){S.protectItem=id;render();}
-  else if(a==='close-protect'){S.protectItem=null;render();}
-  else if(a==='save-protect'){var prot=loadLocal('pm_price_protect',[]);prot.push({id:S.protectItem,date:new Date().toISOString().slice(0,10),days:14});saveLocal('pm_price_protect',prot.slice(-100));S.protectItem=null;render();}
-  else if(a==='open-scanner'){S.scannerOpen=true;S.scannerResult='Ready to scan.';render();}
-  else if(a==='close-scanner'){if(S.barcodeReader&&S.barcodeReader.reset)S.barcodeReader.reset();S.scannerOpen=false;render();}
-  else if(a==='start-scanner'){startBarcodeScanner();}
-  else if(a==='open-ai-settings'){S.aiSettingsOpen=true;render();}
-  else if(a==='close-ai-settings'){S.aiSettingsOpen=false;persist();render();}
-  else if(a==='ask-ai'){var k=document.getElementById('ai-key'),qel=document.getElementById('ai-q');S.aiKey=k?k.value:S.aiKey;S.aiQuestion=qel?qel.value:S.aiQuestion;S.aiAnswer='Thinking...';persist();render();try{S.aiAnswer=await askClaude(S.aiQuestion||'How can I save on this basket?');}catch(err){S.aiAnswer='AI request failed. Check your API key/CORS and try again. '+err.message;}render();}
-  else if(a==='generate-meals'){var b=buildMealBasket();if(Object.keys(b).length){S.cart=b;S.cartOpen=true;S.tab='compare';persist();}render();}
-  else if(a==='clear-meals'){S.mealPlan={};persist();render();}
-  else if(a==='share-basket'){var url=location.origin+location.pathname+'?basket='+encodeBasket();navigator.clipboard&&navigator.clipboard.writeText(url);S.authMsg='Basket link copied to clipboard.';render();}
-  else if(a==='open-report'){S.reportItem=id;render();}
-  else if(a==='close-report'){S.reportItem=null;render();}
-  else if(a==='submit-report'){var prod=document.getElementById('r-product').value, rs=document.getElementById('r-store').value, rp=document.getElementById('r-price').value, rd=document.getElementById('r-date').value;var rep={productId:S.reportItem,productName:prod,store:rs,price:+rp,date:rd};var reps=reportRows();reps.push(rep);saveLocal('pm_reports',reps);savePriceRecord({id:S.reportItem,name:prod,cat:(CAT.find(function(p){return p.id===S.reportItem;})||{}).cat||'Pantry'},rs);S.reportItem=null;window.open('https://github.com/your-org/pricematch/issues/new?title='+encodeURIComponent('Price report: '+prod)+'&body='+encodeURIComponent('Store: '+STORES[rs].name+'\nProduct: '+prod+'\nPrice: $'+rp+'\nDate: '+rd),'_blank','noopener');render();}
   else if(a==='set-auth-mode'){S.authMode=mode;S.authMsg='';render();}
   else if(a==='toggle-chat'){S.chatOpen=!S.chatOpen;render();}
   else if(a==='send-chat'){var q=(document.getElementById('chat-input')||{}).value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();}
   else if(a==='offline-profile'){S.user={name:'Offline Shopper',email:'',provider:'offline'};S.authOpen=false;S.authMsg='';persist();render();}
-  else if(a==='save-receipt'){var hist=loadLocal('pm_price_history',[]).concat(S.receiptItems||[]);saveLocal('pm_price_history',hist.slice(-600));S.receiptItems=[];render();}
   else if(a==='show-proof'){
     var item2=CAT.find(function(p){return p.id===fid;});
     if(item2&&fsid){
