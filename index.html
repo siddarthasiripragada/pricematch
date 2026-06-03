@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="PriceMatch CA — Browse real store flyers, compare basket prices across 6 stores, and generate price-match proof at checkout."/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
 <title>PriceMatch CA — Live Flyer Comparison</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F6D2;</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet"/>
@@ -223,6 +225,20 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .pitbl tr:last-child td{border-bottom:none}
 /* ── MODALS ── */
 .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.54);z-index:600;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:16px}
+
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.auth-tab{border:1.5px solid var(--bd);background:#F8FAFC;color:#64748B;border-radius:10px;padding:10px;font-weight:800;cursor:pointer}
+.auth-tab.on{background:var(--gl);border-color:var(--gs);color:var(--g)}
+.auth-msg{padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.45;margin-bottom:12px}
+.auth-msg.ok{background:var(--gl);border:1px solid var(--gs);color:var(--gd)}.auth-msg.err{background:#FEF2F2;border:1px solid #FECACA;color:var(--r)}
+.pref-chip{padding:10px 12px;border-radius:10px;border:1.5px solid var(--bd);background:white;color:#475569;font-size:12px;font-weight:700;cursor:pointer;min-height:42px}
+.pref-chip.on{border-color:var(--g);background:var(--gl);color:var(--g)}
+.chat-fab{position:fixed;right:22px;bottom:22px;z-index:520;border:none;border-radius:999px;background:linear-gradient(135deg,#2563EB,#06B6D4);color:white;padding:14px 18px;font-size:14px;font-weight:800;box-shadow:0 16px 36px rgba(37,99,235,.34);cursor:pointer;display:flex;align-items:center;gap:8px}
+.chat-panel{position:fixed;right:22px;bottom:78px;z-index:520;width:360px;max-width:calc(100vw - 28px);background:white;border:1px solid var(--bd);border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,.22);overflow:hidden}
+.chat-head{padding:14px 16px;background:linear-gradient(135deg,#2563EB,#06B6D4);color:white;display:flex;align-items:center;justify-content:space-between}
+.chat-body{padding:14px;height:310px;overflow-y:auto;background:#F8FAFC}.chat-msg{padding:9px 11px;border-radius:12px;margin-bottom:8px;font-size:12px;line-height:1.45}.chat-msg.bot{background:white;border:1px solid var(--bd);color:#334155}.chat-msg.me{background:#DBEAFE;color:#1D4ED8;margin-left:34px}
+.chat-input{display:flex;gap:8px;padding:12px;background:white;border-top:1px solid var(--bd)}
+.chat-input input{flex:1;border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;font-size:13px}.chat-input button{border:none;border-radius:10px;background:var(--b);color:white;padding:0 14px;font-weight:800;cursor:pointer}
 .modal-box{background:var(--w);border-radius:22px;padding:36px;width:440px;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.22);animation:fadeUp .3s ease}
 .micon{width:60px;height:60px;border-radius:16px;margin:0 auto 14px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:28px}
 .firow{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t2);margin-bottom:9px}
@@ -238,6 +254,9 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .stog{padding:10px 12px;border-radius:10px;border:1.5px solid var(--bd);background:white;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;font-family:'DM Sans',sans-serif;min-height:44px}
 .stog:hover{border-color:var(--bd2)}.stog.on{border-color:var(--g);background:var(--gl)}
 .sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.unit-price{font-size:10px;font-weight:800;color:#2563EB;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:2px 6px;display:inline-block;margin-top:4px}
+.diet-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.diet-chip{padding:7px 12px;border-radius:999px;border:1.5px solid var(--bd);background:white;color:#64748B;font-size:12px;font-weight:800;cursor:pointer}.diet-chip.on{background:var(--gl);border-color:var(--gs);color:var(--g)}
+.policy-card{background:white;border:1px solid var(--bd);border-radius:15px;padding:16px;box-shadow:var(--sh)}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .sec-hdr h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
 .tag-r{background:#FEF2F2;color:var(--r);padding:3px 9px;border-radius:7px;font-size:11px;font-weight:800}
@@ -264,6 +283,7 @@ const STORES={
 };
 const SIDS=Object.keys(STORES);
 const CATS=["All","Produce","Dairy","Meat","Bakery","Pantry","Beverages"];
+const DIETS=["All","Vegan","Halal","Kosher","Gluten-Free"];
 const CIC={All:"🛒",Produce:"🥬",Dairy:"🥛",Meat:"🥩",Bakery:"🍞",Pantry:"🥫",Beverages:"🧃"};
 const CBG={Produce:"linear-gradient(145deg,#BBF7D0,#6EE7B7)",Dairy:"linear-gradient(145deg,#BAE6FD,#7DD3FC)",Meat:"linear-gradient(145deg,#FECACA,#FCA5A5)",Bakery:"linear-gradient(145deg,#FDE68A,#FCD34D)",Pantry:"linear-gradient(145deg,#E9D5FF,#C4B5FD)",Beverages:"linear-gradient(145deg,#A5F3FC,#67E8F9)"};
 const CAT=[
@@ -301,6 +321,11 @@ const CAT=[
 const TODAY="2026-05-28";
 const WEEK_START="2026-05-25";
 const WEEK_END="2026-05-31";
+const SUPABASE_URL=""; // Set to https://YOUR_PROJECT.supabase.co
+const SUPABASE_ANON_KEY=""; // Public anon key only; never add service-role keys in the browser
+const PREF_OPTIONS=["Produce","Dairy","Meat","Bakery","Pantry","Beverages","Flyer Deals","Price Match","Low-Carb","Family Staples","No Bulk"] ;
+const TR={en:{shop:'Shop',flyers:'Flyers',priceMatch:'Price Match',watchlist:'Watchlist',preferences:'Preferences',policies:'Policy Hub',cart:'Cart',setLocation:'Set location',bestBasket:'Best Basket',priceMatchOnly:'Price Match Only',quickTrip:'Quick Trip',diet:'Dietary filters',all:'All',unit:'Unit price',officialSource:'Official Source'},fr:{shop:'Épicerie',flyers:'Circulaires',priceMatch:'Égalisation',watchlist:'Favoris',preferences:'Préférences',policies:'Politiques',cart:'Panier',setLocation:'Lieu',bestBasket:'Meilleur panier',priceMatchOnly:'Égalisation seulement',quickTrip:'Trajet rapide',diet:'Filtres alimentaires',all:'Tous',unit:'Prix unitaire',officialSource:'Source officielle'}};
+const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'}];
 const DEALS=[
   {id:"dw1",cid:21,sid:"walmart",   price:2.97,reg:4.97,pct:40,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
   {id:"dw2",cid:14,sid:"walmart",   price:4.47,reg:6.97,pct:36,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
@@ -425,21 +450,41 @@ var SK = 'pm_ca_v3';
 var S = {
   cart:{}, watchlist:[], basketMode:'best_basket', maxStores:1, stopPenalty:0,
   user:null, postalCode:'', radiusKm:10, favouriteStores:[],
+  preferences:{interests:['Produce','Dairy','Flyer Deals'],budget:'balanced',maxStops:2},
+  lang:'en', dietFilter:'All', policySearch:'',
   view:'shop', search:'', cat:'All',
   flyerStore:'freshco', flyerSearch:'',
-  cartOpen:false, authOpen:false, postalOpen:false,
+  cartOpen:false, authOpen:false, postalOpen:false, chatOpen:false,
   matchItem:null, proofItem:null,
-  tab:'items', fName:'', fEmail:'', fPostal:'',
+  tab:'items', fName:'', fEmail:'', fPostal:'', authMode:'signup', authMsg:'',
+  chatInput:'', chatMessages:[{from:'bot',text:'Ask me “where is milk cheapest?”, “what should I buy from flyers?”, or “official flyer for Walmart”. I use downloaded flyer data and official store links.'}],
   idbFlyers:[], idbStatus:'loading', idbSavedAt:'',
   idbFetching:false
 };
 
+function sanitizeUser(u) {
+  if (!u || typeof u !== 'object') return null;
+  return {
+    name:String(u.name||'').slice(0,60),
+    email:String(u.email||'').slice(0,120),
+    id:String(u.id||'').slice(0,80),
+    provider:String(u.provider||'local').slice(0,20)
+  };
+}
+function sanitizePreferences(prefs) {
+  var base={interests:S.preferences.interests.slice(),budget:S.preferences.budget,maxStops:S.preferences.maxStops};
+  if (!prefs || typeof prefs !== 'object') return base;
+  if (Array.isArray(prefs.interests)) base.interests=prefs.interests.filter(function(x){return PREF_OPTIONS.indexOf(x)>-1;}).slice(0,12);
+  if (['deal_first','balanced','quality'].indexOf(prefs.budget)>-1) base.budget=prefs.budget;
+  if (+prefs.maxStops>=1 && +prefs.maxStops<=3) base.maxStops=+prefs.maxStops;
+  return base;
+}
 function persist() {
   try {
     localStorage.setItem(SK, JSON.stringify({
       cart:S.cart, watchlist:S.watchlist, basketMode:S.basketMode,
-      maxStores:S.maxStores, stopPenalty:S.stopPenalty, user:S.user,
-      postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
+      maxStores:S.maxStores, stopPenalty:S.stopPenalty, user:sanitizeUser(S.user), preferences:sanitizePreferences(S.preferences),
+      lang:S.lang, dietFilter:S.dietFilter, postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
     }));
   } catch(e) {}
 }
@@ -453,7 +498,10 @@ function hydrate() {
     if (d.basketMode) S.basketMode = d.basketMode;
     if (d.maxStores) S.maxStores = d.maxStores;
     if (d.stopPenalty !== undefined) S.stopPenalty = d.stopPenalty;
-    if (d.user) S.user = d.user;
+    if (d.user) S.user = sanitizeUser(d.user);
+    if (d.preferences) S.preferences = sanitizePreferences(d.preferences);
+    if (d.lang==='fr'||d.lang==='en') S.lang=d.lang;
+    if (DIETS.indexOf(d.dietFilter)>-1) S.dietFilter=d.dietFilter;
     if (d.postalCode) S.postalCode = d.postalCode;
     if (d.radiusKm) S.radiusKm = d.radiusKm;
     if (d.favouriteStores) S.favouriteStores = d.favouriteStores;
@@ -568,6 +616,9 @@ function cartRecommendations(items) {
     var ins=priceInsightForItem(item);
     if (!ins) return;
     var deal=getDeal(item.id, ins.best.sid);
+    var prefBoost=itemMatchesPrefs(item)?2:0, prefNote=itemMatchesPrefs(item)?' Matches your saved interests.':'';
+    if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.'+prefNote,score:ins.spread*item.qty+prefBoost});
+    if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.'+prefNote,score:deal.reg-deal.price+prefBoost});
     if (ins.spread * item.qty >= 1) recs.push({kind:'gap',title:esc(item.name)+' has a $'+ins.spread.toFixed(2)+' store price gap',body:'Best is '+STORES[ins.best.sid].name+' at $'+ins.best.price.toFixed(2)+'; highest is '+STORES[ins.worst.sid].name+' at $'+ins.worst.price.toFixed(2)+'.',score:ins.spread*item.qty});
     if (deal) recs.push({kind:'deal',title:'Flyer deal: '+esc(item.name),body:STORES[ins.best.sid].name+' is $'+deal.price.toFixed(2)+' until '+deal.vt+' (was $'+deal.reg.toFixed(2)+'). Add proof if you price match.',score:deal.reg-deal.price});
   });
@@ -586,13 +637,128 @@ function matchElig(cid, fSid, tSid) {
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+function tr(k) { return (TR[S.lang]&&TR[S.lang][k])||TR.en[k]||k; }
+function itemMeasure(item) {
+  var n=(item.name||'').toLowerCase(), m;
+  if ((m=n.match(/(\d+(?:\.\d+)?)\s*kg/))) return {amount:+m[1]*1000,unit:'g',base:100,label:'100g'};
+  if ((m=n.match(/(\d+(?:\.\d+)?)\s*g\b/))) return {amount:+m[1],unit:'g',base:100,label:'100g'};
+  if ((m=n.match(/(\d+(?:\.\d+)?)\s*l\b/))) return {amount:+m[1]*1000,unit:'ml',base:100,label:'100ml'};
+  if ((m=n.match(/(\d+(?:\.\d+)?)\s*ml/))) return {amount:+m[1],unit:'ml',base:100,label:'100ml'};
+  if ((m=n.match(/(\d+(?:\.\d+)?)\s*lb/))) return {amount:+m[1]*453.592,unit:'g',base:100,label:'100g'};
+  if ((m=n.match(/(\d+)\s*(?:pk|pack|ct)/))) return {amount:+m[1],unit:'ea',base:1,label:'each'};
+  if (n.indexOf('bunch')>-1) return {amount:1,unit:'ea',base:1,label:'bunch'};
+  return {amount:1,unit:'ea',base:1,label:'each'};
+}
+function unitPriceText(item, price) {
+  var u=itemMeasure(item);
+  if (!u.amount || !price) return '';
+  return '$'+(price/u.amount*u.base).toFixed(2)+' / '+u.label;
+}
+function dietTags(item) {
+  var tags=[], n=(item.name||'').toLowerCase();
+  if (['Produce','Pantry','Beverages'].indexOf(item.cat)>-1 && !/milk|butter|egg|chicken|beef|cheese/.test(n)) tags.push('Vegan');
+  if (['Produce','Dairy','Meat','Pantry','Beverages'].indexOf(item.cat)>-1) tags.push('Kosher');
+  if (['Produce','Meat','Dairy','Beverages'].indexOf(item.cat)>-1 || /rice|corn|potato/.test(n)) tags.push('Gluten-Free');
+  if (item.cat==='Meat') tags.push('Halal');
+  return tags;
+}
+function matchesDiet(item) { return S.dietFilter==='All' || dietTags(item).indexOf(S.dietFilter)>-1; }
+function policyRows() { return SIDS.map(function(sid){return STORES[sid];}).concat(POLICY_EXTRA); }
+function safeUrl(u) {
+  return /^https:\/\//i.test(String(u||'')) ? u : '#';
+}
+function formatChatText(t) {
+  return esc(t).replace(/(https:\/\/[^\s<]+)/g,function(m){return '<a href="'+safeUrl(m)+'" target="_blank" rel="noopener noreferrer" style="color:#2563EB;font-weight:700">source</a>';}).replace(/\n/g,'<br>');
+}
+function prefInterests() {
+  return (S.preferences&&Array.isArray(S.preferences.interests)?S.preferences.interests:[]);
+}
+function likesInterest(name) {
+  return prefInterests().indexOf(name) > -1;
+}
+function itemMatchesPrefs(item) {
+  var prefs=prefInterests();
+  if (!prefs.length) return true;
+  if (prefs.indexOf(item.cat)>-1) return true;
+  if (prefs.indexOf('Flyer Deals')>-1 && SIDS.some(function(sid){return getDeal(item.id,sid);})) return true;
+  if (prefs.indexOf('Price Match')>-1 && item.brand!=='Generic') return true;
+  if (prefs.indexOf('Family Staples')>-1 && ['Dairy','Bakery','Pantry'].indexOf(item.cat)>-1) return true;
+  if (prefs.indexOf('Low-Carb')>-1 && ['Produce','Meat','Dairy'].indexOf(item.cat)>-1) return true;
+  if (prefs.indexOf('No Bulk')>-1 && bestP(item.id,SIDS) && bestP(item.id,SIDS).sid!=='costco') return true;
+  return false;
+}
+function personalizedPicks(limit) {
+  return CAT.map(function(item){
+    var bp=bestP(item.id,SIDS); if(!bp) return null;
+    var deal=getDeal(item.id,bp.sid), ins=priceInsightForItem(item);
+    var score=(itemMatchesPrefs(item)?40:0)+(deal?30:0)+(item.hot?12:0)+((ins&&ins.spread)?Math.min(20,ins.spread*4):0);
+    return {item:item,bp:bp,deal:deal,score:score};
+  }).filter(Boolean).sort(function(a,b){return b.score-a.score;}).slice(0,limit||6);
+}
+function supabaseConfigured() {
+  try { var u=new URL(SUPABASE_URL); return u.protocol==='https:' && /\.supabase\.co$/i.test(u.hostname) && SUPABASE_ANON_KEY.length > 20; } catch(e) { return false; }
+}
+function validEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+async function authWithSupabase(mode, email, password, name) {
+  var endpoint = mode==='signin' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
+  var body = mode==='signin' ? {email:email,password:password} : {email:email,password:password,data:{full_name:name,preferences:S.preferences}};
+  var res = await fetch(SUPABASE_URL+endpoint, {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_ANON_KEY,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify(body)});
+  var data = await res.json().catch(function(){return {};});
+  if (!res.ok) throw new Error(data.msg || data.error_description || data.message || 'Supabase authentication failed');
+  return data;
+}
+function officialSearchUrl(q) {
+  return 'https://www.google.com/search?q='+encodeURIComponent('Canada grocery flyer '+q);
+}
+function chatAnswer(q) {
+  var raw=String(q||'').trim(), ql=raw.toLowerCase();
+  if (!raw) return 'Ask about an item, a store flyer, price matching, or ways to save with your cart.';
+  var store=SIDS.find(function(sid){return ql.indexOf(STORES[sid].name.toLowerCase())>-1 || ql.indexOf(sid)>-1;});
+  if (store && (ql.indexOf('flyer')>-1 || ql.indexOf('website')>-1 || ql.indexOf('site')>-1)) return STORES[store].name+' official flyer: '+STORES[store].flyerUrl;
+  if (ql.indexOf('policy')>-1 || ql.indexOf('match')>-1) { var pr=policyRows().filter(function(st){return !store || st.id===store || st.name.toLowerCase().indexOf(ql)>-1;})[0]; if(pr) return pr.name+' policy: '+pr.matchNote+' Bring identical item proof and verify local geographic limits. Flyer: '+pr.flyerUrl; }
+  var matches=CAT.filter(function(item){return item.name.toLowerCase().indexOf(ql)>-1 || ql.split(/\s+/).some(function(w){return w.length>2 && item.name.toLowerCase().indexOf(w)>-1;});}).slice(0,3);
+  if (matches.length) {
+    return matches.map(function(item){var bp=bestP(item.id,SIDS), wp=worstP(item.id,SIDS), deal=bp&&getDeal(item.id,bp.sid);return item.name+': best at '+STORES[bp.sid].name+' for $'+bp.price.toFixed(2)+(deal?' (flyer deal, proof available)':'')+(wp?' — up to $'+((wp.price-bp.price)*(S.cart[item.id]||1)).toFixed(2)+' cheaper than highest store.':'');}).join('\n');
+  }
+  if (ql.indexOf('recommend')>-1 || ql.indexOf('save')>-1 || ql.indexOf('cart')>-1) {
+    var recs=cartRecommendations(cartItems()).slice(0,3);
+    return recs.length ? recs.map(function(r){return r.title+' — '+r.body;}).join('\n') : 'Add a few items to your cart and I can recommend best stores, 2-shop splits, and flyer deal proof.';
+  }
+  return 'I could not find that in the downloaded flyer data. Try downloading flyers locally, or check web results: '+officialSearchUrl(raw);
+}
 /* IDB flyer search: find item across all stored flyers */
+function proofCardBlob(pi) {
+  return new Promise(function(resolve) {
+    var st=STORES[pi.storeId], c=document.createElement('canvas'), x=c.getContext('2d');
+    c.width=900;c.height=520;
+    x.fillStyle='#F8FAFC';x.fillRect(0,0,c.width,c.height);
+    x.fillStyle=st.color;x.fillRect(0,0,c.width,120);
+    x.fillStyle='white';x.font='800 34px DM Sans, Arial';x.fillText('PriceMatch CA',40,54);
+    x.font='700 20px DM Sans, Arial';x.fillText('Price Match Proof • '+st.name,40,92);
+    x.fillStyle='#0F172A';x.font='800 34px DM Sans, Arial';x.fillText(pi.name,40,180);
+    x.font='700 22px DM Sans, Arial';x.fillStyle='#475569';x.fillText(pi.cat+' • '+pi.brand,40,218);
+    x.fillStyle='#059669';x.font='900 76px DM Sans, Arial';x.fillText('$'+pi.price.toFixed(2),40,315);
+    x.fillStyle='#64748B';x.font='700 24px DM Sans, Arial';x.fillText(unitPriceText(pi,pi.price)+' • Valid May 25–31, 2026',40,360);
+    x.fillStyle='#E2E8F0';x.fillRect(40,392,820,1);
+    x.fillStyle='#334155';x.font='700 22px DM Sans, Arial';x.fillText('Show this flyer proof at checkout. Identical item / same size required.',40,430);
+    x.fillStyle=st.color;x.font='900 86px Arial';x.fillText(pi.e,735,305);
+    x.fillStyle='#94A3B8';x.font='600 18px DM Sans, Arial';x.fillText('Source: '+st.flyerUrl,40,475);
+    c.toBlob(resolve,'image/png',0.95);
+  });
+}
+async function shareProofImage(pi) {
+  var blob=await proofCardBlob(pi), file=new File([blob], 'pricematch-proof-'+pi.id+'.png', {type:'image/png'});
+  if (navigator.canShare && navigator.canShare({files:[file]})) return navigator.share({title:'PriceMatch proof',text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name,files:[file]});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+}
 function searchIDBFlyers(q) {
   if (!q) return [];
   var ql = q.toLowerCase();
   var results = [];
   S.idbFlyers.forEach(function(flyer) {
-    var matched = flyer.items.filter(function(item) { return item.name.toLowerCase().includes(ql) || (item.cat&&item.cat.toLowerCase().includes(ql)); });
+    var matched = flyer.items.filter(function(item) { var catItem=CAT.find(function(p){return p.id===item.catalogId;})||item; return matchesDiet(catItem) && (item.name.toLowerCase().includes(ql) || (item.cat&&item.cat.toLowerCase().includes(ql))); });
     if (matched.length > 0) results.push({storeId:flyer.storeId,storeName:flyer.storeName,weekStart:flyer.weekStart,weekEnd:flyer.weekEnd,items:matched,savedAt:flyer.savedAt});
   });
   return results;
@@ -637,10 +803,11 @@ function bHdr() {
     +(sv?'<button class="srch-clear" data-act="clr-search" aria-label="Clear search">'+SVG.x14+'</button>':'')
     +'</div>'
     +'<button class="hdr-loc '+(S.postalCode?'set':'')+'" data-act="open-postal" aria-label="Set location">'
-    +SVG.pin+' '+(S.postalCode||'Set location')+'</button>'
+    +SVG.pin+' '+(S.postalCode||tr('setLocation'))+'</button>'
+    +'<button class="btn-ol" data-act="toggle-lang" aria-label="Toggle language">'+(S.lang==='fr'?'FR':'EN')+'</button>'
     +ub
     +'<button class="btn-cart '+(n>0?'on':'')+'" data-act="open-cart" aria-label="Cart '+n+' items">'
-    +SVG.cart+' '+(n>0?'Cart <span class="cbadge pop" aria-live="polite">'+n+'</span>':'Cart')+'</button>'
+    +SVG.cart+' '+(n>0?tr('cart')+' <span class="cbadge pop" aria-live="polite">'+n+'</span>':tr('cart'))+'</button>'
     +'</header>';
 }
 
@@ -651,10 +818,12 @@ function bNav() {
     ? '<span style="font-size:9px;background:#DCFCE7;color:#059669;padding:1px 5px;border-radius:4px;font-weight:700;margin-left:3px">LIVE</span>'
     : '<span class="spin" style="font-size:10px;margin-left:3px">&#x21BB;</span>';
   return '<nav class="nav-tabs" aria-label="Main navigation">'
-    +'<button class="ntab'+(S.view==='shop'?' on':'')+'" data-act="set-view" data-view="shop">'+SVG.cart+' Shop</button>'
-    +'<button class="ntab'+(S.view==='flyers'?' on':'')+'" data-act="set-view" data-view="flyers">'+SVG.news+' Flyers <span class="nbadge">'+tot+'</span>'+idbBadge+'</button>'
-    +'<button class="ntab'+(S.view==='pricematch'?' on':'')+'" data-act="set-view" data-view="pricematch">'+SVG.scale+' Price Match</button>'
-    +'<button class="ntab'+(S.view==='watchlist'?' on':'')+'" data-act="set-view" data-view="watchlist">&#x2B50; Watchlist'+(S.watchlist.length>0?'<span class="nbadge" style="background:var(--o)">'+S.watchlist.length+'</span>':'')+'</button>'
+    +'<button class="ntab'+(S.view==='shop'?' on':'')+'" data-act="set-view" data-view="shop">'+SVG.cart+' '+tr('shop')+'</button>'
+    +'<button class="ntab'+(S.view==='flyers'?' on':'')+'" data-act="set-view" data-view="flyers">'+SVG.news+' '+tr('flyers')+' <span class="nbadge">'+tot+'</span>'+idbBadge+'</button>'
+    +'<button class="ntab'+(S.view==='pricematch'?' on':'')+'" data-act="set-view" data-view="pricematch">'+SVG.scale+' '+tr('priceMatch')+'</button>'
+    +'<button class="ntab'+(S.view==='watchlist'?' on':'')+'" data-act="set-view" data-view="watchlist">&#x2B50; '+tr('watchlist')+(S.watchlist.length>0?'<span class="nbadge" style="background:var(--o)">'+S.watchlist.length+'</span>':'')+'</button>'
+    +'<button class="ntab'+(S.view==='preferences'?' on':'')+'" data-act="set-view" data-view="preferences">&#x2728; '+tr('preferences')+'</button>'
+    +'<button class="ntab'+(S.view==='policies'?' on':'')+'" data-act="set-view" data-view="policies">&#x1F4DC; '+tr('policies')+'</button>'
     +'</nav>'
     +'<div class="mode-bar" role="toolbar">'
     +'<span style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px">Mode:</span>'
@@ -703,7 +872,7 @@ function bGrid(filt) {
         +'</div>':'')
       +'</div>'
       +'<div class="cbody"><div class="cname">'+esc(p.name)+'</div>'
-      +'<span class="ccat">'+p.cat+'</span>'
+      +'<span class="ccat">'+p.cat+'</span><div class="unit-price">'+tr('unit')+': '+unitPriceText(p,bp.price)+'</div>'
       +'<div class="schips">'+SIDS.map(function(sid){
         var pr=getPrice(p.id,sid);if(!pr)return '';
         var st=STORES[sid],ib=sid===bp.sid;
@@ -711,14 +880,21 @@ function bGrid(filt) {
       }).join('')+'</div>'
       +'<div class="cfoot"><div>'
       +'<div class="blbl">'+(bp.isDeal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
-      +'<div class="bpr">$'+bp.price.toFixed(2)+'</div>'
+      +'<div class="bpr">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div>'
       +(wp&&wp.sid!==bp.sid?'<div class="prsub">vs $'+wp.price.toFixed(2)+' at '+STORES[wp.sid].name+'</div>':'')
       +'</div><div>'+bCTA(p.id)+'</div></div></div></article>';
   }).join('')+'</div>';
 }
 
+function bPersonalizedPicks() {
+  var picks=personalizedPicks(6);
+  if(!picks.length)return '';
+  return '<div style="margin-bottom:32px"><div class="sec-hdr"><h2><span class="tag-r" style="background:#EFF6FF;color:#2563EB">&#x2728; FOR YOU</span> Picks based on your interests</h2><button class="btn-ol" data-act="set-view" data-view="preferences" style="min-height:34px;padding:6px 10px;font-size:12px">Edit interests</button></div>'
+    +'<div style="display:flex;gap:14px;overflow-x:auto;padding-bottom:8px">'+picks.map(function(pick){var p=pick.item,bp=pick.bp,deal=pick.deal,st=STORES[bp.sid],inC=S.cart[p.id]||0;return '<article style="min-width:180px;width:180px;background:white;border-radius:12px;border:1px solid var(--bd);overflow:hidden;flex-shrink:0;box-shadow:var(--sh)"><div style="height:112px;background:'+(CBG[p.cat]||'#F1F5F9')+';display:flex;align-items:center;justify-content:center;position:relative;font-size:50px">'+p.e+'<div style="position:absolute;top:7px;left:7px;background:#2563EB;color:white;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px">MATCH</div></div><div style="padding:11px 12px"><div style="font-size:12px;font-weight:800;margin-bottom:2px;line-height:1.3">'+esc(p.name)+'</div><div style="font-size:11px;color:'+st.color+';font-weight:700;margin-bottom:7px">'+st.name+' &middot; $'+bp.price.toFixed(2)+(deal?' flyer':'')+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div><button style="width:100%;padding:8px;border-radius:8px;border:none;font-size:11px;font-weight:800;cursor:pointer;'+(inC?'background:#059669;color:white':'background:#ECFDF5;color:#059669')+'" data-act="'+(inC?'dec':'add')+'" data-id="'+p.id+'">'+(inC?'&#x2713; In cart':'Add smart pick')+'</button></div></article>';}).join('')+'</div></div>';
+}
+
 function bDeals() {
-  var saleItems = CAT.filter(function(p){return p.sale||DEALS.some(function(d){return d.cid===p.id&&isActive(d);});});
+  var saleItems = CAT.filter(function(p){return matchesDiet(p)&&(p.sale||DEALS.some(function(d){return d.cid===p.id&&isActive(d);}));});
   return '<div style="margin-bottom:32px"><div class="sec-hdr">'
     +'<h2><span class="tag-r">&#x1F3F7; DEALS</span> This Week</h2>'
     +'<span style="font-size:12px;color:#94A3B8">'+saleItems.length+' items &middot; '+(S.postalCode||'your area')+'</span>'
@@ -734,7 +910,7 @@ function bDeals() {
         +'<div style="font-size:11px;color:'+bst.color+';font-weight:600;margin-bottom:8px">At '+bst.name+'</div>'
         +'<div style="display:flex;align-items:center;justify-content:space-between">'
         +'<div><span style="font-size:17px;font-weight:800;color:#059669">$'+bp.price.toFixed(2)+'</span>'
-        +(deal?'<div style="font-size:10px;color:#94A3B8;text-decoration:line-through">$'+deal.reg.toFixed(2)+'</div>':'')
+        +(deal?'<div style="font-size:10px;color:#94A3B8;text-decoration:line-through">$'+deal.reg.toFixed(2)+'</div>':'')+'<div class="unit-price">'+unitPriceText(p,bp.price)+'</div>'
         +'</div><button style="padding:6px 10px;border-radius:7px;border:none;cursor:pointer;font-size:11px;font-weight:700;min-height:32px;'+(inC>0?'background:#059669;color:white':'background:#ECFDF5;color:#059669')+'" data-act="'+(inC>0?'dec':'add')+'" data-id="'+p.id+'">'+(inC>0?'&#x2713; '+inC:'+ Add')+'</button>'
         +'</div></div></article>';
     }).join('')+'</div></div>';
@@ -753,7 +929,7 @@ function bBanner(items,tots) {
 }
 
 function bShop(items,tots) {
-  var filt=CAT.filter(function(p){return (S.cat==='All'||p.cat===S.cat)&&p.name.toLowerCase().includes(S.search.toLowerCase());});
+  var filt=CAT.filter(function(p){return (S.cat==='All'||p.cat===S.cat)&&matchesDiet(p)&&p.name.toLowerCase().includes(S.search.toLowerCase());});
   var aids=getAids();
   return bBanner(items,tots)+'<main>'
     +(!S.search&&!cartCount()
@@ -768,8 +944,9 @@ function bShop(items,tots) {
         +'</div>'
         +'<div class="store-pills">'+SIDS.map(function(sid){var st=STORES[sid];return '<span class="spill" style="color:'+st.color+';background:'+st.bg+';border-color:'+st.brd+'">'+st.name+'</span>';}).join('')+'</div>'
         +'</div>':'')
-    +(!S.search&&S.cat==='All'?bDeals():'')
+    +(!S.search&&S.cat==='All'?bPersonalizedPicks()+bDeals():'')
     +'<div class="cat-tabs" role="tablist">'+CATS.map(function(c){return '<button class="cpill'+(S.cat===c?' on':'')+'" data-act="set-cat" data-cat="'+c+'" role="tab" aria-selected="'+(S.cat===c)+'">'+CIC[c]+' '+c+'</button>';}).join('')+'</div>'
+    +'<div style="font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-top:6px">'+tr('diet')+'</div><div class="diet-row">'+DIETS.map(function(d){return '<button class="diet-chip'+(S.dietFilter===d?' on':'')+'" data-act="set-diet" data-diet="'+d+'">'+(d==='All'?tr('all'):d)+'</button>';}).join('')+'</div>'
     +'<div class="meta-bar"><p style="font-size:13px;color:#64748B"><strong style="color:#0F172A">'+filt.length+'</strong> items'+(S.search?' for &ldquo;<em>'+esc(S.search)+'</em>&rdquo;':'')+(S.basketMode==='price_match'?' <span style="color:var(--b);font-weight:600">&middot; Price-match stores only</span>':'')+'</p>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+aids.map(function(sid){var st=STORES[sid];return '<span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:'+st.color+';display:inline-block"></span>'+st.sh+'</span>';}).join('')+'</div></div>'
     +bGrid(filt)
@@ -809,7 +986,7 @@ function bFlyerItemCard(fi, sid, delay) {
     +'<div class="fi-body">'
     +'<div class="fi-name">'+esc(fi.name)+'</div>'
     +'<div class="fi-reg">Reg. $'+fi.reg.toFixed(2)+'</div>'
-    +'<div class="fi-price">$'+fi.price.toFixed(2)+'</div>'
+    +'<div class="fi-price">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item||fi,fi.price)+'</div>'
     +'<div class="fi-acts">'
     +'<button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'" aria-label="Add to cart">'+(inC>0?'&#x2713; Added':'+ Add')+'</button>'
     +'<button class="bfp" data-act="show-proof" data-fid="'+fi.catalogId+'" data-fsid="'+sid+'" aria-label="Show price match proof">&#x1F9FE; Proof</button>'
@@ -821,6 +998,7 @@ function bFlyers() {
   var st = STORES[S.flyerStore];
 
   /* ── Top bar with search + IDB status + refresh ── */
+  var dietBar='<div style="padding:0 20px 12px;background:white;border-bottom:1px solid var(--bd)"><div style="font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin:8px 0">'+tr('diet')+'</div><div class="diet-row" style="margin:0">'+DIETS.map(function(d){return '<button class="diet-chip'+(S.dietFilter===d?' on':'')+'" data-act="set-diet" data-diet="'+d+'">'+(d==='All'?tr('all'):d)+'</button>';}).join('')+'</div></div>';
   var topBar = '<div class="flyer-top-bar">'
     +'<div class="flyer-srch-wrap">'
     +'<div class="flyer-srch-icon">'+SVG.srch+'</div>'
@@ -870,7 +1048,7 @@ function bFlyers() {
             +'<div class="fi-body">'
             +'<div class="fi-name">'+esc(fi.name)+'</div>'
             +'<div class="fi-reg">Reg. $'+fi.reg.toFixed(2)+'</div>'
-            +'<div class="fi-price" style="color:'+(isCheapest?'#059669':'#16A34A')+'">$'+fi.price.toFixed(2)+'</div>'
+            +'<div class="fi-price" style="color:'+(isCheapest?'#059669':'#16A34A')+'">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(CAT.find(function(p){return p.id===fi.catalogId;})||fi,fi.price)+'</div>'
             +(isCheapest?'<div style="font-size:10px;font-weight:700;color:#059669;background:#DCFCE7;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:6px">&#x1F4B0; Cheapest across all flyers</div>':'')
             +'<div class="fi-acts">'
             +'<button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button>'
@@ -894,7 +1072,7 @@ function bFlyers() {
         +'</div></div>'
         +groupsHtml+'</div>';
     }
-    return topBar+resultsHtml;
+    return topBar+dietBar+resultsHtml;
   }
 
   /* ── BROWSE MODE — magazine layout ── */
@@ -909,7 +1087,7 @@ function bFlyers() {
 
   /* Get items from IDB for this store, fall back to DEALS */
   var stored = S.idbFlyers.find(function(f){return f.storeId===S.flyerStore;});
-  var flyerItems = stored ? stored.items : buildFlyerItems(S.flyerStore);
+  var flyerItems = (stored ? stored.items : buildFlyerItems(S.flyerStore)).filter(function(fi){return matchesDiet(CAT.find(function(p){return p.id===fi.catalogId;})||fi);});
   var savedAt = stored ? new Date(stored.savedAt).toLocaleString() : 'Not yet saved';
   var matchBadge = st.supportsMatch
     ? '<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x2696; Price match available</span>'
@@ -930,6 +1108,7 @@ function bFlyers() {
     ? '<div style="text-align:center;padding:48px;color:#94A3B8"><div style="font-size:48px;margin-bottom:12px">&#x1F4CB;</div><p>No deals stored for '+st.name+'. Click &ldquo;Refresh Flyers&rdquo; to load.</p></div>'
     : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
 
+  return topBar+dietBar+storeTabs+flyerHdr+magGrid
   return topBar+storeTabs+flyerHdr+magGrid
     +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Flyers downloaded to this browser via IndexedDB &middot; Search works after the local flyer download finishes &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
 }
@@ -984,7 +1163,7 @@ function bProofModal() {
     +'<div class="proof-script">&#x1F4AC; &ldquo;This item is $'+pi.price.toFixed(2)+' at '+st.name+' this week. Can you match that price? Here is the flyer proof.&rdquo;</div>'
     +'<div class="proof-footer">'
     +'<button class="btn-print" onclick="window.print()" aria-label="Print proof card">'+SVG.print+' Print Proof</button>'
-    +(navigator.share?'<button class="btn-share" data-act="share-proof" aria-label="Share proof">'+SVG.share+' Share</button>':'')
+    +'<button class="btn-share" data-act="share-proof" aria-label="Share proof image">'+SVG.share+' Share Image</button>'
     +'</div></div></div></div>';
 }
 
@@ -1025,7 +1204,7 @@ function bPM() {
     var item=CAT.find(function(p){return p.id===deal.cid;}),ist=STORES[deal.sid];if(!item)return '';
     var inC=S.cart[item.id]||0;
     return '<article class="flyer-item fu"><div class="fi-img" style="background:'+(CBG[item.cat]||'#F1F5F9')+'"><span>'+item.e+'</span><div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
-      +'<div class="fi-body"><div class="fi-name">'+esc(item.name)+'</div><div class="fi-reg">Reg. $'+deal.reg.toFixed(2)+'</div><div class="fi-price">$'+deal.price.toFixed(2)+'</div>'
+      +'<div class="fi-body"><div class="fi-name">'+esc(item.name)+'</div><div class="fi-reg">Reg. $'+deal.reg.toFixed(2)+'</div><div class="fi-price">$'+deal.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,deal.price)+'</div>'
       +'<div class="fi-acts"><button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+item.id+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button><button class="bfp" data-act="sel-match" data-cid="'+item.id+'" data-sid="'+deal.sid+'">&#x2696; Match</button></div></div></article>';
   }).join('')+'</div>';
   return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2696; Price Match</h1><p style="font-size:13px;color:#64748B">Based on verified store policies &middot; Eligibility may vary by store location</p></div>'+stepsH+selH+'<div><h2 style="font-size:16px;font-weight:800;margin-bottom:14px">All Active Deals</h2>'+allC+'</div></main>';
@@ -1051,7 +1230,7 @@ function bWL() {
       +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" style="background:transparent;border:none">&#x2B50;</button></div>'
       +'<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">'
       +'<div><div style="font-size:11px;color:#94A3B8;margin-bottom:2px">'+(deal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
-      +'<div style="font-size:22px;font-weight:800;color:var(--g)">$'+bp.price.toFixed(2)+'</div></div>'
+      +'<div style="font-size:22px;font-weight:800;color:var(--g)">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div></div>'
       +'<span class="wdelta '+dc+'">'+dl+'</span></div>'+db
       +'<div style="display:flex;gap:7px">'+bCTA(p.id)
       +'<button class="bfp" data-act="show-proof" data-fid="'+p.id+'" data-fsid="'+bp.sid+'" style="flex:0 0 auto;padding:10px 14px;font-size:11px">&#x1F9FE; Proof</button>'
@@ -1069,7 +1248,7 @@ function bCI(items){
     return '<div class="ci"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div>'
       +'<div class="cinfo"><div class="cname2">'+esc(item.name)+'</div>'
       +(deal?'<span class="cdeal">&#x1F3F7; Deal</span>':'')
-      +'<div class="cbest" style="color:'+bst.color+'">Best: '+bst.name+' &middot; $'+bp.price.toFixed(2)+'</div>'
+      +'<div class="cbest" style="color:'+bst.color+'">Best: '+bst.name+' &middot; $'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,bp.price)+'</div>'
       +'<div class="cq" role="group"><button class="cqb cqm" data-act="dec" data-id="'+item.id+'" aria-label="Remove one">&#x2212;</button><span class="cqn" aria-live="polite">'+item.qty+'</span><button class="cqb cqp" data-act="add" data-id="'+item.id+'" aria-label="Add one">+</button><button class="cqb cqr" data-act="rem" data-id="'+item.id+'" aria-label="Remove item">'+SVG.x14+'</button></div></div>'
       +'<div style="text-align:right;flex-shrink:0"><div style="font-size:15px;font-weight:800">$'+(bp.price*item.qty).toFixed(2)+'</div><div style="font-size:11px;color:#94A3B8">&times;'+item.qty+'</div></div></div>';
   }).join('');
@@ -1161,16 +1340,48 @@ function bCart(items,tots){
     +'</div>';
 }
 
+function bPolicies(){
+  var q=(S.policySearch||'').toLowerCase();
+  var rows=policyRows().filter(function(st){return !q || st.name.toLowerCase().indexOf(q)>-1 || st.matchNote.toLowerCase().indexOf(q)>-1 || st.matchState.toLowerCase().indexOf(q)>-1;});
+  return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x1F4DC; Store Price-Match Policy Hub</h1><p style="font-size:13px;color:#64748B">Search Canadian retailer rules, proof requirements, and geographic limits before checkout. Always confirm with the local store manager.</p></div>'
+    +'<div class="srch-wrap" style="max-width:640px;margin-bottom:18px"><div class="srch-icon">'+SVG.srch+'</div><input class="srch" id="policy-srch" value="'+esc(S.policySearch)+'" placeholder="Search Walmart, FreshCo, printed flyer, local competitor..." oninput="onPolicySearch(this.value)"/></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">'+rows.map(function(st){var yes=st.supportsMatch;return '<article class="policy-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px"><span style="width:11px;height:11px;border-radius:50%;background:'+st.color+';display:inline-block"></span><h2 style="font-size:17px;font-weight:900;color:'+st.color+'">'+esc(st.name)+'</h2></div><span style="font-size:10px;font-weight:900;border-radius:999px;padding:3px 8px;background:'+(yes?'#DCFCE7':'#FEF2F2')+';color:'+(yes?'#047857':'#B91C1C')+'">'+(yes?'MATCHES':'NO MATCH')+'</span></div><div style="font-size:12px;color:#64748B;line-height:1.55;margin-bottom:10px">'+esc(st.matchNote)+'</div><ul style="font-size:12px;color:#475569;line-height:1.7;padding-left:18px;margin-bottom:10px"><li>Bring current flyer proof: printed or digital screenshot.</li><li>Item must be identical brand, size, format, and in stock.</li><li>Geographic limits usually mean local competitors only.</li></ul><a href="'+safeUrl(st.flyerUrl)+'" target="_blank" rel="noopener noreferrer" style="font-size:12px;font-weight:800;color:var(--b);text-decoration:none">'+SVG.ext+' '+tr('officialSource')+'</a></article>';}).join('')+'</div></main>';
+}
+
+/* ═══ PREFERENCES + CHAT ═══════════════════════════════════════════ */
+function bPreferences(){
+  var interests=prefInterests();
+  var chips=PREF_OPTIONS.map(function(opt){var on=interests.indexOf(opt)>-1;return '<button class="pref-chip'+(on?' on':'')+'" data-act="toggle-pref" data-pref="'+esc(opt)+'" aria-pressed="'+on+'">'+(on?'&#x2713; ':'')+esc(opt)+'</button>';}).join('');
+  var picks=personalizedPicks(8).map(function(pick){var item=pick.item,bp=pick.bp,st=STORES[bp.sid],deal=pick.deal;return '<div style="display:flex;align-items:center;gap:12px;padding:12px;background:white;border:1px solid var(--bd);border-radius:12px"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div style="flex:1"><div style="font-size:13px;font-weight:800">'+esc(item.name)+'</div><div style="font-size:12px;color:#64748B">'+item.cat+' &middot; '+(deal?'Flyer deal':'Best current price')+'</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:800;color:'+st.color+'">'+st.name+'</div><div style="font-size:15px;font-weight:900;color:var(--g)">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,bp.price)+'</div></div></div>';}).join('');
+  return '<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2728; Your Preferences</h1><p style="font-size:13px;color:#64748B">Personalize recommendations by interests, budget, shopping style, and favourite stores. Sign up to sync these settings with Supabase when configured.</p></div>'
+    +'<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.75fr);gap:18px">'
+    +'<section style="background:white;border:1px solid var(--bd);border-radius:16px;padding:20px"><h2 style="font-size:17px;font-weight:900;margin-bottom:8px">Interests</h2><p style="font-size:12px;color:#64748B;margin-bottom:14px">Recommendations prioritize checked categories and shopping goals.</p><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px">'+chips+'</div>'
+    +'<h3 style="font-size:13px;font-weight:900;margin-bottom:10px;color:#475569">Budget style</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">'+['deal_first','balanced','quality'].map(function(b){var lbl=b==='deal_first'?'Deal first':b==='quality'?'Quality first':'Balanced';return '<button class="mpill'+(S.preferences.budget===b?' on':'')+'" data-act="set-budget" data-budget="'+b+'">'+lbl+'</button>';}).join('')+'</div>'
+    +'<div style="padding:14px;border-radius:12px;background:#F8FAFC;border:1px solid var(--bd);font-size:12px;color:#64748B;line-height:1.55"><strong style="color:#0F172A">Security note:</strong> passwords are never stored in localStorage. Browser storage only keeps cart, preferences, and non-sensitive profile display data. Supabase must be configured with Row Level Security policies before production use.</div></section>'
+    +'<aside style="background:white;border:1px solid var(--bd);border-radius:16px;padding:20px"><h2 style="font-size:17px;font-weight:900;margin-bottom:8px">Smart picks preview</h2><p style="font-size:12px;color:#64748B;margin-bottom:14px">These picks update immediately when interests change.</p><div style="display:grid;gap:10px">'+picks+'</div></aside></div></main>';
+}
+function bChatbot(){
+  var body=S.chatMessages.map(function(m){return '<div class="chat-msg '+(m.from==='me'?'me':'bot')+'">'+formatChatText(m.text)+'</div>';}).join('');
+  return (S.chatOpen?'<div class="chat-panel fi" role="dialog" aria-label="Price assistant"><div class="chat-head"><div><div style="font-weight:900">PriceMatch Assistant</div><div style="font-size:11px;opacity:.85">Local flyer answers + official source links</div></div><button data-act="toggle-chat" style="border:none;background:rgba(255,255,255,.2);color:white;border-radius:50%;width:30px;height:30px;cursor:pointer">&times;</button></div><div class="chat-body" id="chat-body">'+body+'</div><div class="chat-input"><input id="chat-input" value="'+esc(S.chatInput)+'" placeholder="Ask about prices, stores, flyers..." oninput="S.chatInput=this.value"/><button data-act="send-chat">Ask</button></div><div style="padding:0 12px 12px;background:white;font-size:10px;color:#94A3B8">For live web pages, use the official source links shown in answers; this static app does not scrape third-party sites.</div></div>':'')
+    +'<button class="chat-fab" data-act="toggle-chat" aria-label="Open price assistant">&#x1F916; Ask prices</button>';
+}
 /* ═══ MODALS ════════════════════════════════════════════════════════ */
 function bAuth(){
   if(!S.authOpen)return '';
-  var feats=[['&#x1F3C6;','Basket optimiser &mdash; best store for your weekly shop'],['&#x1F4F0;','Weekly flyer digest with price alerts'],['&#x1F9FE;','Price match proof card generator'],['&#x1F4CD;','Store locator near you']];
-  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:24px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Join PriceMatch</h2><p style="font-size:13px;color:#64748B;line-height:1.55">Save your cart, track prices, and get weekly picks.</p></div><div style="margin-bottom:22px">'+feats.map(function(f){return '<div class="firow"><span>'+f[0]+'</span>'+f[1]+'</div>';}).join('')+'</div>'
-    +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-name">Your name</label>'
-    +'<input class="finput" id="f-name" name="name" autocomplete="name" placeholder="Your name" value="'+esc(S.fName)+'" oninput="S.fName=this.value"/>'
+  var isSign=S.authMode!=='signin';
+  var feats=[['&#x1F512;','Supabase-ready email/password auth with no service keys in the browser'],['&#x2728;','Preference-based recommendations after signup'],['&#x1F4F0;','Downloaded flyer search and price alerts'],['&#x1F916;','Chat assistant for price and flyer questions']];
+  var msg=S.authMsg?'<div class="auth-msg '+(S.authMsg.indexOf('Error')===0?'err':'ok')+'">'+esc(S.authMsg)+'</div>':'';
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:20px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">'+(isSign?'Create your PriceMatch account':'Welcome back')+'</h2><p style="font-size:13px;color:#64748B;line-height:1.55">'+(supabaseConfigured()?'Connected to Supabase auth.':'Supabase is not configured yet. Add your project URL and anon key to enable real signup/login.')+'</p></div>'
+    +'<div class="auth-tabs"><button class="auth-tab'+(isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signup">Sign up</button><button class="auth-tab'+(!isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signin">Login</button></div>'+msg
+    +'<div style="margin-bottom:18px">'+feats.map(function(f){return '<div class="firow"><span>'+f[0]+'</span>'+f[1]+'</div>';}).join('')+'</div>'
+    +(isSign?'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-name">Your name</label><input class="finput" id="f-name" name="name" autocomplete="name" placeholder="Your name" value="'+esc(S.fName)+'" oninput="S.fName=this.value"/>':'')
     +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-email">Email address</label>'
     +'<input class="finput" id="f-email" name="email" type="email" autocomplete="email" placeholder="your@email.com" value="'+esc(S.fEmail)+'" oninput="S.fEmail=this.value"/>'
-    +'<button class="btn-full btn-gf" data-act="sign-in">Get Started &mdash; Free</button>'
+    +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-pass">Password</label>'
+    +'<input class="finput" id="f-pass" name="password" type="password" autocomplete="'+(isSign?'new-password':'current-password')+'" placeholder="Minimum 8 characters"/>'
+    +(isSign?'<div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:10px">Start with interests</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">'+PREF_OPTIONS.slice(0,6).map(function(opt){var on=likesInterest(opt);return '<button class="pref-chip'+(on?' on':'')+'" data-act="toggle-pref" data-pref="'+esc(opt)+'">'+esc(opt)+'</button>';}).join('')+'</div>':'')
+    +'<button class="btn-full btn-gf" data-act="sign-in">'+(isSign?'Sign up':'Login')+'</button>'
+    +(!supabaseConfigured()?'<button class="btn-maybe" data-act="offline-profile">Continue offline without account</button>':'')
     +'<button class="btn-maybe" data-act="close-auth">Maybe later</button>'
     +'</div></div>';
 }
@@ -1199,26 +1410,32 @@ function render(){
   else if(S.view==='flyers') html+=bFlyers();
   else if(S.view==='pricematch') html+=bPM();
   else if(S.view==='watchlist') html+=bWL();
+  else if(S.view==='preferences') html+=bPreferences();
+  else if(S.view==='policies') html+=bPolicies();
   if(S.cartOpen) html+=bCart(items,tots);
-  html+=bAuth()+bPostal()+bProofModal();
+  html+=bChatbot()+bAuth()+bPostal()+bProofModal();
   document.getElementById('app').innerHTML=html;
   window.scrollTo(0,prevY);
   if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
   if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
   if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
+  if(fid==='policy-srch'){var el9=document.getElementById('policy-srch');if(el9){el9.focus();el9.setSelectionRange(S.policySearch.length,S.policySearch.length);}}
+  if(fid==='chat-input'){var el7=document.getElementById('chat-input');if(el7){el7.focus();el7.setSelectionRange(S.chatInput.length,S.chatInput.length);}}
 }
 
 function onSearch(v){ if(S.view==='flyers')S.flyerSearch=v; else S.search=v; render(); }
 function onFlyerSearch(v){ S.flyerSearch=v; render(); }
+function onPolicySearch(v){ S.policySearch=v; render(); }
 
 /* ═══ EVENTS ════════════════════════════════════════════════════════ */
-document.addEventListener('click',function(e){
+document.addEventListener('click',async function(e){
   var el=e.target.closest('[data-act]');if(!el)return;
   var a=el.dataset.act,id=el.dataset.id?+el.dataset.id:null,
       tab=el.dataset.tab,view=el.dataset.view,store=el.dataset.store,
       mode=el.dataset.mode,n=el.dataset.n?+el.dataset.n:null,
       cid=el.dataset.cid?+el.dataset.cid:null,sid=el.dataset.sid,
-      fid=el.dataset.fid?+el.dataset.fid:null,fsid=el.dataset.fsid;
+      fid=el.dataset.fid?+el.dataset.fid:null,fsid=el.dataset.fsid,
+      pref=el.dataset.pref,budget=el.dataset.budget,diet=el.dataset.diet;
 
   if(a==='add')           {S.cart[id]=(S.cart[id]||0)+1;persist();render();}
   else if(a==='dec')      {if(S.cart[id]>1)S.cart[id]--;else delete S.cart[id];persist();render();}
@@ -1227,6 +1444,8 @@ document.addEventListener('click',function(e){
   else if(a==='clr-search'){if(S.view==='flyers')S.flyerSearch='';else S.search='';render();}
   else if(a==='clr-fsearch'){S.flyerSearch='';render();}
   else if(a==='set-cat')  {S.cat=el.dataset.cat;render();}
+  else if(a==='set-diet') {S.dietFilter=diet;persist();render();}
+  else if(a==='toggle-lang'){S.lang=S.lang==='fr'?'en':'fr';persist();render();}
   else if(a==='set-view') {S.view=view;render();}
   else if(a==='set-fstore'){S.flyerStore=store;render();}
   else if(a==='set-mode') {S.basketMode=mode;persist();render();}
@@ -1242,6 +1461,12 @@ document.addEventListener('click',function(e){
   else if(a==='save-postal'){var el4=document.getElementById('f-postal');var pc=(el4?el4.value:S.fPostal||'').trim().toUpperCase();if(pc)S.postalCode=pc;S.postalOpen=false;persist();render();}
   else if(a==='toggle-fav'){var idx=S.favouriteStores.indexOf(store);if(idx>-1)S.favouriteStores.splice(idx,1);else S.favouriteStores.push(store);persist();render();}
   else if(a==='toggle-watch'){var idx2=S.watchlist.indexOf(id);if(idx2>-1)S.watchlist.splice(idx2,1);else S.watchlist.push(id);persist();render();}
+  else if(a==='toggle-pref'){var ints=prefInterests().slice();var idxp=ints.indexOf(pref);if(idxp>-1)ints.splice(idxp,1);else ints.push(pref);S.preferences.interests=ints;persist();render();}
+  else if(a==='set-budget'){S.preferences.budget=budget;persist();render();}
+  else if(a==='set-auth-mode'){S.authMode=mode;S.authMsg='';render();}
+  else if(a==='toggle-chat'){S.chatOpen=!S.chatOpen;render();}
+  else if(a==='send-chat'){var q=(document.getElementById('chat-input')||{}).value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();}
+  else if(a==='offline-profile'){S.user={name:'Offline Shopper',email:'',provider:'offline'};S.authOpen=false;S.authMsg='';persist();render();}
   else if(a==='show-proof'){
     var item2=CAT.find(function(p){return p.id===fid;});
     if(item2&&fsid){
@@ -1255,7 +1480,7 @@ document.addEventListener('click',function(e){
   }
   else if(a==='close-proof'){S.proofItem=null;render();}
   else if(a==='share-proof'){
-    if(S.proofItem&&navigator.share){var pi=S.proofItem;navigator.share({title:'Price Match Proof &mdash; '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid May 25-31 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});}
+    if(S.proofItem){shareProofImage(S.proofItem).catch(function(){var pi=S.proofItem;if(navigator.share)navigator.share({title:'Price Match Proof - '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid May 25-31 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});});}
   }
   else if(a==='sel-match'){
     var item3=CAT.find(function(p){return p.id===cid;});
@@ -1263,10 +1488,25 @@ document.addEventListener('click',function(e){
   }
   else if(a==='clr-match'){S.matchItem=null;render();}
   else if(a==='refresh-flyers'){if(!S.idbFetching){S.idbFetching=true;render();saveAllFlyersToIDB().then(function(){S.idbFetching=false;render();});}}
-  else if(a==='sign-in'){var el5=document.getElementById('f-name');var nm=(el5?el5.value:S.fName||'').trim();if(nm){var el6=document.getElementById('f-email');S.user={name:nm,email:el6?el6.value:S.fEmail||''};S.authOpen=false;persist();render();}else{if(el5)el5.focus();}}
+  else if(a==='sign-in'){
+    var el5=document.getElementById('f-name'), el6=document.getElementById('f-email'), el8=document.getElementById('f-pass');
+    var nm=(el5?el5.value:S.fName||'').trim(), email=(el6?el6.value:S.fEmail||'').trim().toLowerCase(), pass=(el8&&el8.value)||'';
+    if(S.authMode!=='signin' && !nm){S.authMsg='Error: name is required for signup.';render();return;}
+    if(!validEmail(email)){S.authMsg='Error: enter a valid email address.';render();return;}
+    if(pass.length<8){S.authMsg='Error: password must be at least 8 characters.';render();return;}
+    try{
+      if(!supabaseConfigured()){S.authMsg='Error: configure Supabase URL and anon key before real signup/login. Use Continue offline for a local-only profile.';render();return;}
+      var data=await authWithSupabase(S.authMode,email,pass,nm);
+        var u=data.user || (data.session&&data.session.user) || {};
+        S.user={name:(u.user_metadata&&u.user_metadata.full_name)||nm||email.split('@')[0],email:email,id:u.id||'',provider:'supabase'};
+      S.authMsg=S.authMode==='signin'?'Login successful.':'Signup successful. Check your email if Supabase confirmation is enabled.';
+      if(el8)el8.value='';S.authOpen=false;persist();render();
+    }catch(err){S.authMsg='Error: '+err.message;render();}
+  }
 });
 
 document.addEventListener('keydown',function(e){
+  if(e.key==='Enter' && document.activeElement && document.activeElement.id==='chat-input'){e.preventDefault();var q=document.activeElement.value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();return;}
   if(e.key==='Escape'){
     if(S.proofItem){S.proofItem=null;render();}
     else if(S.postalOpen){S.postalOpen=false;render();}
