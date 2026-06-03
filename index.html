@@ -9,6 +9,9 @@
 <title>PriceMatch CA — Live Flyer Comparison</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F6D2;</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<script src="https://unpkg.com/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
+<script src="https://unpkg.com/@zxing/library@latest" defer></script>
 <style>
 :root{--bg:#F1F5F9;--w:#fff;--tx:#0F172A;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bd2:#CBD5E1;--g:#059669;--gd:#047857;--gl:#ECFDF5;--gm:#D1FAE5;--gs:#6EE7B7;--r:#DC2626;--o:#D97706;--b:#2563EB;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 18px rgba(0,0,0,.09);--ra:14px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -833,11 +836,22 @@ function bNav() {
     +(S.basketMode==='quick_trip'
       ?'<button class="mpill'+(S.maxStores===1?' on':'')+'" data-act="set-max" data-n="1" aria-pressed="'+(S.maxStores===1)+'">1 stop</button>'
       +'<button class="mpill'+(S.maxStores===2?' on':'')+'" data-act="set-max" data-n="2" aria-pressed="'+(S.maxStores===2)+'">2 stops</button>':'')
-    +'<span class="fresh">&#x1F504; Last verified: May 25, 2026 &middot; Prices may vary by store</span>'
+    +'<button class="mpill" data-act="open-scanner">Scan in Store</button><button class="mpill" data-act="open-ai-settings">Ask AI Beta</button><span class="fresh">&#x1F504; Last verified: May 25, 2026 &middot; Prices may vary by store</span>'
     +'</div>';
 }
 
 /* ═══ SHOP VIEW ════════════════════════════════════════ */
+function bDropBanner() {
+  var drops=priceDrops(), protects=protectDrops();
+  var all=drops.concat(protects.map(function(d){return Object.assign({},d,{protect:true});}));
+  return all.length?'<div class="drop-banner">&#x1F514; '+(protects.length?'PRICE PROTECT ALERT ':'PRICE DROP ')+all.map(function(d){return esc(d.item.name)+' $'+d.old.toFixed(2)+' → $'+d.now.toFixed(2)+' at '+d.store+(d.protect?' — possible price adjustment':'');}).join(' • ')+'</div>':'';
+}
+
+function bSavingsDashboard(){
+  var st=savingsStats();
+  return '<div class="stat-grid"><div class="stat-card"><div style="font-size:20px;font-weight:900;color:#059669">💰 $'+st.saved.toFixed(2)+'</div><div style="font-size:11px;color:#64748B">saved all-time</div></div><div class="stat-card"><div style="font-size:20px;font-weight:900">🧾 '+st.proofs+'</div><div style="font-size:11px;color:#64748B">proof cards made</div></div><div class="stat-card"><div style="font-size:20px;font-weight:900">🔔 '+st.drops+'</div><div style="font-size:11px;color:#64748B">price drops caught</div></div><div class="stat-card"><div style="font-size:20px;font-weight:900">🔥 '+st.streak+'</div><div style="font-size:11px;color:#64748B">day app streak</div></div></div>';
+}
+
 function bCTA(cid) {
   var inC = S.cart[cid] || 0;
   if (inC===0) return '<button class="btn-add" data-act="add" data-id="'+cid+'" aria-label="Add to cart">+ Add</button>';
@@ -865,7 +879,7 @@ function bGrid(filt) {
       +'<span class="pemoji" aria-hidden="true">'+p.e+'</span>'
       +(deal?'<div class="pbadge pb-d">&#x1F3F7; DEAL</div>':p.sale?'<div class="pbadge pb-s">&#x1F3F7; SALE</div>':p.hot?'<div class="pbadge pb-h">'+SVG.trend+' HOT</div>':'')
       +(inC>0?'<div class="pcn pop">'+inC+'</div>':'')
-      +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" aria-label="'+(watched?'Remove from':'Add to')+' watchlist">'+(watched?'&#x2B50;':'&#x2606;')+'</button>'
+      +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" aria-label="'+(watched?'Remove from':'Add to')+' watchlist">'+(watched?'&#x1F514;':'&#x1F515;')+'</button>'
       +(sv?'<div class="bstrip" style="background:'+bst.color+'18;border-top:1px solid '+bst.color+'30">'
         +'<span style="color:'+bst.color+';font-weight:700;font-size:11px">&#x1F3C6; '+bst.name+'</span>'
         +'<span style="color:'+bst.color+';font-size:11px">Save $'+sv+' ('+pct+'%)</span>'
@@ -882,7 +896,7 @@ function bGrid(filt) {
       +'<div class="blbl">'+(bp.isDeal?'&#x1F3F7; Deal at':'Best at')+' '+bst.name+'</div>'
       +'<div class="bpr">$'+bp.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(p,bp.price)+'</div>'
       +(wp&&wp.sid!==bp.sid?'<div class="prsub">vs $'+wp.price.toFixed(2)+' at '+STORES[wp.sid].name+'</div>':'')
-      +'</div><div>'+bCTA(p.id)+'</div></div></div></article>';
+      +'</div><div style="display:grid;gap:6px">'+bCTA(p.id)+'<button class="mini-btn" data-act="open-bulk" data-id="'+p.id+'">Compare Bulk Size</button>'+(genericAlt(p)?'<button class="mini-btn" data-act="show-generic" data-id="'+p.id+'">Show Generic Alternative</button>':'')+'<button class="mini-btn" data-act="open-protect" data-id="'+p.id+'">Price Protect</button><button class="mini-btn" data-act="open-report" data-id="'+p.id+'">Report a Price</button></div></div></div></article>';
   }).join('')+'</div>';
 }
 
@@ -931,7 +945,8 @@ function bBanner(items,tots) {
 function bShop(items,tots) {
   var filt=CAT.filter(function(p){return (S.cat==='All'||p.cat===S.cat)&&matchesDiet(p)&&p.name.toLowerCase().includes(S.search.toLowerCase());});
   var aids=getAids();
-  return bBanner(items,tots)+'<main>'
+  recordVisiblePrices(filt);
+  return bBanner(items,tots)+'<main>'+bSavingsDashboard()
     +(!S.search&&!cartCount()
       ?'<div class="hero fu">'
         +'<h1>Smarter grocery shopping.<br><em>Real prices. Real savings.</em></h1>'
@@ -942,7 +957,7 @@ function bShop(items,tots) {
         +'<div class="tchip">&#x1F4CD; '+(S.postalCode?'Near '+S.postalCode:'Set location')+'</div>'
         +'<div class="tchip">&#x2696; Price match tool</div>'
         +'</div>'
-        +'<div class="store-pills">'+SIDS.map(function(sid){var st=STORES[sid];return '<span class="spill" style="color:'+st.color+';background:'+st.bg+';border-color:'+st.brd+'">'+st.name+'</span>';}).join('')+'</div>'
+        +'<div class="store-pills">'+SIDS.map(function(sid){var st=STORES[sid];return '<span class="spill" style="color:'+st.color+';background:'+st.bg+';border-color:'+st.brd+'">'+st.name+'</span>';}).join('')+(S.lang==='fr'?['Maxi','IGA','Super C','PA Supermarché'].map(function(n){return '<span class="spill" style="color:#0F766E;background:#ECFDF5;border-color:#99F6E4">'+n+'</span>';}).join(''):'')+'</div>'
         +'</div>':'')
     +(!S.search&&S.cat==='All'?bPersonalizedPicks()+bDeals():'')
     +'<div class="cat-tabs" role="tablist">'+CATS.map(function(c){return '<button class="cpill'+(S.cat===c?' on':'')+'" data-act="set-cat" data-cat="'+c+'" role="tab" aria-selected="'+(S.cat===c)+'">'+CIC[c]+' '+c+'</button>';}).join('')+'</div>'
@@ -981,7 +996,7 @@ function bFlyerItemCard(fi, sid, delay) {
     +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
     +'<span>'+fi.e+'</span>'
     +'<div class="fi-pct">-'+fi.pct+'%</div>'
-    +'<div class="fi-va">valid til '+fi.validTo+'</div>'
+    +'<div class="fi-va">valid til '+fi.validTo+'</div>'+expiryPill(fi.validTo)
     +'</div>'
     +'<div class="fi-body">'
     +'<div class="fi-name">'+esc(fi.name)+'</div>'
@@ -1006,13 +1021,14 @@ function bFlyers() {
     +(q?'<button style="position:absolute;right:9px;top:50%;transform:translateY(-50%);background:#E2E8F0;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center" data-act="clr-fsearch" aria-label="Clear flyer search">'+SVG.x14+'</button>':'')
     +'</div>'
     +bIDBStatus()
+    +'<button class="mini-btn" data-act="toggle-expiring" style="margin-left:8px">'+(S.expiringSoon?'All deals':'Expiring Soon')+'</button>'
     +'<button class="btn-refresh" data-act="refresh-flyers" '+(S.idbFetching?'disabled':'')+' aria-label="Refresh flyer data">'
     +'<span class="'+(S.idbFetching?'spin':'')+'">'+(S.idbFetching?'&#x21BB;':SVG.refresh)+'</span> '+(S.idbFetching?'Downloading...':'Download Flyers Locally')+'</button>'
     +'</div>';
 
   /* ── SEARCH RESULTS MODE ── */
   if (q) {
-    var results = searchIDBFlyers(q);
+    var results = searchIDBFlyers(q).map(function(r){return Object.assign({},r,{items:r.items.filter(function(fi){return !S.expiringSoon || daysLeft(fi.validTo)<=2;})});}).filter(function(r){return r.items.length;});
     var totalFound = results.reduce(function(s,r){return s+r.items.length;},0);
 
     /* find cheapest price across all results for each item */
@@ -1042,7 +1058,7 @@ function bFlyers() {
           return '<article class="flyer-item fu" style="animation-delay:'+(i*0.04)+'s">'
             +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
             +'<span>'+fi.e+'</span>'
-            +'<div class="fi-pct">-'+fi.pct+'%</div>'
+            +'<div class="fi-pct">-'+fi.pct+'%</div>'+expiryPill(fi.validTo)
             +(isCheapest?'<div style="position:absolute;top:7px;left:7px;background:#059669;color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">CHEAPEST</div>':'')
             +'</div>'
             +'<div class="fi-body">'
@@ -1217,8 +1233,9 @@ function bWL() {
   if(!watched.length) return hdr+'<div style="text-align:center;padding:60px 20px;color:#94A3B8"><div style="font-size:52px;margin-bottom:14px">&#x2B50;</div><h3 style="font-size:17px;font-weight:700;color:#475569;margin-bottom:8px">Watchlist is empty</h3><p style="font-size:13px;margin-bottom:18px">Click &#x2606; on any product to watch it</p><button class="btn-add" style="padding:11px 28px;border-radius:10px;font-size:14px" data-act="set-view" data-view="shop">Browse Products</button></div></main>';
   var cards=watched.map(function(p,i){
     var bp=bestP(p.id,SIDS),deal=bp?getDeal(p.id,bp.sid):null;if(!bp)return '';
-    var bst=STORES[bp.sid],inC=S.cart[p.id]||0;
-    var lw=bp.price+(deal?(deal.reg-deal.price)*0.3:0.1),delta=bp.price-lw;
+    var bst=STORES[bp.sid],inC=S.cart[p.id]||0,wm=watchMeta()[p.id];
+    var drop=wm&&bp.price<wm.price;
+    var lw=wm?wm.price:(bp.price+(deal?(deal.reg-deal.price)*0.3:0.1)),delta=bp.price-lw;
     var dc=delta<-0.01?'dd':delta>0.01?'du':'ds2';
     var dl=delta<-0.01?('&#x2193; $'+Math.abs(delta).toFixed(2)+' this week'):delta>0.01?('&#x2191; $'+delta.toFixed(2)+' this week'):'No change';
     var db=deal?'<div style="font-size:11px;color:var(--g);background:var(--gl);padding:5px 8px;border-radius:6px;margin-bottom:10px">&#x1F3F7; Deal until May 31 &middot; was $'+deal.reg.toFixed(2)+'</div>':'';
@@ -1277,7 +1294,7 @@ function bCompare(items,tots){
       +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:#F59E0B">'+stars+'</span>'
       +'<span style="font-size:14px;font-weight:'+(isBP?800:400)+';color:'+(isBP?'#059669':isBV?'#2563EB':'#94A3B8')+'">$'+s.tot.toFixed(2)+'</span></div></div>'
       +'<div style="background:#F1F5F9;border-radius:8px;overflow:hidden;height:28px"><div style="height:100%;width:'+w+'%;background:'+(isBP?'#059669':isBV?'#2563EB':s.color)+';opacity:'+(isBP||isBV?1:.5)+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width .6s ease">'+(isBP?'<span style="font-size:10px;font-weight:800;color:white">CHEAPEST</span>':isBV?'<span style="font-size:10px;font-weight:800;color:white">BEST VALUE</span>':'')+'</div></div>'
-      +'<div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#94A3B8">'+s.qNote+'</span><span style="font-size:10px;font-weight:600;color:#64748B">Value score: '+s.vs+'/100</span></div>'
+      +'<div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#94A3B8">'+s.qNote+' &middot; '+storeDistanceLabel(s.sid)+'</span><span style="font-size:10px;font-weight:600;color:#64748B">'+(S.loyaltyOn?'After Points $'+netPrice(s.sid,s.tot).toFixed(2)+' &middot; ':'')+'Value score: '+s.vs+'/100</span></div>'
       +'</div>';
   }).join('');
   var w2='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">'
@@ -1286,8 +1303,8 @@ function bCompare(items,tots){
     +'</div>';
   var thC=SIDS.map(function(sid){var st=STORES[sid];return '<th style="text-align:right;padding:8px 10px;min-width:70px"><span style="display:block;width:8px;height:8px;border-radius:50%;background:'+st.color+';margin:0 auto 3px"></span>'+st.sh+'</th>';}).join('');
   var itemRows=items.map(function(item){
-    var mn=999;SIDS.forEach(function(sid){var p=getPrice(item.id,sid);if(p&&p.price<mn)mn=p.price;});
-    var cells=SIDS.map(function(sid){var p=getPrice(item.id,sid),deal=getDeal(item.id,sid);var ib=p&&Math.abs(p.price-mn)<0.001;return '<td style="text-align:right;padding:8px 10px;font-size:12px;font-weight:'+(ib?700:400)+';color:'+(ib?'#059669':STORES[sid].color)+';background:'+(ib?'#ECFDF5':'')+';border-bottom:1px solid #F8FAFC">'+(p?'$'+p.price.toFixed(2)+(deal?'*':''):'<span style="color:#CBD5E1">&mdash;</span>')+'</td>';}).join('');
+    var mn=999, mun=999;SIDS.forEach(function(sid){var p=getPrice(item.id,sid);if(p&&p.price<mn)mn=p.price;if(p){var u=+unitPriceText(item,p.price).replace(/[^0-9.]/g,'');if(u<mun)mun=u;}});
+    var cells=SIDS.map(function(sid){var p=getPrice(item.id,sid),deal=getDeal(item.id,sid);var unit=p?unitPriceText(item,p.price):'',un=p?+unit.replace(/[^0-9.]/g,''):999;var ib=p&&Math.abs(p.price-mn)<0.001, iub=p&&Math.abs(un-mun)<0.001;return '<td style="text-align:right;padding:8px 10px;font-size:12px;font-weight:'+(ib||iub?700:400)+';color:'+(ib||iub?'#059669':STORES[sid].color)+';background:'+(ib||iub?'#ECFDF5':'')+';border-bottom:1px solid #F8FAFC">'+(p?'$'+p.price.toFixed(2)+(deal?'*':'')+'<div style="font-size:10px;color:'+(iub?'#059669':'#94A3B8')+'">'+unit+(iub?' LOW UNIT':'')+'</div>'+(S.loyaltyOn?'<div style="font-size:10px;color:#7C3AED">After Points $'+netPrice(sid,p.price).toFixed(2)+'</div>':''):'<span style="color:#CBD5E1">&mdash;</span>')+'</td>';}).join('');
     return '<tr><td style="padding:8px 10px;font-size:12px;border-bottom:1px solid #F8FAFC;display:flex;align-items:center;gap:6px"><span style="font-size:16px">'+item.e+'</span>'+esc(item.name)+' <span style="color:#94A3B8">&times;'+item.qty+'</span></td>'+cells+'</tr>';
   }).join('');
   var totC=SIDS.map(function(sid){var tot=items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);var ib=sid===best.sid;return '<td style="text-align:right;padding:10px;font-size:13px;font-weight:'+(ib?800:600)+';color:'+(ib?'#059669':'#475569')+';background:'+(ib?'#ECFDF5':'#F8FAFC')+';border-top:2px solid var(--bd)">$'+tot.toFixed(2)+(ib?'<div style="font-size:9px;color:var(--g)">CHEAPEST</div>':'')+'</td>';}).join('');
@@ -1326,16 +1343,16 @@ function bAlerts(items){
 
 function bCart(items,tots){
   var n=cartCount(),b=tots[0],ab=items.filter(function(i){return SIDS.some(function(sid){return getDeal(i.id,sid);});}).length;
-  var footer=S.user?'<button class="btn-full btn-gf" data-act="close-cart">'+SVG.map+' Find '+(b?b.name:'store')+' Near Me &rarr;</button>':'<button class="btn-full btn-gf" data-act="auth-from-cart">Sign in to save cart &amp; get price alerts &rarr;</button>';
+  var footer='<button class="btn-full btn-gf" data-act="order-delivery">&#x1F6D2; Order for Delivery / Smart Split &rarr;</button>'+(!S.user?'<button class="btn-maybe" data-act="auth-from-cart">Sign in to save cart &amp; get price alerts</button>':'');
   var body=S.tab==='items'?bCI(items):S.tab==='compare'?bCompare(items,tots):S.tab==='trip'?bTrip(items,tots):bAlerts(items);
   var ab2=ab?'<span style="background:var(--r);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-left:3px">'+ab+'</span>':'';
   var tabs=items.length?'<div class="ctabs" role="tablist"><button class="ctab'+(S.tab==='items'?' on':'')+'" data-act="set-tab" data-tab="items">&#x1F6D2; Items</button><button class="ctab'+(S.tab==='compare'?' on':'')+'" data-act="set-tab" data-tab="compare">&#x1F4CA; Compare All</button><button class="ctab'+(S.tab==='trip'?' on':'')+'" data-act="set-tab" data-tab="trip">'+SVG.route+' Trip Plan</button><button class="ctab'+(S.tab==='alerts'?' on':'')+'" data-act="set-tab" data-tab="alerts">&#x1F514; Deals'+ab2+'</button></div>':'';
   return '<div class="cov fi" data-act="close-cart" aria-hidden="true"></div>'
     +'<div class="cpan si" role="dialog" aria-modal="true" aria-label="Shopping cart">'
     +'<div class="chdr"><div><h2>Your Cart</h2><p>'+n+' items &middot; '+items.length+' products</p></div>'
-    +'<div class="chdr-r">'+(items.length?'<button class="btn-clr" data-act="clr-cart">Clear all</button>':'')
+    +'<div class="chdr-r">'+(items.length?'<button class="btn-clr" data-act="share-basket">Share Basket</button><button class="btn-clr" data-act="set-tab" data-tab="trip">Smart Split</button><button class="btn-clr" data-act="clr-cart">Clear all</button>':'')
     +'<button class="btn-cls" data-act="close-cart" aria-label="Close cart">'+SVG.x17+'</button></div></div>'
-    +tabs+'<div class="cbdy" role="tabpanel">'+body+'</div>'
+    +tabs+'<div class="cbdy" role="tabpanel">'+(items.length?bBudgetPanel(items):'')+body+'</div>'
     +(items.length?'<div style="padding:14px 20px;border-top:1px solid var(--bd);background:white">'+footer+'</div>':'')
     +'</div>';
 }
@@ -1386,6 +1403,14 @@ function bAuth(){
     +'</div></div>';
 }
 
+
+function bInstallBanner(){ var visits=+localStorage.getItem('pm_visits')||0; if(visits<2 || localStorage.getItem('pm_install_dismissed'))return ''; return '<div class="drop-banner" style="background:linear-gradient(90deg,#DC2626,#F97316)"><span>📲 Install PriceMatch CA for offline flyer access.</span><button class="mini-btn" data-act="install-pwa">Add to Home Screen</button><button class="mini-btn" data-act="dismiss-install">Dismiss</button></div>'; }
+function bBudgetPanel(items){ var total=basketBudget(items), pct=S.budget?Math.min(100,total/S.budget*100):0, color=pct<75?'#059669':pct<90?'#D97706':'#DC2626', sub=bestSubstitution(items); return '<div style="padding:14px;border:1px solid var(--bd);border-radius:14px;background:white;margin-bottom:14px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><strong>Weekly budget</strong><input class="finput" style="max-width:150px;margin:0" type="number" min="0" step="1" value="'+(S.budget||'')+'" placeholder="$ budget" onchange="S.budget=+this.value;persist();render()"><button class="mpill'+(S.loyaltyOn?' on':'')+'" data-act="toggle-loyalty">Loyalty true cost</button></div>'+(S.budget?'<div class="budget-bar"><div class="budget-fill" style="width:'+pct+'%;background:'+color+'"></div></div><div style="font-size:12px;color:'+color+';font-weight:800">$'+Math.max(0,S.budget-total).toFixed(2)+' remaining &middot; '+(pct>100&&sub?'Over budget: consider removing or substituting '+esc(sub.name):'Best-store total $'+total.toFixed(2))+'</div>':'<div style="font-size:12px;color:#94A3B8;margin-top:6px">Set a weekly limit to get live warnings and substitution suggestions.</div>')+'</div>'; }
+function bBulkModal(){ if(!S.bulkItem)return ''; var item=CAT.find(function(p){return p.id===S.bulkItem;}); if(!item)return ''; var bp=bestP(item.id,SIDS); return '<div class="modal-bg fi" role="dialog" aria-modal="true"><div class="modal-box" style="width:620px"><h2 style="font-size:22px;font-weight:900;margin-bottom:8px">Bulk Comparison</h2><p style="font-size:12px;color:#64748B;margin-bottom:12px">'+esc(item.name)+' at '+(bp?STORES[bp.sid].name:'best store')+'. Bulk is only better if you use it before expiry.</p><div style="display:flex;gap:8px;margin-bottom:10px"><input class="finput" style="margin:0" value="100" placeholder="I use approx X per week"><input class="finput" style="margin:0" value="2 people" placeholder="Household size 1-6"></div><table class="policy-table"><thead><tr><th>Size</th><th>Est. price</th><th>Unit price</th><th>Use window</th></tr></thead><tbody>'+bulkRows(item,bp?bp.price:1)+'</tbody></table><p style="font-size:11px;color:#94A3B8;margin-top:8px">Best value size is highlighted in gold. Estimate is based on current catalogue sizes.</p><button class="btn-maybe" data-act="close-bulk">Close</button></div></div>'; }
+function bGenericModal(){ if(!S.genericItem)return ''; var item=CAT.find(function(p){return p.id===S.genericItem;}); if(!item)return ''; var alt=genericAlt(item)||'Store-brand '+item.name.replace(item.brand,'').trim(), bp=bestP(item.id,SIDS), est=bp?Math.max(.25,bp.price*.78):1; return '<div class="modal-bg fi" role="dialog" aria-modal="true"><div class="modal-box"><h2 style="font-size:22px;font-weight:900;margin-bottom:8px">Generic Alternative</h2><p style="font-size:13px;color:#64748B;margin-bottom:14px">Compare name brand vs likely Canadian store-brand equivalent.</p><div class="stat-grid"><div class="stat-card"><strong>'+esc(item.name)+'</strong><div style="font-size:24px;font-weight:900">$'+(bp?bp.price.toFixed(2):'--')+'</div></div><div class="stat-card" style="border-color:#FDE68A;background:#FFFBEB"><strong>'+esc(alt)+'</strong><div style="font-size:24px;font-weight:900;color:#B45309">~$'+est.toFixed(2)+'</div><span class="badge-gold">generic value</span></div></div><p style="font-size:12px;color:#059669;font-weight:800">Switching could save about $'+((bp?bp.price-est:0)*12).toFixed(2)+'/year on monthly purchases.</p><button class="btn-maybe" data-act="close-generic">Close</button></div></div>'; }
+function bScannerModal(){ if(!S.scannerOpen)return ''; return '<div class="modal-bg fi" role="dialog" aria-modal="true"><div class="modal-box" style="width:640px"><h2 style="font-size:22px;font-weight:900;margin-bottom:8px">Scan in Store</h2><p style="font-size:12px;color:#64748B;margin-bottom:12px">Uses your camera with ZXing, then looks up the UPC in Open Food Facts and searches prices locally.</p><video id="barcode-video" style="width:100%;border-radius:12px;background:#0F172A" muted playsinline></video><div id="scanner-result" style="font-size:12px;color:#64748B;margin-top:8px">'+esc(S.scannerResult||'Ready to scan.')+'</div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn-full btn-gf" data-act="start-scanner">Start Camera</button><button class="btn-maybe" data-act="close-scanner">Close</button></div></div></div>'; }
+function bAISettings(){ if(!S.aiSettingsOpen)return ''; return '<div class="modal-bg fi" role="dialog" aria-modal="true"><div class="modal-box"><h2 style="font-size:22px;font-weight:900;margin-bottom:6px">Ask AI <span style="font-size:12px;color:#B45309">Beta – Requires API key</span></h2><p style="font-size:12px;color:#64748B;margin-bottom:12px">Paste your own Anthropic API key. It is stored locally only and never hardcoded.</p><input class="finput" id="ai-key" type="password" value="'+esc(S.aiKey)+'" placeholder="Anthropic API key"><textarea class="finput" id="ai-q" rows="3" placeholder="What is the cheapest way to make tacos for 4 this week?">'+esc(S.aiQuestion||'')+'</textarea><button class="btn-full btn-gf" data-act="ask-ai">Ask Claude</button><div style="font-size:12px;color:#475569;line-height:1.5;margin-top:10px">'+formatChatText(S.aiAnswer||'The answer will reference your current basket and store prices.')+'</div><button class="btn-maybe" data-act="close-ai-settings">Close</button></div></div>'; }
+function bProtectModal(){ if(!S.protectItem)return ''; var item=CAT.find(function(p){return p.id===S.protectItem;}); var bp=item&&bestP(item.id,SIDS); return '<div class="modal-bg fi"><div class="modal-box"><h2 style="font-size:22px;font-weight:900">Price Protect</h2><p style="font-size:12px;color:#64748B;margin:10px 0">Track '+esc(item?item.name:'item')+' for 14 days after purchase. If it drops, use this script at customer service.</p><div style="padding:12px;background:#F8FAFC;border-radius:12px;font-size:12px;color:#475569">Hi, I purchased '+esc(item?item.name:'this item')+' at '+(bp?STORES[bp.sid].name:'this store')+' for $'+(bp?bp.price.toFixed(2):'')+'. It is now lower. May I request a price adjustment under your policy?</div><button class="btn-full btn-gf" data-act="save-protect" style="margin-top:12px">Start 14-day watch</button><button class="btn-maybe" data-act="close-protect">Cancel</button></div></div>'; }
 function bPostal(){
   if(!S.postalOpen)return '';
   var favSet=new Set(S.favouriteStores);
@@ -1394,8 +1419,9 @@ function bPostal(){
     +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:6px" for="f-postal">Postal code (e.g. M5V 2T6)</label>'
     +'<input class="finput" id="f-postal" name="postal" autocomplete="postal-code" placeholder="M5V 2T6" value="'+esc(S.fPostal||S.postalCode)+'" oninput="S.fPostal=this.value" style="margin-bottom:16px"/>'
     +'<div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:10px">Favourite stores <span style="font-weight:400;color:#94A3B8">(optional &mdash; Compare always shows all 6)</span></div>'
-    +'<div class="pgrid" role="group">'+toggles+'</div>'
-    +'<div style="font-size:11px;color:#94A3B8;margin-bottom:20px;margin-top:8px">The Compare tab always shows all 6 stores regardless of this setting.</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:10px">'+[5,10,20].map(function(r){return '<button class="mpill'+(S.radiusKm===r?' on':'')+'" data-act="set-radius" data-n="'+r+'">'+r+' km</button>';}).join('')+'</div><div class="pgrid" role="group">'+toggles+'</div>'
+    +'<div style="height:120px;border-radius:12px;overflow:hidden;border:1px solid var(--bd);background:#DBEAFE;margin-bottom:10px;background-image:url(https://tile.openstreetmap.org/11/603/768.png);background-size:cover;position:relative"><div style="position:absolute;inset:0;background:rgba(255,255,255,.35);padding:10px;font-size:11px;font-weight:900;color:#0F172A">Nearby stores within '+S.radiusKm+'km: '+nearbySids().map(function(s){return STORES[s].name+' ('+storeDistanceLabel(s)+')';}).join(', ')+'</div></div>'
+    +'<div style="font-size:11px;color:#94A3B8;margin-bottom:20px;margin-top:8px">Approximate hardcoded Canadian coverage/radius demo; compare still shows all 6 unless you favourite stores.</div>'
     +'<button class="btn-full btn-gf" data-act="save-postal">Save Preferences</button>'
     +'<button class="btn-maybe" data-act="close-postal">Cancel</button>'
     +'</div></div>';
@@ -1405,7 +1431,7 @@ function bPostal(){
 function render(){
   var items=cartItems(),tots=sTotals(items);
   var prevY=window.scrollY,fid=document.activeElement&&document.activeElement.id;
-  var html=bHdr()+bNav();
+  var html=bHdr()+bNav()+bDropBanner()+bInstallBanner();
   if(S.view==='shop') html+=bShop(items,tots);
   else if(S.view==='flyers') html+=bFlyers();
   else if(S.view==='pricematch') html+=bPM();
@@ -1437,7 +1463,7 @@ document.addEventListener('click',async function(e){
       fid=el.dataset.fid?+el.dataset.fid:null,fsid=el.dataset.fsid,
       pref=el.dataset.pref,budget=el.dataset.budget,diet=el.dataset.diet;
 
-  if(a==='add')           {S.cart[id]=(S.cart[id]||0)+1;persist();render();}
+  if(a==='add')           {S.cart[id]=(S.cart[id]||0)+1;var added=CAT.find(function(p){return p.id===id;});if(added)savePriceRecord(added);persist();render();}
   else if(a==='dec')      {if(S.cart[id]>1)S.cart[id]--;else delete S.cart[id];persist();render();}
   else if(a==='rem')      {delete S.cart[id];persist();render();}
   else if(a==='clr-cart') {S.cart={};persist();render();}
@@ -1475,10 +1501,12 @@ document.addEventListener('click',async function(e){
       var reg2=deal2?deal2.reg:price2;
       var pct2=deal2?deal2.pct:0;
       S.proofItem=Object.assign({},item2,{storeId:fsid,price:price2,reg:reg2,pct:pct2,va:deal2?deal2.va:TODAY,sourceUrl:STORES[fsid].flyerUrl});
+      var proofs=loadLocal('pm_proofs',[]);proofs.push({id:fid,storeId:fsid,price:price2,reg:reg2,date:new Date().toISOString().slice(0,10)});saveLocal('pm_proofs',proofs.slice(-200));
       render();
     }
   }
   else if(a==='close-proof'){S.proofItem=null;render();}
+  else if(a==='copy-proof'){if(S.proofItem)copyProofImage(S.proofItem).catch(function(){});}
   else if(a==='share-proof'){
     if(S.proofItem){shareProofImage(S.proofItem).catch(function(){var pi=S.proofItem;if(navigator.share)navigator.share({title:'Price Match Proof - '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid May 25-31 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});});}
   }
@@ -1505,19 +1533,65 @@ document.addEventListener('click',async function(e){
   }
 });
 
+
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='receipt-file'){
+    var file=e.target.files&&e.target.files[0], out=document.getElementById('receipt-output'); if(!file)return;
+    if(out)out.innerHTML='Scanning receipt...';
+    if(!window.Tesseract){if(out)out.innerHTML='Tesseract.js is still loading. Try again in a moment.';return;}
+    Tesseract.recognize(file,'eng').then(function(res){
+      var lines=(res.data.text||'').split(/\n/), parsed=[];
+      lines.forEach(function(line){var m=line.match(/(.{3,}?)\s+\$?([0-9]+\.[0-9]{2})\s*$/); if(m)parsed.push({productName:m[1].trim().slice(0,60),store:'Receipt',storeId:'receipt',price:+m[2],date:new Date().toISOString().slice(0,10)});});
+      S.receiptItems=parsed;
+      if(out)out.innerHTML=parsed.length?'<div style="font-weight:800;margin-bottom:6px">Parsed items</div>'+parsed.map(function(x,i){return '<div>'+esc(x.productName)+' — $'+x.price.toFixed(2)+'</div>';}).join('')+'<button class="mini-btn" data-act="save-receipt" style="margin-top:8px">Confirm & save to history</button>':'No prices found. Try a clearer receipt image.';
+    }).catch(function(){if(out)out.innerHTML='Receipt scan failed. Try another image.';});
+  }
+});
+
+
+async function startBarcodeScanner(){
+  var out=document.getElementById('scanner-result');
+  if(!window.ZXing){S.scannerResult='ZXing is still loading. Try again in a moment.';render();return;}
+  try{
+    var reader=new ZXing.BrowserMultiFormatReader(); S.barcodeReader=reader;
+    if(out)out.textContent='Camera starting...';
+    reader.decodeFromVideoDevice(null,'barcode-video',async function(result,err){
+      if(result){
+        var code=result.getText();
+        if(S.barcodeReader&&S.barcodeReader.reset)S.barcodeReader.reset();
+        S.scannerResult='Barcode '+code+' found. Looking up product...'; render();
+        try{
+          var r=await fetch('https://world.openfoodfacts.org/api/v0/product/'+encodeURIComponent(code)+'.json');
+          var data=await r.json();
+          var name=(data.product&&(data.product.product_name||data.product.generic_name))||code;
+          S.search=name; S.view='shop'; S.scannerOpen=false; render();
+        }catch(e){S.scannerResult='Barcode '+code+' found, but Open Food Facts lookup failed.';render();}
+      }
+    });
+  }catch(e){S.scannerResult='Camera unavailable or permission denied.';render();}
+}
+
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter' && document.activeElement && document.activeElement.id==='chat-input'){e.preventDefault();var q=document.activeElement.value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();return;}
   if(e.key==='Escape'){
     if(S.proofItem){S.proofItem=null;render();}
     else if(S.postalOpen){S.postalOpen=false;render();}
     else if(S.authOpen){S.authOpen=false;render();}
+    else if(S.bulkItem){S.bulkItem=null;render();}
+    else if(S.genericItem){S.genericItem=null;render();}
+    else if(S.scannerOpen){S.scannerOpen=false;render();}
+    else if(S.aiSettingsOpen){S.aiSettingsOpen=false;render();}
+    else if(S.protectItem){S.protectItem=null;render();}
     else if(S.cartOpen){S.cartOpen=false;render();}
   }
 });
 
 /* ═══ INIT ══════════════════════════════════════════════════════════ */
 async function init() {
+  updateVisitStreak();
+  initPWA();
   hydrate();
+  decodeBasketParam();
   if(!S.postalCode) S.postalOpen=true;
   render();
   var ok = await idbOpen();
