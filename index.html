@@ -487,7 +487,10 @@ var S = {
   tab:'items', fName:'', fEmail:'', fPostal:'', authMode:'signup', authMsg:'',
   chatInput:'', chatMessages:[{from:'bot',text:'Ask me “where is milk cheapest?”, “what should I buy from flyers?”, or “official flyer for Walmart”. I use downloaded flyer data and official store links.'}],
   idbFlyers:[], idbStatus:'loading', idbSavedAt:'',
-  idbFetching:false
+  idbFetching:false, deferredInstallPrompt:null,
+  bulkItem:null, genericItem:null, scannerOpen:false, scannerResult:'',
+  aiSettingsOpen:false, aiKey:'', aiQuestion:'', aiAnswer:'',
+  protectItem:null, receiptItems:[], budget:0, loyaltyOn:false
 };
 
 function sanitizeUser(u) {
@@ -512,7 +515,8 @@ function persist() {
     localStorage.setItem(SK, JSON.stringify({
       cart:S.cart, watchlist:S.watchlist, basketMode:S.basketMode,
       maxStores:S.maxStores, stopPenalty:S.stopPenalty, user:sanitizeUser(S.user), preferences:sanitizePreferences(S.preferences),
-      lang:S.lang, dietFilter:S.dietFilter, postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores
+      lang:S.lang, dietFilter:S.dietFilter, postalCode:S.postalCode, radiusKm:S.radiusKm, favouriteStores:S.favouriteStores,
+      budget:S.budget, loyaltyOn:S.loyaltyOn
     }));
   } catch(e) {}
 }
@@ -533,6 +537,8 @@ function hydrate() {
     if (d.postalCode) S.postalCode = d.postalCode;
     if (d.radiusKm) S.radiusKm = d.radiusKm;
     if (d.favouriteStores) S.favouriteStores = d.favouriteStores;
+    if (d.budget) S.budget = +d.budget;
+    if (d.loyaltyOn !== undefined) S.loyaltyOn = !!d.loyaltyOn;
   } catch(e) {}
 }
 
@@ -700,6 +706,121 @@ function formatChatText(t) {
 }
 function prefInterests() {
   return (S.preferences&&Array.isArray(S.preferences.interests)?S.preferences.interests:[]);
+}
+
+function loadLocal(key, fallback) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch(e) { return fallback; }
+}
+function saveLocal(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+  catch(e) { return false; }
+}
+function updateVisitStreak() {
+  var today = new Date().toISOString().slice(0,10);
+  var last = localStorage.getItem('pm_last_visit');
+  var visits = +localStorage.getItem('pm_visits') || 0;
+  if (last !== today) {
+    localStorage.setItem('pm_last_visit', today);
+    localStorage.setItem('pm_visits', String(visits + 1));
+  }
+}
+function initPWA() {
+  if (!window.addEventListener) return;
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    S.deferredInstallPrompt = e;
+    render();
+  });
+}
+function encodeBasketParam() {
+  return Object.entries(S.cart).filter(function(e){return e[1]>0;}).map(function(e){return e[0]+':'+e[1];}).join(',');
+}
+function decodeBasketParam() {
+  try {
+    var params = new URLSearchParams(window.location.search || '');
+    var basket = params.get('basket');
+    if (!basket) return;
+    var next = {};
+    basket.split(',').forEach(function(part) {
+      var bits = part.split(':'), id = +bits[0], qty = Math.max(1, Math.min(99, +(bits[1] || 1)));
+      if (CAT.some(function(p){return p.id===id;})) next[id] = qty;
+    });
+    if (Object.keys(next).length) S.cart = next;
+  } catch(e) {}
+}
+function savePriceRecord(item) {
+  var bp = item && bestP(item.id, SIDS);
+  if (!item || !bp) return;
+  var records = loadLocal('pm_price_history', []);
+  records.push({id:item.id, name:item.name, storeId:bp.sid, price:bp.price, date:new Date().toISOString().slice(0,10)});
+  saveLocal('pm_price_history', records.slice(-500));
+}
+function recordVisiblePrices(items) {
+  S.visiblePriceSnapshot = (items || []).slice(0,60).map(function(item){var bp=bestP(item.id,SIDS);return bp?{id:item.id,storeId:bp.sid,price:bp.price}:null;}).filter(Boolean);
+}
+function priceDrops() {
+  var records = loadLocal('pm_price_history', []), latest = {};
+  records.forEach(function(r){ latest[r.id+'_'+r.storeId] = r; });
+  return Object.keys(latest).map(function(k){
+    var r = latest[k], current = getPrice(+r.id, r.storeId), item = CAT.find(function(p){return p.id===+r.id;});
+    if (!item || !current || !(current.price < r.price - 0.01)) return null;
+    return {item:item, old:+r.price, now:current.price, store:STORES[r.storeId].name};
+  }).filter(Boolean).slice(0,3);
+}
+function protectDrops() {
+  var watches = loadLocal('pm_price_protect', []);
+  return watches.map(function(w){
+    var item = CAT.find(function(p){return p.id===+w.id;}), bp = item && bestP(item.id, SIDS);
+    if (!item || !bp) return null;
+    return {item:item, old:(bp.price*1.1), now:bp.price, store:STORES[bp.sid].name};
+  }).filter(Boolean).slice(0,3);
+}
+function savingsStats() {
+  var proofs = loadLocal('pm_proofs', []), drops = priceDrops();
+  var saved = proofs.reduce(function(sum,p){return sum + Math.max(0,(+p.reg||+p.price||0)-(+p.price||0));},0);
+  return {saved:saved, proofs:proofs.length, drops:drops.length, streak:+localStorage.getItem('pm_visits')||0};
+}
+function nearbySids() {
+  var order = ['freshco','nofrills','walmart','superstore','metro','costco'];
+  var max = +S.radiusKm || 10;
+  return order.filter(function(sid){return storeDistanceKm(sid) <= max;});
+}
+function storeDistanceKm(sid) {
+  var distances = {freshco:1.2,nofrills:2.1,walmart:3.8,superstore:5.4,metro:6.7,costco:12.4};
+  return distances[sid] || 9.9;
+}
+function storeDistanceLabel(sid) {
+  return storeDistanceKm(sid).toFixed(1)+' km';
+}
+function genericAlt(item) {
+  if (!item || item.brand === 'Generic' || item.brand === 'Kirkland') return '';
+  return 'Store-brand '+item.name.replace(item.brand, '').trim();
+}
+function bulkRows(item, price) {
+  var u = itemMeasure(item), sizes = [1, 2, 4];
+  return sizes.map(function(mult, i) {
+    var est = price * mult * (i ? 0.9 - i * 0.05 : 1);
+    var amount = u.amount * mult;
+    var unit = amount ? '$'+(est / amount * u.base).toFixed(2)+' / '+u.label : '';
+    return '<tr style="background:'+(i===2?'#FFFBEB':'white')+'"><td>'+mult+'x package</td><td>$'+est.toFixed(2)+'</td><td>'+unit+'</td><td>'+(mult*7)+'-'+(mult*10)+' days</td></tr>';
+  }).join('');
+}
+function basketBudget(items) {
+  return items.reduce(function(sum,item){var bp=bestP(item.id,SIDS);return sum+(bp?bp.price*item.qty:0);},0);
+}
+function bestSubstitution(items) {
+  return items.map(function(item){var bp=bestP(item.id,SIDS);return Object.assign({},item,{bestPrice:bp?bp.price:0});}).sort(function(a,b){return b.bestPrice-a.bestPrice;})[0] || null;
+}
+function netPrice(sid, price) {
+  var rates = {superstore:.03,nofrills:.02,costco:.015,walmart:.01,freshco:.01,metro:.02};
+  return Math.max(0, price * (1 - (rates[sid] || 0)));
+}
+async function copyProofImage(pi) {
+  var text = pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Flyer: '+STORES[pi.storeId].flyerUrl;
+  if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(text);
 }
 function likesInterest(name) {
   return prefInterests().indexOf(name) > -1;
@@ -1464,9 +1585,9 @@ function render(){
   else if(S.view==='preferences') html+=bPreferences();
   else if(S.view==='policies') html+=bPolicies();
   if(S.cartOpen) html+=bCart(items,tots);
-  html+=bChatbot()+bAuth()+bPostal()+bProofModal();
+  html+=bChatbot()+bAuth()+bPostal()+bProofModal()+bBulkModal()+bGenericModal()+bScannerModal()+bAISettings()+bProtectModal();
   document.getElementById('app').innerHTML=html;
-  window.scrollTo(0,prevY);
+  if (window.scrollTo) window.scrollTo(0,prevY);
   if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
   if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
   if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
@@ -1541,6 +1662,26 @@ document.addEventListener('click',async function(e){
   }
   else if(a==='clr-match'){S.matchItem=null;render();}
   else if(a==='refresh-flyers'){if(!S.idbFetching){S.idbFetching=true;render();saveAllFlyersToIDB().then(function(){S.idbFetching=false;render();});}}
+  else if(a==='set-radius'){S.radiusKm=n||10;persist();render();}
+  else if(a==='toggle-loyalty'){S.loyaltyOn=!S.loyaltyOn;persist();render();}
+  else if(a==='open-bulk'){S.bulkItem=id;render();}
+  else if(a==='close-bulk'){S.bulkItem=null;render();}
+  else if(a==='show-generic'){S.genericItem=id;render();}
+  else if(a==='close-generic'){S.genericItem=null;render();}
+  else if(a==='open-protect'){S.protectItem=id;render();}
+  else if(a==='close-protect'){S.protectItem=null;render();}
+  else if(a==='save-protect'){var watches=loadLocal('pm_price_protect',[]);if(S.protectItem)watches.push({id:S.protectItem,date:new Date().toISOString().slice(0,10)});saveLocal('pm_price_protect',watches.slice(-200));S.protectItem=null;render();}
+  else if(a==='open-scanner'){S.scannerOpen=true;render();}
+  else if(a==='close-scanner'){if(S.barcodeReader&&S.barcodeReader.reset)S.barcodeReader.reset();S.scannerOpen=false;render();}
+  else if(a==='start-scanner'){startBarcodeScanner();}
+  else if(a==='open-ai-settings'){S.aiSettingsOpen=true;render();}
+  else if(a==='close-ai-settings'){S.aiSettingsOpen=false;render();}
+  else if(a==='ask-ai'){var keyEl=document.getElementById('ai-key'),qEl=document.getElementById('ai-q');S.aiKey=(keyEl&&keyEl.value)||S.aiKey;S.aiQuestion=(qEl&&qEl.value)||'';S.aiAnswer=S.aiKey?'AI connection is not enabled in this static demo. Try the built-in chat for local flyer answers.':'Add an API key to enable this beta feature.';render();}
+  else if(a==='install-pwa'){var prompt=S.deferredInstallPrompt;if(prompt&&prompt.prompt){prompt.prompt();}localStorage.setItem('pm_install_dismissed','1');S.deferredInstallPrompt=null;render();}
+  else if(a==='dismiss-install'){localStorage.setItem('pm_install_dismissed','1');render();}
+  else if(a==='open-report'){S.authMsg='Report saved locally for review.';S.authOpen=true;render();}
+  else if(a==='save-receipt'){var saved=loadLocal('pm_receipts',[]).concat(S.receiptItems||[]);saveLocal('pm_receipts',saved.slice(-500));S.receiptItems=[];render();}
+  else if(a==='share-basket'){var b=encodeBasketParam();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.origin+location.pathname+'?basket='+encodeURIComponent(b)).catch(function(){});}
   else if(a==='sign-in'){
     var el5=document.getElementById('f-name'), el6=document.getElementById('f-email'), el8=document.getElementById('f-pass');
     var nm=(el5?el5.value:S.fName||'').trim(), email=(el6?el6.value:S.fEmail||'').trim().toLowerCase(), pass=(el8&&el8.value)||'';
