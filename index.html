@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" content="#059669"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="description" content="PriceMatch CA — Browse real store flyers, compare basket prices across 6 stores, and generate price-match proof at checkout."/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://*.supabase.co https://world.openfoodfacts.org; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -15,7 +18,7 @@
 <style>
 :root{--bg:#F1F5F9;--w:#fff;--tx:#0F172A;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bd2:#CBD5E1;--g:#059669;--gd:#047857;--gl:#ECFDF5;--gm:#D1FAE5;--gs:#6EE7B7;--r:#DC2626;--o:#D97706;--b:#2563EB;--sh:0 1px 3px rgba(0,0,0,.07);--shm:0 4px 18px rgba(0,0,0,.09);--ra:14px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);font-family:'DM Sans',-apple-system,sans-serif;color:var(--tx);-webkit-font-smoothing:antialiased}
+html{width:100%;min-height:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}body{width:100%;min-height:100dvh;overflow-x:hidden;background:var(--bg);font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--tx);-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);touch-action:manipulation}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
@@ -134,6 +137,17 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .fsearch-group-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .fsearch-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px}
 .fsearch-cheapest{font-size:10px;background:#DCFCE7;color:var(--g);padding:2px 7px;border-radius:5px;font-weight:800}
+
+/* ── LOCAL FLYER IMAGE CACHE / SEARCH ZOOM ── */
+.flyer-zoom-panel{margin:0 20px 16px;background:white;border:1px solid var(--bd);border-radius:18px;box-shadow:var(--shm);overflow:hidden;display:grid;grid-template-columns:minmax(280px,1.25fr) minmax(240px,.75fr)}
+.flyer-zoom-stage{min-height:330px;background:linear-gradient(135deg,#E0F2FE,#F8FAFC);display:flex;align-items:center;justify-content:center;padding:22px;overflow:hidden;position:relative}
+.flyer-sheet{width:min(420px,92%);aspect-ratio:3/4;background:white;border-radius:18px;border:1px solid #CBD5E1;box-shadow:0 18px 44px rgba(15,23,42,.18);position:relative;transform-origin:center;transition:transform .35s ease}
+.flyer-sheet.zoomed{transform:scale(1.38)}
+.flyer-cell{position:absolute;border-radius:14px;border:1.5px solid #E2E8F0;background:#F8FAFC;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;box-shadow:0 6px 18px rgba(15,23,42,.06)}
+.flyer-cell.hit{border:3px solid #2563EB;background:#EFF6FF;box-shadow:0 0 0 7px rgba(37,99,235,.16),0 18px 34px rgba(37,99,235,.18);z-index:2;animation:pop .28s ease both}
+.flyer-cell .emoji{font-size:34px;line-height:1}.flyer-cell .label{font-size:9px;font-weight:900;color:#334155;margin-top:4px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flyer-cell .price{font-size:13px;font-weight:900;color:#059669}
+.flyer-zoom-info{padding:20px;display:flex;flex-direction:column;justify-content:center}.cache-chip{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 10px;border-radius:999px;background:#ECFDF5;color:#047857;border:1px solid #6EE7B7;font-size:11px;font-weight:900;margin-bottom:10px}.zoom-title{font-size:22px;font-weight:900;letter-spacing:-.7px;margin-bottom:6px}.zoom-copy{font-size:13px;color:#64748B;line-height:1.55;margin-bottom:14px}.zoom-actions{display:flex;gap:8px;flex-wrap:wrap}.zoom-btn{border:none;border-radius:10px;background:#2563EB;color:white;font-size:12px;font-weight:900;padding:10px 13px;cursor:pointer}.zoom-btn.alt{background:#F8FAFC;color:#475569;border:1px solid #CBD5E1}
+@media(max-width:760px){.flyer-zoom-panel{margin:0 12px 14px;grid-template-columns:1fr;border-radius:16px}.flyer-zoom-stage{min-height:260px;padding:14px}.flyer-sheet{width:min(330px,96%)}.flyer-sheet.zoomed{transform:scale(1.22)}.flyer-cell .emoji{font-size:28px}.flyer-zoom-info{padding:16px}.zoom-title{font-size:19px}.zoom-actions .zoom-btn{flex:1;min-height:44px}}
 /* ── PROOF MODAL ── */
 .proof-modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 .proof-card{background:white;border-radius:20px;width:420px;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden;animation:fadeUp .3s ease}
@@ -319,6 +333,15 @@ body{background:radial-gradient(circle at 8% 0%,rgba(16,185,129,.14),transparent
 @media(max-width:380px){
   .flyer-mag,.fsearch-items{grid-template-columns:1fr}.hdr-loc{display:none}.grid{gap:10px}
 }
+
+@media(max-width:760px){
+  .hdr{width:100%;padding-left:calc(12px + env(safe-area-inset-left,0px));padding-right:calc(12px + env(safe-area-inset-right,0px))}.hdr .btn-ol svg,.btn-cart svg{flex-shrink:0}.hdr .btn-cart{margin-left:auto}.hdr .btn-ol:not(.act){max-width:56px;overflow:hidden}.hdr .btn-ol.act{max-width:118px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-tabs{position:sticky;top:0;padding-left:calc(8px + env(safe-area-inset-left,0px));padding-right:calc(8px + env(safe-area-inset-right,0px));overscroll-behavior-x:contain}.ntab{min-height:46px}
+  .mode-bar,.flyer-top-bar,.fstore-bar{padding-left:calc(12px + env(safe-area-inset-left,0px));padding-right:calc(12px + env(safe-area-inset-right,0px))}
+  input,button,select,textarea{font-size:16px}.srch,.flyer-srch,.finput{font-size:16px}
+  .proof-footer,.fi-acts{flex-direction:column}.btn-print,.btn-share,.bfa,.bfp{width:100%}
+}
+@media(orientation:landscape) and (max-height:500px){.hdr{position:relative}.nav-tabs,.mode-bar{position:relative;top:auto}.modal-box,.proof-card{max-height:96dvh}.chat-panel{max-height:82dvh}}
 </style>
 </head>
 <body>
@@ -376,6 +399,7 @@ const WEEK_END="2026-05-31";
 const SUPABASE_URL="https://trhdnjebprnducbzuuhl.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_8kipYqzyAlucPq5wNerI8g_jY8_E4ul";
 const SUPABASE_ANON_KEY=SUPABASE_PUBLISHABLE_KEY; // Backward-compatible alias; publishable key only. Never add secret/service-role keys in the browser
+const APP_PUBLIC_URL=""; // Optional production origin/path override for Supabase email confirmations; leave blank to use the current deployed URL.
 const PREF_OPTIONS=["Produce","Dairy","Meat","Bakery","Pantry","Beverages","Flyer Deals","Price Match","Low-Carb","Family Staples","No Bulk"] ;
 const TR={en:{shop:'Shop',flyers:'Flyers',priceMatch:'Price Match',watchlist:'Watchlist',preferences:'Preferences',policies:'Policy Hub',cart:'Cart',setLocation:'Set location',bestBasket:'Best Basket',priceMatchOnly:'Price Match Only',quickTrip:'Quick Trip',diet:'Dietary filters',all:'All',unit:'Unit price',officialSource:'Official Source'},fr:{shop:'Épicerie',flyers:'Circulaires',priceMatch:'Égalisation',watchlist:'Favoris',preferences:'Préférences',policies:'Politiques',cart:'Panier',setLocation:'Lieu',bestBasket:'Meilleur panier',priceMatchOnly:'Égalisation seulement',quickTrip:'Trajet rapide',diet:'Filtres alimentaires',all:'Tous',unit:'Prix unitaire',officialSource:'Source officielle'}};
 const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'}];
@@ -446,6 +470,43 @@ function idbGetAll(storeName) {
   });
 }
 
+function flyerImageCacheEntry(item, deal, sid) {
+  var slot = Math.abs((deal.id || String(deal.cid)).split('').reduce(function(sum,ch){return sum + ch.charCodeAt(0);},0)) % 8;
+  var cols = [8, 36, 64, 18, 50, 8, 36, 64], rows = [10, 10, 10, 38, 38, 66, 66, 66];
+  var terms = [item ? item.name : '', item ? item.brand : '', item ? item.cat : '', STORES[sid].name].join(' ').toLowerCase();
+  return {type:'local-flyer-image-cache', slot:slot, x:cols[slot], y:rows[slot], w:24, h:22, terms:terms};
+}
+
+function flyerVisualItems(storeId, hit) {
+  var stored = S.idbFlyers.find(function(f){return f.storeId===storeId;});
+  var items = (stored ? stored.items : buildFlyerItems(storeId)).slice(0,8);
+  return items.map(function(fi, idx){
+    var cache = fi.imageCache || flyerImageCacheEntry(CAT.find(function(p){return p.id===fi.catalogId;}), {id:fi.dealId || String(fi.catalogId), cid:fi.catalogId}, storeId);
+    var isHit = hit && hit.catalogId === fi.catalogId && hit.storeId === storeId;
+    return '<div class="flyer-cell'+(isHit?' hit':'')+'" style="left:'+cache.x+'%;top:'+cache.y+'%;width:'+cache.w+'%;height:'+cache.h+'%"><div class="emoji">'+fi.e+'</div><div class="label">'+esc(fi.name)+'</div><div class="price">$'+fi.price.toFixed(2)+'</div></div>';
+  }).join('');
+}
+
+function firstFlyerSearchMatch(q) {
+  q = (q || '').trim();
+  if (!q) return null;
+  var groups = searchIDBFlyers(q);
+  for (var i=0;i<groups.length;i++) {
+    var items = groups[i].items.filter(function(fi){return !S.expiringSoon || daysLeft(fi.validTo)<=2;});
+    if (items.length) return Object.assign({}, items[0], {storeId:groups[i].storeId, weekStart:groups[i].weekStart, weekEnd:groups[i].weekEnd});
+  }
+  return null;
+}
+
+function bFlyerZoomPanel(match, q) {
+  if (!match) return '';
+  var st = STORES[match.storeId], cache = match.imageCache || {x:50,y:50};
+  var origin = Math.max(20, Math.min(80, cache.x + 12))+'% '+Math.max(20, Math.min(80, cache.y + 11))+'%';
+  return '<section class="flyer-zoom-panel fu" aria-label="Local flyer image search result">'
+    +'<div class="flyer-zoom-stage"><div class="flyer-sheet zoomed" style="transform-origin:'+origin+'"><div style="position:absolute;left:14px;top:12px;font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' local flyer cache</div>'+flyerVisualItems(match.storeId, match)+'</div></div>'
+    +'<div class="flyer-zoom-info"><span class="cache-chip">'+SVG.db+' Downloaded image cache match</span><h2 class="zoom-title">Zoomed to '+esc(match.name)+'</h2><p class="zoom-copy">Your search for <strong>“'+esc(q)+'”</strong> matched the locally downloaded flyer cache. The flyer image preview is automatically zoomed to the matching item area so you can spot bananas, EXR, or any cached flyer item quickly.</p><div class="zoom-actions"><button class="zoom-btn" data-act="show-proof" data-fid="'+match.catalogId+'" data-fsid="'+match.storeId+'">Open proof</button><button class="zoom-btn alt" data-act="set-fstore" data-store="'+match.storeId+'">Browse '+esc(st.name)+'</button></div></div></section>';
+}
+
 /* Build structured flyer items from DEALS for a store */
 function buildFlyerItems(sid) {
   return DEALS.filter(function(d) { return d.sid === sid && isActive(d); }).map(function(d) {
@@ -458,7 +519,8 @@ function buildFlyerItems(sid) {
       brand: item ? item.brand : '',
       price: d.price, reg: d.reg, pct: d.pct,
       validFrom: d.vf, validTo: d.vt, verifiedAt: d.va,
-      source: 'embedded', sourceUrl: STORES[sid].flyerUrl
+      source: 'embedded', sourceUrl: STORES[sid].flyerUrl,
+      imageCache: flyerImageCacheEntry(item, d, sid)
     };
   });
 }
@@ -506,7 +568,7 @@ var S = {
   preferences:{interests:['Produce','Dairy','Flyer Deals'],budget:'balanced',maxStops:2},
   lang:'en', dietFilter:'All', policySearch:'',
   view:'shop', search:'', cat:'All',
-  flyerStore:'freshco', flyerSearch:'',
+  flyerStore:'freshco', flyerSearch:'', flyerZoom:null,
   cartOpen:false, authOpen:false, postalOpen:false, chatOpen:false,
   matchItem:null, proofItem:null,
   tab:'items', fName:'', fEmail:'', fPostal:'', authMode:'signup', authMsg:'',
@@ -908,9 +970,39 @@ async function loadProfileFromSupabase(user, accessToken) {
   if (!res.ok) throw new Error(authErrorMessage(data||{}));
   return Array.isArray(data) ? data[0] : null;
 }
+function authRedirectUrl() {
+  var configured = (APP_PUBLIC_URL || '').trim();
+  if (configured) return configured.replace(/#.*$/,'').replace(/\?.*$/,'');
+  try {
+    var loc = window.location;
+    var current = loc.origin + loc.pathname;
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(current)) {
+      return current;
+    }
+    return current;
+  } catch(e) { return ''; }
+}
+
+function consumeSupabaseRedirect() {
+  var h = (location.hash || '').replace(/^#/, '');
+  if (!h || h.indexOf('access_token=') === -1) return false;
+  var params = new URLSearchParams(h);
+  var access = params.get('access_token'), refresh = params.get('refresh_token'), type = params.get('type');
+  if (access) {
+    S.authMsg = type === 'signup' || type === 'email' ? 'Email confirmed. You can now log in.' : 'Supabase session confirmed.';
+    S.authOpen = true;
+    sessionStorage.setItem('pm_supabase_access_token', access);
+    if (refresh) sessionStorage.setItem('pm_supabase_refresh_token', refresh);
+    history.replaceState(null, document.title, location.pathname + location.search);
+    return true;
+  }
+  return false;
+}
+
 async function authWithSupabase(mode, email, password, name) {
-  var endpoint = mode==='signin' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
-  var body = mode==='signin' ? {email:email,password:password} : {email:email,password:password,data:{full_name:name,preferences:S.preferences}};
+  var redirect = authRedirectUrl();
+  var endpoint = mode==='signin' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup' + (redirect ? '?redirect_to=' + encodeURIComponent(redirect) : '');
+  var body = mode==='signin' ? {email:email,password:password} : {email:email,password:password,data:{full_name:name,preferences:S.preferences},options:{email_redirect_to:redirect}};
   var res = await fetch(SUPABASE_URL+endpoint, {method:'POST',headers:supabaseHeaders(),body:JSON.stringify(body)});
   var data = await res.json().catch(function(){return {};});
   if (!res.ok) throw new Error(authErrorMessage(data));
@@ -1253,7 +1345,7 @@ function bFlyers() {
   var topBar = '<div class="flyer-top-bar">'
     +'<div class="flyer-srch-wrap">'
     +'<div class="flyer-srch-icon">'+SVG.srch+'</div>'
-    +'<input id="flyer-srch" class="flyer-srch" value="'+esc(S.flyerSearch)+'" placeholder="Search downloaded flyer items across all '+SIDS.length+' stores..." oninput="onFlyerSearch(this.value)" aria-label="Search flyers"/>'
+    +'<input id="flyer-srch" class="flyer-srch" value="'+esc(S.flyerSearch)+'" placeholder="Search downloaded flyer/image cache — banana, EXR, milk..." oninput="onFlyerSearch(this.value)" aria-label="Search flyers"/>'
     +(q?'<button style="position:absolute;right:9px;top:50%;transform:translateY(-50%);background:#E2E8F0;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center" data-act="clr-fsearch" aria-label="Clear flyer search">'+SVG.x14+'</button>':'')
     +'</div>'
     +bIDBStatus()
@@ -1324,7 +1416,8 @@ function bFlyers() {
         +'</div></div>'
         +groupsHtml+'</div>';
     }
-    return topBar+dietBar+resultsHtml;
+    var zoomPanel = bFlyerZoomPanel(firstFlyerSearchMatch(q), q);
+    return topBar+dietBar+zoomPanel+resultsHtml;
   }
 
   /* ── BROWSE MODE — magazine layout ── */
@@ -1623,7 +1716,7 @@ function bAuth(){
   var isSign=S.authMode!=='signin';
   var feats=[['&#x1F512;','Supabase-ready email/password auth with no service keys in the browser'],['&#x2728;','Preference-based recommendations after signup'],['&#x1F4F0;','Downloaded flyer search and price alerts'],['&#x1F916;','Chat assistant for price and flyer questions']];
   var msg=S.authMsg?'<div class="auth-msg '+(S.authMsg.indexOf('Error')===0?'err':'ok')+'">'+esc(S.authMsg)+'</div>':'';
-  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:20px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">'+(isSign?'Create your PriceMatch account':'Welcome back')+'</h2><p style="font-size:13px;color:#64748B;line-height:1.55">'+(supabaseConfigured()?'Connected to Supabase auth.':'Supabase is not configured yet. Add your project URL and anon key to enable real signup/login.')+'</p></div>'
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Sign in"><div class="modal-box"><div style="text-align:center;margin-bottom:20px"><div class="micon">&#x1F6D2;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">'+(isSign?'Create your PriceMatch account':'Welcome back')+'</h2><p style="font-size:13px;color:#64748B;line-height:1.55">'+(supabaseConfigured()?'Connected to Supabase auth. Email confirmations return to this app, not localhost.':'Supabase is not configured yet. Add your project URL and anon key to enable real signup/login.')+'</p></div>'
     +'<div class="auth-tabs"><button class="auth-tab'+(isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signup">Sign up</button><button class="auth-tab'+(!isSign?' on':'')+'" data-act="set-auth-mode" data-mode="signin">Login</button></div>'+msg
     +'<div style="margin-bottom:18px">'+feats.map(function(f){return '<div class="firow"><span>'+f[0]+'</span>'+f[1]+'</div>';}).join('')+'</div>'
     +(isSign?'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px" for="f-name">Your name</label><input class="finput" id="f-name" name="name" autocomplete="name" placeholder="Your name" value="'+esc(S.fName)+'" oninput="S.fName=this.value"/>':'')
@@ -1864,6 +1957,7 @@ async function init() {
     updateVisitStreak();
     initPWA();
     hydrate();
+    consumeSupabaseRedirect();
     decodeBasketParam();
     if(!S.postalCode) S.postalOpen=true;
     render();
