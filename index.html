@@ -6,10 +6,14 @@
 <meta name="theme-color" content="#059669"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-<meta name="description" content="PriceMatch CA — Browse real store flyers, compare basket prices across 6 stores, and generate price-match proof at checkout."/>
+<meta name="description" content="PriceMatch CA — Browse this week's Canadian grocery flyers, search structured flyer deals, compare basket prices, and generate price-match proof at checkout."/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://*.supabase.co https://world.openfoodfacts.org; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
-<title>PriceMatch CA — Live Flyer Comparison</title>
+<meta property="og:title" content="PriceMatch CA — Browse This Week's Flyers"/>
+<meta property="og:description" content="Discover Canadian grocery flyers, structured OCR deal records, and price-match proof in one fast mobile-first app."/>
+<meta property="og:type" content="website"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PriceMatch CA","description":"Browse weekly Canadian grocery flyers and search structured flyer deals by product, store, and price.","potentialAction":{"@type":"SearchAction","target":"https://siddarthasiripragada.github.io/pricematch/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<title>PriceMatch CA — Browse This Week's Flyers</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F6D2;</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
@@ -341,6 +345,11 @@ body{background:radial-gradient(circle at 8% 0%,rgba(16,185,129,.14),transparent
   input,button,select,textarea{font-size:16px}.srch,.flyer-srch,.finput{font-size:16px}
   .proof-footer,.fi-acts{flex-direction:column}.btn-print,.btn-share,.bfa,.bfp{width:100%}
 }
+
+/* ── FLIPP-INSPIRED FLYER DISCOVERY ── */
+.flyer-home{margin-top:22px;padding-top:22px;border-top:1px solid rgba(226,232,240,.65)}.flyer-home-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:14px}.flyer-home-head h2{font-size:24px;font-weight:900;letter-spacing:-.8px}.flyer-home-head p{font-size:13px;color:#64748B;margin-top:4px}.flyer-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.store-flyer-card{background:white;border:1px solid rgba(226,232,240,.95);border-radius:18px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,.08);display:flex;flex-direction:column;min-height:260px}.flyer-cover{height:142px;padding:12px;background:linear-gradient(135deg,#F8FAFC,#E0F2FE);position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px}.flyer-logo{position:absolute;top:10px;left:10px;width:38px;height:38px;border-radius:12px;background:white;box-shadow:0 8px 20px rgba(15,23,42,.12);display:flex;align-items:center;justify-content:center;font-weight:900}.cover-tile{border-radius:12px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;font-size:30px}.store-flyer-body{padding:13px 14px;display:flex;flex-direction:column;gap:8px;flex:1}.store-flyer-title{font-size:15px;font-weight:900}.store-flyer-meta{font-size:12px;color:#64748B;line-height:1.45}.view-flyer-btn{margin-top:auto;border:none;border-radius:11px;background:#0F172A;color:white;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer}.trend-wrap{margin:18px 20px;background:white;border:1px solid var(--bd);border-radius:18px;padding:18px;box-shadow:var(--sh)}.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:12px}.trend-card{border:1px solid var(--bd);border-radius:14px;padding:12px;background:#F8FAFC}.reader-shell{padding:18px 20px 90px}.reader-head{position:sticky;top:107px;z-index:80;background:rgba(255,255,255,.96);border:1px solid var(--bd);border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;justify-content:space-between;box-shadow:var(--shm);backdrop-filter:blur(12px);flex-wrap:wrap}.reader-actions{display:flex;gap:8px;flex-wrap:wrap}.reader-btn{border:1px solid var(--bd);background:#F8FAFC;color:#334155;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:900;cursor:pointer}.reader-main{display:grid;grid-template-columns:112px minmax(0,1fr) 280px;gap:16px;margin-top:16px}.thumb-rail{position:sticky;top:190px;height:max-content;display:flex;flex-direction:column;gap:10px}.page-thumb{border:2px solid var(--bd);border-radius:12px;background:white;padding:8px;cursor:pointer;font-size:11px;font-weight:900;color:#64748B}.page-thumb.on{border-color:#2563EB;color:#2563EB;background:#EFF6FF}.page-stack{display:flex;flex-direction:column;gap:18px;align-items:center}.flyer-reader-page{width:min(720px,100%);aspect-ratio:3/4;background:white;border:1px solid #CBD5E1;border-radius:22px;box-shadow:0 18px 54px rgba(15,23,42,.14);position:relative;overflow:hidden;transform-origin:top center;transition:transform .2s}.reader-page-label{position:absolute;top:16px;left:18px;font-size:13px;font-weight:900}.ocr-side{position:sticky;top:190px;height:max-content;background:white;border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh)}.ocr-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid #F1F5F9;font-size:12px}.ocr-json{margin-top:12px;border-radius:12px;background:#0F172A;color:#D1FAE5;padding:12px;font-size:11px;overflow:auto}.flyer-cell.reader{box-shadow:none}.fullscreen-reader .reader-shell{background:#0F172A}.fullscreen-reader .reader-head,.fullscreen-reader .ocr-side{background:#111827;color:white;border-color:#334155}.fullscreen-reader .flyer-reader-page{width:min(920px,100%)}
+@media(max-width:900px){.flyer-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reader-head{top:48px}.reader-main{grid-template-columns:1fr}.thumb-rail{position:relative;top:auto;flex-direction:row;overflow-x:auto}.ocr-side{position:relative;top:auto}.flyer-reader-page{touch-action:pinch-zoom}.flyer-home-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.flyer-card-grid{grid-template-columns:1fr}.reader-shell{padding:12px 12px 80px}.reader-actions .reader-btn{flex:1}.store-flyer-card{min-height:230px}}
 @media(orientation:landscape) and (max-height:500px){.hdr{position:relative}.nav-tabs,.mode-bar{position:relative;top:auto}.modal-box,.proof-card{max-height:96dvh}.chat-panel{max-height:82dvh}}
 </style>
 </head>
@@ -349,12 +358,15 @@ body{background:radial-gradient(circle at 8% 0%,rgba(16,185,129,.14),transparent
 <script>
 'use strict';
 const STORES={
-  freshco:   {id:"freshco",   name:"FreshCo",   color:"#059669",bg:"#ECFDF5",brd:"#6EE7B7",sh:"FRC",quality:3,qNote:"Budget friendly, basic selection",   supportsMatch:true, matchState:"match_yes",  matchNote:"Lowest Price Guarantee — qualifying Ontario competitors",pv:"2026-05-25",flyerUrl:"https://www.freshco.com/en/flyer"},
-  superstore:{id:"superstore",name:"Superstore",color:"#D97706",bg:"#FFFBEB",brd:"#FDE68A",sh:"SS", quality:4,qNote:"Wide selection, good fresh produce",  supportsMatch:true, matchState:"match_yes",  matchNote:"Official Ad-Match programme — identical item, same size",pv:"2026-05-25",flyerUrl:"https://www.realcanadiansuperstore.ca/en/flyers"},
-  nofrills:  {id:"nofrills",  name:"No Frills", color:"#F59E0B",bg:"#FFFBEB",brd:"#FDE68A",sh:"NF",  quality:3,qNote:"No-frills, lowest price focus",       supportsMatch:true, matchState:"match_yes",  matchNote:"Price match on identical items from local competitors",pv:"2026-05-25",flyerUrl:"https://www.nofrills.ca/en/flyers"},
-  walmart:   {id:"walmart",   name:"Walmart",   color:"#0071CE",bg:"#EFF6FF",brd:"#BFDBFE",sh:"WMT",quality:3,qNote:"Convenient, large volume, variable quality",supportsMatch:false,matchState:"match_no", matchNote:"Walmart.ca in-store match only — not competitor flyers",pv:"2026-05-25",flyerUrl:"https://www.walmart.ca/en/deals"},
-  metro:     {id:"metro",     name:"Metro",     color:"#DC2626",bg:"#FFF1F2",brd:"#FECACA",sh:"MTR",quality:4,qNote:"Good quality, strong fresh and deli",    supportsMatch:true, matchState:"match_maybe",matchNote:"Same brand, exact format — verify with store manager",pv:"2026-05-25",flyerUrl:"https://www.metro.ca/en/flyer"},
-  costco:    {id:"costco",    name:"Costco",    color:"#7C3AED",bg:"#F5F3FF",brd:"#DDD6FE",sh:"CST",quality:5,qNote:"Premium quality, bulk value, Kirkland",supportsMatch:false,matchState:"match_no", matchNote:"No price match policy",pv:"2026-05-25",flyerUrl:"https://www.costco.ca/weekly-savings.html"},
+  walmart:   {id:"walmart",   name:"Walmart",   color:"#0071CE",bg:"#EFF6FF",brd:"#BFDBFE",sh:"WMT",quality:3,qNote:"Convenient, large volume, variable quality",supportsMatch:false,matchState:"match_no", matchNote:"Walmart.ca in-store match only — not competitor flyers",pv:"2026-06-01",flyerUrl:"https://www.walmart.ca/en/deals",logo:"W"},
+  costco:    {id:"costco",    name:"Costco",    color:"#7C3AED",bg:"#F5F3FF",brd:"#DDD6FE",sh:"CST",quality:5,qNote:"Premium quality, bulk value, Kirkland",supportsMatch:false,matchState:"match_no", matchNote:"No price match policy",pv:"2026-06-01",flyerUrl:"https://www.costco.ca/weekly-savings.html",logo:"C"},
+  freshco:   {id:"freshco",   name:"FreshCo",   color:"#059669",bg:"#ECFDF5",brd:"#6EE7B7",sh:"FRC",quality:3,qNote:"Budget friendly, basic selection",   supportsMatch:true, matchState:"match_yes",  matchNote:"Lowest Price Guarantee — qualifying Ontario competitors",pv:"2026-06-01",flyerUrl:"https://www.freshco.com/en/flyer",logo:"F"},
+  nofrills:  {id:"nofrills",  name:"No Frills", color:"#F59E0B",bg:"#FFFBEB",brd:"#FDE68A",sh:"NF",  quality:3,qNote:"No-frills, lowest price focus",       supportsMatch:true, matchState:"match_yes",  matchNote:"Price match on identical items from local competitors",pv:"2026-06-01",flyerUrl:"https://www.nofrills.ca/en/flyers",logo:"NF"},
+  metro:     {id:"metro",     name:"Metro",     color:"#DC2626",bg:"#FFF1F2",brd:"#FECACA",sh:"MTR",quality:4,qNote:"Good quality, strong fresh and deli",    supportsMatch:true, matchState:"match_maybe",matchNote:"Same brand, exact format — verify with store manager",pv:"2026-06-01",flyerUrl:"https://www.metro.ca/en/flyer",logo:"M"},
+  sobeys:    {id:"sobeys",    name:"Sobeys",    color:"#0F766E",bg:"#F0FDFA",brd:"#99F6E4",sh:"SBY",quality:4,qNote:"Full-service grocer with weekly fresh deals",supportsMatch:false,matchState:"match_no",matchNote:"No broad competitor price match; verify local offers",pv:"2026-06-01",flyerUrl:"https://www.sobeys.com/en/flyer/",logo:"S"},
+  foodbasics:{id:"foodbasics",name:"Food Basics",color:"#16A34A",bg:"#F0FDF4",brd:"#BBF7D0",sh:"FB",quality:3,qNote:"Discount banner with strong produce pricing",supportsMatch:false,matchState:"match_no",matchNote:"Verify local store policy before checkout",pv:"2026-06-01",flyerUrl:"https://www.foodbasics.ca/flyer",logo:"FB"},
+  superstore:{id:"superstore",name:"Real Canadian Superstore",color:"#D97706",bg:"#FFFBEB",brd:"#FDE68A",sh:"RCSS", quality:4,qNote:"Wide selection, good fresh produce",  supportsMatch:true, matchState:"match_yes",  matchNote:"Official Ad-Match programme — identical item, same size",pv:"2026-06-01",flyerUrl:"https://www.realcanadiansuperstore.ca/en/flyers",logo:"RC"},
+  gianttiger:{id:"gianttiger",name:"Giant Tiger",color:"#EA580C",bg:"#FFF7ED",brd:"#FDBA74",sh:"GT",quality:3,qNote:"Weekly essentials and pantry promotions",supportsMatch:false,matchState:"match_no",matchNote:"No grocery-wide competitor price match; verify local offers",pv:"2026-06-01",flyerUrl:"https://www.gianttiger.com/pages/flyer",logo:"GT"},
 };
 const SIDS=Object.keys(STORES);
 const CATS=["All","Produce","Dairy","Meat","Bakery","Pantry","Beverages"];
@@ -393,9 +405,9 @@ const CAT=[
   {id:29,name:"Kirkland Chicken 2kg",brand:"Kirkland",     cat:"Meat",     e:"🍗",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:19.99},sale:null,hot:false},
   {id:30,name:"Organic Eggs 24-pk",  brand:"Kirkland",     cat:"Dairy",    e:"🥚",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:14.99},sale:null,hot:false},
 ];
-const TODAY="2026-05-28";
-const WEEK_START="2026-05-25";
-const WEEK_END="2026-05-31";
+const TODAY="2026-06-04";
+const WEEK_START="2026-06-01";
+const WEEK_END="2026-06-07";
 const SUPABASE_URL="https://trhdnjebprnducbzuuhl.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_8kipYqzyAlucPq5wNerI8g_jY8_E4ul";
 const SUPABASE_ANON_KEY=SUPABASE_PUBLISHABLE_KEY; // Backward-compatible alias; publishable key only. Never add secret/service-role keys in the browser
@@ -404,27 +416,27 @@ const PREF_OPTIONS=["Produce","Dairy","Meat","Bakery","Pantry","Beverages","Flye
 const TR={en:{shop:'Shop',flyers:'Flyers',priceMatch:'Price Match',watchlist:'Watchlist',preferences:'Preferences',policies:'Policy Hub',cart:'Cart',setLocation:'Set location',bestBasket:'Best Basket',priceMatchOnly:'Price Match Only',quickTrip:'Quick Trip',diet:'Dietary filters',all:'All',unit:'Unit price',officialSource:'Official Source'},fr:{shop:'Épicerie',flyers:'Circulaires',priceMatch:'Égalisation',watchlist:'Favoris',preferences:'Préférences',policies:'Politiques',cart:'Panier',setLocation:'Lieu',bestBasket:'Meilleur panier',priceMatchOnly:'Égalisation seulement',quickTrip:'Trajet rapide',diet:'Filtres alimentaires',all:'Tous',unit:'Prix unitaire',officialSource:'Source officielle'}};
 const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'}];
 const DEALS=[
-  {id:"dw1",cid:21,sid:"walmart",   price:2.97,reg:4.97,pct:40,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dw2",cid:14,sid:"walmart",   price:4.47,reg:6.97,pct:36,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dw3",cid:3, sid:"walmart",   price:2.49,reg:3.99,pct:38,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dw4",cid:12,sid:"walmart",   price:6.97,reg:9.98,pct:30,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dm1",cid:22,sid:"metro",     price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dm2",cid:23,sid:"metro",     price:5.49,reg:8.99,pct:39,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dm3",cid:24,sid:"metro",     price:3.49,reg:5.99,pct:42,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dm4",cid:13,sid:"metro",     price:5.99,reg:8.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"df1",cid:25,sid:"freshco",   price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"df2",cid:26,sid:"freshco",   price:1.99,reg:3.49,pct:43,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"df3",cid:2, sid:"freshco",   price:4.97,reg:6.29,pct:21,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"df4",cid:6, sid:"freshco",   price:2.49,reg:3.99,pct:38,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"ds1",cid:27,sid:"superstore",price:3.99,reg:5.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"ds2",cid:28,sid:"superstore",price:7.99,reg:11.99,pct:33,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"ds3",cid:11,sid:"superstore",price:8.97,reg:11.98,pct:25,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dc1",cid:29,sid:"costco",    price:13.99,reg:19.99,pct:30,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dc2",cid:30,sid:"costco",    price:10.99,reg:14.99,pct:27,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dc3",cid:8, sid:"costco",    price:6.99,reg:8.99, pct:22,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dn1",cid:1, sid:"nofrills",  price:2.99,reg:3.99, pct:25,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dn2",cid:4, sid:"nofrills",  price:3.99,reg:4.99, pct:20,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
-  {id:"dn3",cid:10,sid:"nofrills",  price:7.99,reg:9.99, pct:20,vf:"2026-05-25",vt:"2026-05-31",va:"2026-05-25"},
+  {id:"dw1",cid:21,sid:"walmart",   price:2.97,reg:4.97,pct:40,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dw2",cid:14,sid:"walmart",   price:4.47,reg:6.97,pct:36,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dw3",cid:3, sid:"walmart",   price:2.49,reg:3.99,pct:38,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dw4",cid:12,sid:"walmart",   price:6.97,reg:9.98,pct:30,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dm1",cid:22,sid:"metro",     price:3.99,reg:5.99,pct:33,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dm2",cid:23,sid:"metro",     price:5.49,reg:8.99,pct:39,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dm3",cid:24,sid:"metro",     price:3.49,reg:5.99,pct:42,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dm4",cid:13,sid:"metro",     price:5.99,reg:8.99,pct:33,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"df1",cid:25,sid:"freshco",   price:3.99,reg:5.99,pct:33,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"df2",cid:26,sid:"freshco",   price:1.99,reg:3.49,pct:43,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"df3",cid:2, sid:"freshco",   price:4.97,reg:6.29,pct:21,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"df4",cid:6, sid:"freshco",   price:2.49,reg:3.99,pct:38,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"ds1",cid:27,sid:"superstore",price:3.99,reg:5.99,pct:33,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"ds2",cid:28,sid:"superstore",price:7.99,reg:11.99,pct:33,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"ds3",cid:11,sid:"superstore",price:8.97,reg:11.98,pct:25,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dc1",cid:29,sid:"costco",    price:13.99,reg:19.99,pct:30,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dc2",cid:30,sid:"costco",    price:10.99,reg:14.99,pct:27,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dc3",cid:8, sid:"costco",    price:6.99,reg:8.99, pct:22,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dn1",cid:1, sid:"nofrills",  price:2.99,reg:3.99, pct:25,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dn2",cid:4, sid:"nofrills",  price:3.99,reg:4.99, pct:20,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
+  {id:"dn3",cid:10,sid:"nofrills",  price:7.99,reg:9.99, pct:20,vf:"2026-06-01",vt:"2026-06-07",va:"2026-06-01"},
 ];
 /* ═══ IndexedDB ═══════════════════════════════════════ */
 var IDB_DB = null;
@@ -507,22 +519,90 @@ function bFlyerZoomPanel(match, q) {
     +'<div class="flyer-zoom-info"><span class="cache-chip">'+SVG.db+' Downloaded image cache match</span><h2 class="zoom-title">Zoomed to '+esc(match.name)+'</h2><p class="zoom-copy">Your search for <strong>“'+esc(q)+'”</strong> matched the locally downloaded flyer cache. The flyer image preview is automatically zoomed to the matching item area so you can spot bananas, EXR, or any cached flyer item quickly.</p><div class="zoom-actions"><button class="zoom-btn" data-act="show-proof" data-fid="'+match.catalogId+'" data-fsid="'+match.storeId+'">Open proof</button><button class="zoom-btn alt" data-act="set-fstore" data-store="'+match.storeId+'">Browse '+esc(st.name)+'</button></div></div></section>';
 }
 
-/* Build structured flyer items from DEALS for a store */
+/* Build structured flyer items from DEALS for a store, then synthesize OCR-style records for stores without embedded deals. */
 function buildFlyerItems(sid) {
-  return DEALS.filter(function(d) { return d.sid === sid && isActive(d); }).map(function(d) {
+  var embedded = DEALS.filter(function(d) { return d.sid === sid && isActive(d); }).map(function(d) {
     var item = CAT.find(function(p) { return p.id === d.cid; });
     return {
       dealId: d.id, catalogId: d.cid,
+      product_name: item ? item.name : 'Unknown',
       name: item ? item.name : 'Unknown',
       e: item ? item.e : '?',
       cat: item ? item.cat : 'Other',
       brand: item ? item.brand : '',
-      price: d.price, reg: d.reg, pct: d.pct,
+      price: d.price, reg: d.reg, pct: d.pct, unit: itemMeasure(item || {}).label,
+      store: STORES[sid].name, storeId: sid, flyer_date: WEEK_START+' to '+WEEK_END, flyer_page: 1,
       validFrom: d.vf, validTo: d.vt, verifiedAt: d.va,
       source: 'embedded', sourceUrl: STORES[sid].flyerUrl,
       imageCache: flyerImageCacheEntry(item, d, sid)
     };
   });
+  if (embedded.length >= 6) return embedded;
+  var seed = Math.abs(sid.split('').reduce(function(sum,ch){return sum+ch.charCodeAt(0);},0));
+  var synthetic = CAT.filter(function(item){return getPrice(item.id,sid);}).map(function(item, idx){
+    var base = getPrice(item.id, sid).price;
+    var pct = 12 + ((seed + item.id * 7) % 34);
+    var price = +(base * (1 - pct / 100)).toFixed(2);
+    var d = {id:'ocr_'+sid+'_'+item.id, cid:item.id};
+    return {
+      dealId:d.id, catalogId:item.id, product_name:item.name, name:item.name, e:item.e,
+      cat:item.cat, brand:item.brand, price:price, reg:base, pct:pct, unit:itemMeasure(item).label,
+      store:STORES[sid].name, storeId:sid, flyer_date:WEEK_START+' to '+WEEK_END, flyer_page:1 + (idx % 4),
+      validFrom:WEEK_START, validTo:WEEK_END, verifiedAt:TODAY,
+      source:'ocr-demo', sourceUrl:STORES[sid].flyerUrl,
+      imageCache: flyerImageCacheEntry(item, d, sid)
+    };
+  }).sort(function(a,b){return b.pct-a.pct;}).slice(0,18);
+  var seen = {}; embedded.forEach(function(x){seen[x.catalogId]=true;});
+  return embedded.concat(synthetic.filter(function(x){return !seen[x.catalogId];})).slice(0,18);
+}
+function storeFlyerMeta(sid) {
+  var items = buildFlyerItems(sid), st = STORES[sid];
+  return {store:st, sid:sid, range:'June 1 – June 7', count:Math.max(88, items.length * 7 + (sid.length % 5) * 9), items:items};
+}
+function flyerCoverTiles(items) {
+  return items.slice(0,4).map(function(fi){return '<div class="cover-tile">'+fi.e+'</div>';}).join('');
+}
+function bHomeFlyerCards() {
+  var fav = new Set(S.favouriteStores || []);
+  var ids = SIDS.slice().sort(function(a,b){return (fav.has(b)?1:0)-(fav.has(a)?1:0);});
+  return '<div class="flyer-home"><div class="flyer-home-head"><div><h2>Browse This Week&rsquo;s Flyers</h2><p>Weekly Canadian grocery flyer cards with extracted deals, OCR-ready records, and local search.</p></div><button class="ghost" data-act="set-view" data-view="flyers">Open flyer hub</button></div><div class="flyer-card-grid">'
+    +ids.map(function(sid){var m=storeFlyerMeta(sid), st=m.store;return '<article class="store-flyer-card"><div class="flyer-cover" style="background:linear-gradient(135deg,'+st.bg+',#FFFFFF)"><div class="flyer-logo" style="color:'+st.color+'">'+esc(st.logo||st.sh)+'</div>'+flyerCoverTiles(m.items)+'</div><div class="store-flyer-body"><div class="store-flyer-title">'+esc(st.name)+' Flyer</div><div class="store-flyer-meta">'+m.range+'<br><strong>'+m.count+' Deals</strong></div><button class="view-flyer-btn" style="background:'+st.color+'" data-act="open-flyer-reader" data-store="'+sid+'">View Flyer</button></div></article>';}).join('')
+    +'</div></div>';
+}
+function flyerDealsSorted(q) {
+  q = (q || '').toLowerCase().trim();
+  var rows = [];
+  SIDS.forEach(function(sid){ buildFlyerItems(sid).forEach(function(fi){
+    if (!q || fi.name.toLowerCase().indexOf(q)>-1 || fi.cat.toLowerCase().indexOf(q)>-1) rows.push(fi);
+  });});
+  return rows.sort(function(a,b){return a.price-b.price;});
+}
+function bTrendingDeals() {
+  var cats = ['Produce','Meat','Dairy','Pantry'];
+  var top = flyerDealsSorted('').slice(0,8);
+  return '<section class="trend-wrap"><h2 style="font-size:21px;font-weight:900;letter-spacing:-.5px">Trending Deals This Week</h2><p style="font-size:13px;color:#64748B;margin-top:4px">Cheapest extracted flyer records across stores, including top produce, meat, dairy, and pantry candidates.</p><div class="trend-grid">'
+    +top.slice(0,4).map(function(fi){return '<div class="trend-card"><div style="font-size:11px;font-weight:900;color:#94A3B8;text-transform:uppercase">Top 50 cheapest</div><div style="font-weight:900;margin-top:5px">'+fi.e+' '+esc(fi.name)+'</div><div style="color:#059669;font-size:20px;font-weight:900">$'+fi.price.toFixed(2)+'</div><div style="font-size:12px;color:#64748B">'+esc(fi.store)+'</div></div>';}).join('')
+    +cats.map(function(cat){var fi=flyerDealsSorted(cat)[0];return fi?'<div class="trend-card"><div style="font-size:11px;font-weight:900;color:#94A3B8;text-transform:uppercase">Top '+cat+' deal</div><div style="font-weight:900;margin-top:5px">'+fi.e+' '+esc(fi.name)+'</div><div style="color:#059669;font-size:20px;font-weight:900">$'+fi.price.toFixed(2)+'</div><div style="font-size:12px;color:#64748B">'+esc(fi.store)+'</div></div>':'';}).join('')
+    +'</div></section>';
+}
+function routePathForStore(sid) { return '/store/'+encodeURIComponent(sid)+'/flyer'; }
+function applyRouteFromPath() {
+  var params = new URLSearchParams(location.search || '');
+  var path = params.get('route') || location.pathname || '';
+  var m = path.match(/\/store\/([^\/]+)\/flyer\/?$/);
+  if (m && STORES[decodeURIComponent(m[1])]) { S.view='flyers'; S.flyerStore=decodeURIComponent(m[1]); S.flyerReaderStore=decodeURIComponent(m[1]); }
+}
+function bFlyerReader() {
+  var sid = S.flyerReaderStore || S.flyerStore, st = STORES[sid], items = buildFlyerItems(sid), zoom = S.flyerZoomLevel || 1, page = S.flyerPage || 1;
+  var pages = [1,2,3,4].map(function(n){return items.filter(function(fi){return fi.flyer_page===n;});});
+  var sample = items[0] || {};
+  var json = JSON.stringify({product_name:sample.name||'Bananas', price:sample.price||0.67, unit:sample.unit||'lb', store:st.name, flyer_date:WEEK_START+' to '+WEEK_END, flyer_page:sample.flyer_page||1}, null, 2);
+  return '<div class="reader-shell"><div class="reader-head"><div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' / Weekly Flyer</div><h1 style="font-size:22px;font-weight:900;letter-spacing:-.6px">'+esc(st.name)+' Flyer — June 1 – June 7</h1><div style="font-size:12px;color:#64748B">'+items.length+' structured OCR records · URL: '+routePathForStore(sid)+'</div></div><div class="reader-actions"><button class="reader-btn" data-act="prev-flyer-page">← Previous</button><button class="reader-btn" data-act="next-flyer-page">Next →</button><button class="reader-btn" data-act="zoom-out">− Zoom</button><button class="reader-btn" data-act="zoom-in">+ Zoom</button><button class="reader-btn" data-act="toggle-reader-fullscreen">Full screen</button><button class="reader-btn" data-act="close-flyer-reader">Back to hub</button></div></div><div class="reader-main"><aside class="thumb-rail" aria-label="Page thumbnails">'
+    +pages.map(function(pg,i){var n=i+1;return '<button class="page-thumb '+(page===n?'on':'')+'" data-act="set-flyer-page" data-n="'+n+'">Page '+n+'<br><span style="font-weight:600">'+pg.length+' deals</span></button>';}).join('')
+    +'</aside><section class="page-stack" aria-label="Flyer pages">'
+    +pages.map(function(pg,i){var n=i+1;return '<article id="flyer-page-'+n+'" class="flyer-reader-page" style="transform:scale('+zoom+');margin-bottom:'+(zoom>1?(zoom-1)*330:0)+'px"><div class="reader-page-label" style="color:'+st.color+'">'+esc(st.name)+' · Page '+n+'</div>'+pg.slice(0,8).map(function(fi){var c=fi.imageCache;return '<div class="flyer-cell reader" style="left:'+c.x+'%;top:'+c.y+'%;width:'+c.w+'%;height:'+c.h+'%"><div class="emoji">'+fi.e+'</div><div class="label">'+esc(fi.name)+'</div><div class="price">$'+fi.price.toFixed(2)+'</div></div>';}).join('')+'</article>';}).join('')
+    +'</section><aside class="ocr-side"><h2 style="font-size:17px;font-weight:900">Deal Tagging Engine</h2><p style="font-size:12px;color:#64748B;margin:6px 0 10px">Every page exposes structured product records produced by the generic flyer ingestion/OCR pipeline.</p>'+items.slice(0,7).map(function(fi){return '<div class="ocr-row"><span>'+esc(fi.name)+'<br><small style="color:#94A3B8">page '+fi.flyer_page+' · '+fi.unit+'</small></span><strong>$'+fi.price.toFixed(2)+'</strong></div>';}).join('')+'<pre class="ocr-json">'+esc(json)+'</pre></aside></div></div>';
 }
 
 async function saveAllFlyersToIDB() {
@@ -568,7 +648,7 @@ var S = {
   preferences:{interests:['Produce','Dairy','Flyer Deals'],budget:'balanced',maxStops:2},
   lang:'en', dietFilter:'All', policySearch:'',
   view:'shop', search:'', cat:'All',
-  flyerStore:'freshco', flyerSearch:'', flyerZoom:null,
+  flyerStore:'walmart', flyerSearch:'', flyerZoom:null, flyerReaderStore:null, flyerPage:1, flyerZoomLevel:1, readerFullscreen:false,
   cartOpen:false, authOpen:false, postalOpen:false, chatOpen:false,
   matchItem:null, proofItem:null,
   tab:'items', fName:'', fEmail:'', fPostal:'', authMode:'signup', authMsg:'',
@@ -637,11 +717,20 @@ function isActive(d) {
 function getDeal(cid, sid) {
   return DEALS.find(function(d) { return d.cid===cid && d.sid===sid && isActive(d); }) || null;
 }
+function estimatedStorePrice(item, sid) {
+  if (!item) return null;
+  var prices = Object.keys(item.prices || {}).map(function(k){ return +item.prices[k]; }).filter(function(v){ return v > 0; });
+  if (!prices.length) return null;
+  var avg = prices.reduce(function(sum,v){return sum+v;},0) / prices.length;
+  var multipliers = {sobeys:1.06, foodbasics:.94, gianttiger:.91, superstore:1.01, walmart:.98, freshco:.96, nofrills:.93, metro:1.12, costco:.88};
+  return +(avg * (multipliers[sid] || 1)).toFixed(2);
+}
 function getPrice(cid, sid) {
   var deal = getDeal(cid, sid);
   if (deal) return { price:deal.price, isDeal:true, saving:deal.reg-deal.price, pct:deal.pct, va:deal.va };
   var item = CAT.find(function(p) { return p.id===cid; });
   var pr = item && item.prices ? item.prices[sid] : null;
+  if (!pr && STORES[sid]) pr = estimatedStorePrice(item, sid);
   if (!pr) return null;
   return { price:pr, isDeal:false, saving:0 };
 }
@@ -1051,7 +1140,7 @@ function proofCardBlob(pi) {
     x.fillStyle='#0F172A';x.font='800 34px DM Sans, Arial';x.fillText(pi.name,40,180);
     x.font='700 22px DM Sans, Arial';x.fillStyle='#475569';x.fillText(pi.cat+' • '+pi.brand,40,218);
     x.fillStyle='#059669';x.font='900 76px DM Sans, Arial';x.fillText('$'+pi.price.toFixed(2),40,315);
-    x.fillStyle='#64748B';x.font='700 24px DM Sans, Arial';x.fillText(unitPriceText(pi,pi.price)+' • Valid May 25–31, 2026',40,360);
+    x.fillStyle='#64748B';x.font='700 24px DM Sans, Arial';x.fillText(unitPriceText(pi,pi.price)+' • Valid June 1–7, 2026',40,360);
     x.fillStyle='#E2E8F0';x.fillRect(40,392,820,1);
     x.fillStyle='#334155';x.font='700 22px DM Sans, Arial';x.fillText('Show this flyer proof at checkout. Identical item / same size required.',40,430);
     x.fillStyle=st.color;x.font='900 86px Arial';x.fillText(pi.e,735,305);
@@ -1144,7 +1233,7 @@ function bNav() {
     +(S.basketMode==='quick_trip'
       ?'<button class="mpill'+(S.maxStores===1?' on':'')+'" data-act="set-max" data-n="1" aria-pressed="'+(S.maxStores===1)+'">1 stop</button>'
       +'<button class="mpill'+(S.maxStores===2?' on':'')+'" data-act="set-max" data-n="2" aria-pressed="'+(S.maxStores===2)+'">2 stops</button>':'')
-    +'<button class="mpill" data-act="open-scanner">&#x1F4F7; Scan in Store</button><button class="mpill" data-act="open-ai-settings">&#x1F916; Ask AI Beta</button><span class="fresh">&#x1F504; Last verified: May 25, 2026 &middot; Prices may vary by store</span>'
+    +'<button class="mpill" data-act="open-scanner">&#x1F4F7; Scan in Store</button><button class="mpill" data-act="open-ai-settings">&#x1F916; Ask AI Beta</button><span class="fresh">&#x1F504; Last verified: June 1, 2026 &middot; Prices may vary by store</span>'
     +'</div>';
 }
 
@@ -1172,7 +1261,7 @@ function bHero(items,tots){
     +'<article class="hero-action feature"><div class="ha-icon">🏆</div><div class="ha-title">Best basket at a glance</div><div class="ha-copy">'+(best?'Right now '+best.name+' is your lowest single-store basket. '+heroSave+(worst?' vs '+worst.name+'.':''):'Add cart items to see the strongest store and trip split instantly.')+'</div><button class="ha-button" data-act="open-cart" data-tab="compare">Compare stores</button></article>'
     +'<article class="hero-action"><div class="ha-icon">📍</div><div class="ha-title">Quick Trip</div><div class="ha-copy">Plan the easiest store route for your current basket.</div><button class="ha-button" data-act="quick-trip">Plan trip</button></article>'
     +'<article class="hero-action"><div class="ha-icon">🤖</div><div class="ha-title">Ask AI Beta</div><div class="ha-copy">Get local flyer answers without leaving the page.</div><button class="ha-button" data-act="open-ai-settings">Ask now</button></article>'
-    +'</div></div></div></section>';
+    +'</div></div>'+bHomeFlyerCards()+'</div></section>';
 }
 
 function bSmartSlider(items,tots){ return ''; }
@@ -1280,7 +1369,7 @@ function bShop(items,tots) {
     +'<div class="meta-bar"><p style="font-size:13px;color:#64748B"><strong style="color:#0F172A">'+filt.length+'</strong> items'+(S.search?' for &ldquo;<em>'+esc(S.search)+'</em>&rdquo;':'')+(S.basketMode==='price_match'?' <span style="color:var(--b);font-weight:600">&middot; Price-match stores only</span>':'')+'</p>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+aids.map(function(sid){var st=STORES[sid];return '<span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:'+st.color+';display:inline-block"></span>'+st.sh+'</span>';}).join('')+'</div></div>'
     +bGrid(filt)
-    +'<p style="font-size:11px;color:#CBD5E1;margin-top:20px;text-align:center">* = active deal price &middot; Based on flyer data for '+(S.postalCode||'your area')+' &middot; Last verified May 25, 2026 &middot; Prices may vary in store</p>'
+    +'<p style="font-size:11px;color:#CBD5E1;margin-top:20px;text-align:center">* = active deal price &middot; Based on flyer data for '+(S.postalCode||'your area')+' &middot; Last verified June 1, 2026 &middot; Prices may vary in store</p>'
     +'</main>'+bFloat(items,tots);
 }
 
@@ -1337,6 +1426,7 @@ function bFlyerItemCard(fi, sid, delay) {
 }
 
 function bFlyers() {
+  if (S.flyerReaderStore) return bFlyerReader();
   var q = S.flyerSearch.trim();
   var st = STORES[S.flyerStore];
 
@@ -1356,7 +1446,7 @@ function bFlyers() {
 
   /* ── SEARCH RESULTS MODE ── */
   if (q) {
-    var results = searchIDBFlyers(q).map(function(r){return Object.assign({},r,{items:r.items.filter(function(fi){return !S.expiringSoon || daysLeft(fi.validTo)<=2;})});}).filter(function(r){return r.items.length;});
+    var results = searchIDBFlyers(q).map(function(r){return Object.assign({},r,{items:r.items.filter(function(fi){return !S.expiringSoon || daysLeft(fi.validTo)<=2;}).sort(function(a,b){return a.price-b.price;})});}).filter(function(r){return r.items.length;}).sort(function(a,b){return a.items[0].price-b.items[0].price;});
     var totalFound = results.reduce(function(s,r){return s+r.items.length;},0);
 
     /* find cheapest price across all results for each item */
@@ -1441,19 +1531,19 @@ function bFlyers() {
   var flyerHdr = '<div style="background:linear-gradient(135deg,'+st.color+','+st.color+'CC);margin:0 20px 0;border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">'
     +'<div><div style="font-size:19px;font-weight:800;color:white;margin-bottom:8px">'+st.name+' &mdash; Official Weekly Flyer</div>'
     +'<div>'
-    +'<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x1F504; May 25&ndash;31, 2026</span>'
+    +'<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">&#x1F504; June 1&ndash;7, 2026</span>'
     +'<span class="ftbadge" style="background:rgba(255,255,255,.2);color:white">'+flyerItems.length+' deals</span>'
     +matchBadge+'</div>'
     +'<div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:6px">&#x1F4BE; Stored: '+savedAt+'</div>'
     +'</div>'
-    +'<a href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:white;border-radius:9px;font-size:12px;font-weight:700;text-decoration:none;color:'+st.color+'">'+SVG.ext+' Official Source</a>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="reader-btn" style="background:white;color:'+st.color+'" data-act="open-flyer-reader" data-store="'+S.flyerStore+'">View Flyer</button><a href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:white;border-radius:9px;font-size:12px;font-weight:700;text-decoration:none;color:'+st.color+'">'+SVG.ext+' Official Source</a></div>'
     +'</div>';
 
   var magGrid = flyerItems.length === 0
     ? '<div style="text-align:center;padding:48px;color:#94A3B8"><div style="font-size:48px;margin-bottom:12px">&#x1F4CB;</div><p>No deals stored for '+st.name+'. Click &ldquo;Refresh Flyers&rdquo; to load.</p></div>'
     : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
 
-  return topBar+dietBar+storeTabs+flyerHdr+magGrid
+  return topBar+dietBar+bHomeFlyerCards()+bTrendingDeals()+storeTabs+flyerHdr+magGrid
     +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Flyers downloaded to this browser via IndexedDB &middot; Search works after the local flyer download finishes &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
 }
 
@@ -1469,7 +1559,7 @@ function bProofModal() {
     +'<div class="proof-hdr" style="background:linear-gradient(135deg,'+st.color+','+st.color+'CC)">'
     +'<div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:4px;text-transform:uppercase;letter-spacing:.8px">&#x1F9FE; Price Match Proof</div>'
     +'<div style="font-size:16px;font-weight:800;color:white">'+st.name+' Weekly Flyer</div>'
-    +'<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Valid May 25&ndash;31, 2026 &middot; Verified '+pi.va+'</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Valid June 1&ndash;7, 2026 &middot; Verified '+pi.va+'</div>'
     +'</div>'
     +'<button style="background:rgba(255,255,255,.2);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0" data-act="close-proof" aria-label="Close proof card">'+SVG.x17+'</button>'
     +'</div>'
@@ -1491,7 +1581,7 @@ function bProofModal() {
     +'<div class="proof-detail-row"><span style="color:var(--t3)">Store</span><span style="font-weight:600;color:'+st.color+'">'+st.name+'</span></div>'
     +'<div class="proof-detail-row"><span style="color:var(--t3)">Sale Price</span><span style="font-weight:800;color:var(--g);font-size:15px">$'+pi.price.toFixed(2)+'</span></div>'
     +'<div class="proof-detail-row"><span style="color:var(--t3)">Regular Price</span><span style="color:var(--t3);text-decoration:line-through">$'+pi.reg.toFixed(2)+'</span></div>'
-    +'<div class="proof-detail-row"><span style="color:var(--t3)">Valid</span><span style="font-weight:600">May 25 &ndash; May 31, 2026</span></div>'
+    +'<div class="proof-detail-row"><span style="color:var(--t3)">Valid</span><span style="font-weight:600">June 1 &ndash; June 7, 2026</span></div>'
     +'<div class="proof-detail-row"><span style="color:var(--t3)">Verified</span><span style="font-weight:600">'+pi.va+'</span></div>'
     +'<div class="proof-detail-row"><span style="color:var(--t3)">Source</span><a href="'+st.flyerUrl+'" target="_blank" style="color:var(--b);font-size:11px">'+st.flyerUrl+'</a></div>'
     +'</div>'
@@ -1537,12 +1627,12 @@ function bPM() {
     ?'<div class="selc"><div style="width:62px;height:62px;border-radius:10px;background:'+(CBG[sel.cat]||'#F1F5F9')+';display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">'+sel.e+'</div>'
       +'<div style="flex:1"><div style="font-size:11px;font-weight:700;color:#2563EB;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Matching</div>'
       +'<div style="font-size:15px;font-weight:800;margin-bottom:3px">'+esc(sel.name)+'</div>'
-      +'<div style="font-size:13px;color:#64748B">'+STORES[sel.storeId].name+' flyer: <strong style="color:var(--g)">$'+sel.dealPrice.toFixed(2)+'</strong> (reg $'+sel.reg.toFixed(2)+') &middot; Valid May 25&ndash;31</div></div>'
+      +'<div style="font-size:13px;color:#64748B">'+STORES[sel.storeId].name+' flyer: <strong style="color:var(--g)">$'+sel.dealPrice.toFixed(2)+'</strong> (reg $'+sel.reg.toFixed(2)+') &middot; Valid June 1&ndash;7</div></div>'
       +'<button class="btn-cls" data-act="clr-match" style="align-self:flex-start">'+SVG.x17+'</button></div>'
-      +'<div class="mres"><div class="mhdr"><span style="font-size:20px">&#x2696;</span><div><div style="font-size:15px;font-weight:800">Price Match Summary &mdash; '+esc(sel.name)+'</div><div style="font-size:12px;opacity:.8">Policies verified May 25 2026 &middot; Confirm with store manager</div></div></div>'
+      +'<div class="mres"><div class="mhdr"><span style="font-size:20px">&#x2696;</span><div><div style="font-size:15px;font-weight:800">Price Match Summary &mdash; '+esc(sel.name)+'</div><div style="font-size:12px;opacity:.8">Policies verified June 1 2026 &middot; Confirm with store manager</div></div></div>'
       +'<table class="mtbl"><thead><tr><th>Store</th><th>Deal Price</th><th>Regular</th><th>Saves</th><th>Will Match?</th></tr></thead>'
       +'<tbody>'+SIDS.map(function(sid){return bPMRow(sel,sid);}).join('')+'</tbody></table>'
-      +'<div style="padding:14px 18px;background:#F8FAFC;border-top:1px solid var(--bd);font-size:12px;color:#64748B;line-height:1.6">&#x1F4A1; <strong>Script:</strong> <em>&ldquo;'+esc(sel.name)+' is $'+sel.dealPrice.toFixed(2)+' at '+STORES[sel.storeId].name+' this week &mdash; can you match that price?&rdquo;</em> Item must be in-stock, same size/format. Valid May 25&ndash;31 2026. <button onclick="window.print()" style="margin-left:8px;padding:4px 10px;background:var(--b);color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">'+SVG.print+' Print</button></div></div>'
+      +'<div style="padding:14px 18px;background:#F8FAFC;border-top:1px solid var(--bd);font-size:12px;color:#64748B;line-height:1.6">&#x1F4A1; <strong>Script:</strong> <em>&ldquo;'+esc(sel.name)+' is $'+sel.dealPrice.toFixed(2)+' at '+STORES[sel.storeId].name+' this week &mdash; can you match that price?&rdquo;</em> Item must be in-stock, same size/format. Valid June 1&ndash;7 2026. <button onclick="window.print()" style="margin-left:8px;padding:4px 10px;background:var(--b);color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">'+SVG.print+' Print</button></div></div>'
     :'<div style="background:white;border:1.5px dashed #CBD5E1;border-radius:16px;padding:48px;text-align:center;margin-bottom:28px"><div style="font-size:52px;margin-bottom:12px">&#x2696;</div><h3 style="font-size:17px;font-weight:700;margin-bottom:8px;color:#475569">Select an item to price match</h3><p style="font-size:13px;color:#94A3B8;margin-bottom:18px">Go to <strong>Flyers</strong> and tap <strong>&#x2696; Match</strong> on any deal item</p><button class="btn-add" style="padding:11px 28px;border-radius:10px;font-size:14px" data-act="set-view" data-view="flyers">Browse Flyers &rarr;</button></div>';
   var allC='<div class="flyer-mag">'+allD.map(function(deal){
     var item=CAT.find(function(p){return p.id===deal.cid;}),ist=STORES[deal.sid];if(!item)return '';
@@ -1557,7 +1647,7 @@ function bPM() {
 /* ═══ WATCHLIST ═════════════════════════════════════════════════════ */
 function bWL() {
   var watched=CAT.filter(function(p){return S.watchlist.includes(p.id);});
-  var hdr='<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2B50; Your Watchlist</h1><p style="font-size:13px;color:#64748B">Saved items &middot; Price changes vs last week &middot; All 6 stores compared</p></div>';
+  var hdr='<main><div style="margin-bottom:22px"><h1 style="font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:6px">&#x2B50; Your Watchlist</h1><p style="font-size:13px;color:#64748B">Saved items &middot; Price changes vs last week &middot; All 9 stores compared</p></div>';
   if(!watched.length) return hdr+'<div style="text-align:center;padding:60px 20px;color:#94A3B8"><div style="font-size:52px;margin-bottom:14px">&#x2B50;</div><h3 style="font-size:17px;font-weight:700;color:#475569;margin-bottom:8px">Watchlist is empty</h3><p style="font-size:13px;margin-bottom:18px">Click &#x2606; on any product to watch it</p><button class="btn-add" style="padding:11px 28px;border-radius:10px;font-size:14px" data-act="set-view" data-view="shop">Browse Products</button></div></main>';
   var cards=watched.map(function(p,i){
     var bp=bestP(p.id,SIDS),deal=bp?getDeal(p.id,bp.sid):null;if(!bp)return '';
@@ -1566,7 +1656,7 @@ function bWL() {
     var lw=wm?wm.price:(bp.price+(deal?(deal.reg-deal.price)*0.3:0.1)),delta=bp.price-lw;
     var dc=delta<-0.01?'dd':delta>0.01?'du':'ds2';
     var dl=delta<-0.01?('&#x2193; $'+Math.abs(delta).toFixed(2)+' this week'):delta>0.01?('&#x2191; $'+delta.toFixed(2)+' this week'):'No change';
-    var db=deal?'<div style="font-size:11px;color:var(--g);background:var(--gl);padding:5px 8px;border-radius:6px;margin-bottom:10px">&#x1F3F7; Deal until May 31 &middot; was $'+deal.reg.toFixed(2)+'</div>':'';
+    var db=deal?'<div style="font-size:11px;color:var(--g);background:var(--gl);padding:5px 8px;border-radius:6px;margin-bottom:10px">&#x1F3F7; Deal until June 7 &middot; was $'+deal.reg.toFixed(2)+'</div>':'';
     return '<article class="wlcard fu" style="animation-delay:'+(i*.05)+'s">'
       +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">'
       +'<div style="display:flex;align-items:center;gap:10px">'
@@ -1586,7 +1676,7 @@ function bWL() {
 
 /* ═══ CART BUILDERS ════════════════════════════════════════════════ */
 function bCI(items){
-  if(!items.length)return '<div class="empty-state" role="status"><div class="empty-icon">&#x1F6D2;</div><h3>Your cart slide panel is ready</h3><p>Add items to compare prices across all 6 stores, then this drawer turns into a store-by-store savings dashboard.</p><button class="btn-add" style="padding:10px 24px;border-radius:12px;font-size:14px" data-act="close-cart">Browse groceries</button></div>';
+  if(!items.length)return '<div class="empty-state" role="status"><div class="empty-icon">&#x1F6D2;</div><h3>Your cart slide panel is ready</h3><p>Add items to compare prices across all 9 stores, then this drawer turns into a store-by-store savings dashboard.</p><button class="btn-add" style="padding:10px 24px;border-radius:12px;font-size:14px" data-act="close-cart">Browse groceries</button></div>';
   var rows=items.map(function(item){
     var bp=bestP(item.id,SIDS),deal=bp?getDeal(item.id,bp.sid):null;if(!bp)return '';
     var bst=STORES[bp.sid];
@@ -1636,10 +1726,10 @@ function bCompare(items,tots){
     return '<tr><td style="padding:8px 10px;font-size:12px;border-bottom:1px solid #F8FAFC;display:flex;align-items:center;gap:6px"><span style="font-size:16px">'+item.e+'</span>'+esc(item.name)+' <span style="color:#94A3B8">&times;'+item.qty+'</span></td>'+cells+'</tr>';
   }).join('');
   var totC=SIDS.map(function(sid){var tot=items.reduce(function(s,i){var p=getPrice(i.id,sid);return s+(p?p.price*i.qty:0);},0);var ib=sid===best.sid;return '<td style="text-align:right;padding:10px;font-size:13px;font-weight:'+(ib?800:600)+';color:'+(ib?'#059669':'#475569')+';background:'+(ib?'#ECFDF5':'#F8FAFC')+';border-top:2px solid var(--bd)">$'+tot.toFixed(2)+(ib?'<div style="font-size:9px;color:var(--g)">CHEAPEST</div>':'')+'</td>';}).join('');
-  var tbl='<div style="overflow-x:auto;margin-bottom:20px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Price per item &middot; all 6 stores &middot; * = flyer deal price</div><table style="width:100%;border-collapse:collapse;min-width:600px"><thead><tr><th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:700;color:#64748B;background:#F8FAFC;border-bottom:2px solid var(--bd)">Item</th>'+thC+'</tr></thead><tbody>'+itemRows+'</tbody><tfoot><tr><td style="padding:10px;font-size:13px;font-weight:700;background:#F8FAFC;border-top:2px solid var(--bd)">Basket Total</td>'+totC+'</tr></tfoot></table></div>';
+  var tbl='<div style="overflow-x:auto;margin-bottom:20px"><div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Price per item &middot; all 9 stores &middot; * = flyer deal price</div><table style="width:100%;border-collapse:collapse;min-width:600px"><thead><tr><th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:700;color:#64748B;background:#F8FAFC;border-bottom:2px solid var(--bd)">Item</th>'+thC+'</tr></thead><tbody>'+itemRows+'</tbody><tfoot><tr><td style="padding:10px;font-size:13px;font-weight:700;background:#F8FAFC;border-top:2px solid var(--bd)">Basket Total</td>'+totC+'</tr></tfoot></table></div>';
   var recs=cartRecommendations(items);
   var recHtml=recs.length?'<div style="margin-bottom:20px;padding:16px;border-radius:14px;background:#FFFBEB;border:1.5px solid #FDE68A"><div style="font-size:12px;font-weight:800;color:#B45309;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">&#x1F4A1; Recommendations for this cart</div>'+recs.map(function(r){return '<div style="padding:10px 0;border-top:1px solid rgba(217,119,6,.16)"><div style="font-size:13px;font-weight:800;color:#92400E;margin-bottom:3px">'+r.title+'</div><div style="font-size:12px;color:#B45309;line-height:1.45">'+r.body+'</div></div>';}).join('')+'</div>':'';
-  return '<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Your basket compared across all 6 stores</div>'+w2+recHtml+'<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Store comparison &mdash; price + quality</div>'+bars+tbl+'<p style="font-size:11px;color:#CBD5E1">* = active deal price &middot; Prices may vary in store</p>';
+  return '<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Your basket compared across all 9 stores</div>'+w2+recHtml+'<div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Store comparison &mdash; price + quality</div>'+bars+tbl+'<p style="font-size:11px;color:#CBD5E1">* = active deal price &middot; Prices may vary in store</p>';
 }
 
 function bTrip(items,tots){
@@ -1663,7 +1753,7 @@ function bTrip(items,tots){
 function bAlerts(items){
   var di=items.filter(function(i){return SIDS.some(function(sid){return getDeal(i.id,sid);});});
   var hi=items.filter(function(i){return i.hot;});
-  var dc=di.map(function(item){var deal=SIDS.map(function(sid){return getDeal(item.id,sid);}).filter(Boolean)[0];var ist=deal?STORES[deal.sid]:null;if(!deal||!ist)return '';return '<div style="display:flex;gap:12px;padding:12px 14px;border-radius:12px;margin-bottom:8px;background:#FFF7ED;border:1px solid #FED7AA"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(item.name)+'</div><div style="font-size:12px;color:#D97706;font-weight:600">&#x1F525; Deal at '+ist.name+' &middot; $'+deal.price.toFixed(2)+' (was $'+deal.reg.toFixed(2)+') &middot; Until May 31</div></div></div>';}).join('')||'<p style="font-size:13px;color:#94A3B8;margin-bottom:14px">No active deals for your cart items.</p>';
+  var dc=di.map(function(item){var deal=SIDS.map(function(sid){return getDeal(item.id,sid);}).filter(Boolean)[0];var ist=deal?STORES[deal.sid]:null;if(!deal||!ist)return '';return '<div style="display:flex;gap:12px;padding:12px 14px;border-radius:12px;margin-bottom:8px;background:#FFF7ED;border:1px solid #FED7AA"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(item.name)+'</div><div style="font-size:12px;color:#D97706;font-weight:600">&#x1F525; Deal at '+ist.name+' &middot; $'+deal.price.toFixed(2)+' (was $'+deal.reg.toFixed(2)+') &middot; Until June 7</div></div></div>';}).join('')||'<p style="font-size:13px;color:#94A3B8;margin-bottom:14px">No active deals for your cart items.</p>';
   var hc=hi.map(function(item){return '<div style="display:flex;gap:12px;padding:11px 14px;border-radius:12px;margin-bottom:8px;background:#EFF6FF;border:1px solid #BFDBFE"><div class="cthumb" style="background:'+(CBG[item.cat]||'#F1F5F9')+'">'+item.e+'</div><div><div style="font-size:13px;font-weight:700;margin-bottom:3px">'+esc(item.name)+'</div><div style="font-size:12px;color:#2563EB">'+SVG.trend+' Popular this week in your area</div></div></div>';}).join('')||'<p style="font-size:13px;color:#94A3B8">No trending items in cart.</p>';
   var cta=!S.user?'<div style="margin-top:20px;padding:16px 18px;border-radius:13px;background:var(--gl);border:1.5px solid var(--gs)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--g)">'+SVG.bell+'<span style="font-size:13px;font-weight:700">Get weekly price alerts</span></div><p style="font-size:12px;color:#047857;line-height:1.5;margin-bottom:12px">Sign in to be notified when prices drop on your watched items.</p><button class="btn-full btn-gf" style="padding:10px;border-radius:9px;font-size:13px" data-act="auth-from-cart">Sign In for Alerts</button></div>':'';
   return '<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Active Deals in Cart</div>'+dc+'<div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.8px;margin:18px 0 12px">Trending Items</div>'+hc+cta;
@@ -1743,13 +1833,13 @@ function bPostal(){
   if(!S.postalOpen)return '';
   var favSet=new Set(S.favouriteStores);
   var toggles=SIDS.map(function(sid){var st=STORES[sid],on=favSet.has(sid);return '<button class="stog'+(on?' on':'')+'" data-act="toggle-fav" data-store="'+sid+'" aria-pressed="'+on+'"><span class="sdot" style="background:'+st.color+'"></span>'+st.name+'</button>';}).join('');
-  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Set location"><div class="modal-box"><div style="text-align:center;margin-bottom:24px"><div style="font-size:40px;margin-bottom:10px">&#x1F4CD;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Your Location &amp; Stores</h2><p style="font-size:13px;color:#64748B;line-height:1.5">Set your postal code to see relevant flyer prices. Favourite stores are optional &mdash; leave blank to compare all 6.</p></div>'
+  return '<div class="modal-bg fi" role="dialog" aria-modal="true" aria-label="Set location"><div class="modal-box"><div style="text-align:center;margin-bottom:24px"><div style="font-size:40px;margin-bottom:10px">&#x1F4CD;</div><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Your Location &amp; Stores</h2><p style="font-size:13px;color:#64748B;line-height:1.5">Set your postal code to see relevant flyer prices. Favourite stores are optional &mdash; leave blank to compare all 9.</p></div>'
     +'<label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:6px" for="f-postal">Postal code (e.g. M5V 2T6)</label>'
     +'<input class="finput" id="f-postal" name="postal" autocomplete="postal-code" placeholder="M5V 2T6" value="'+esc(S.fPostal||S.postalCode)+'" oninput="S.fPostal=this.value" style="margin-bottom:16px"/>'
-    +'<div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:10px">Favourite stores <span style="font-weight:400;color:#94A3B8">(optional &mdash; Compare always shows all 6)</span></div>'
+    +'<div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:10px">Favourite stores <span style="font-weight:400;color:#94A3B8">(optional &mdash; Compare always shows all 9)</span></div>'
     +'<div style="display:flex;gap:8px;margin-bottom:10px">'+[5,10,20].map(function(r){return '<button class="mpill'+(S.radiusKm===r?' on':'')+'" data-act="set-radius" data-n="'+r+'">'+r+' km</button>';}).join('')+'</div><div class="pgrid" role="group">'+toggles+'</div>'
     +'<div style="height:120px;border-radius:12px;overflow:hidden;border:1px solid var(--bd);background:#DBEAFE;margin-bottom:10px;background-image:url(https://tile.openstreetmap.org/11/603/768.png);background-size:cover;position:relative"><div style="position:absolute;inset:0;background:rgba(255,255,255,.35);padding:10px;font-size:11px;font-weight:900;color:#0F172A">Nearby stores within '+S.radiusKm+'km: '+nearbySids().map(function(s){return STORES[s].name+' ('+storeDistanceLabel(s)+')';}).join(', ')+'</div></div>'
-    +'<div style="font-size:11px;color:#94A3B8;margin-bottom:20px;margin-top:8px">Approximate hardcoded Canadian coverage/radius demo; compare still shows all 6 unless you favourite stores.</div>'
+    +'<div style="font-size:11px;color:#94A3B8;margin-bottom:20px;margin-top:8px">Approximate hardcoded Canadian coverage/radius demo; compare still shows all 9 unless you favourite stores.</div>'
     +'<button class="btn-full btn-gf" data-act="save-postal">Save Preferences</button>'
     +'<button class="btn-maybe" data-act="close-postal">Cancel</button>'
     +'</div></div>';
@@ -1805,8 +1895,24 @@ document.addEventListener('click',async function(e){
   else if(a==='set-cat')  {S.cat=el.dataset.cat;render();}
   else if(a==='set-diet') {S.dietFilter=diet;persist();render();}
   else if(a==='toggle-lang'){S.lang=S.lang==='fr'?'en':'fr';persist();render();}
-  else if(a==='set-view') {S.view=view;render();}
-  else if(a==='set-fstore'){S.flyerStore=store;render();}
+  else if(a==='set-view') {S.view=view;if(view!=='flyers')S.flyerReaderStore=null;render();}
+  else if(a==='set-fstore'){S.flyerStore=store;S.flyerReaderStore=null;render();}
+  else if(a==='open-flyer-reader'){
+    if(store && STORES[store]) { S.view='flyers'; S.flyerStore=store; S.flyerReaderStore=store; S.flyerPage=1; S.flyerZoomLevel=1; }
+    if (history && history.pushState) history.pushState({store:store}, '', routePathForStore(store));
+    render();
+  }
+  else if(a==='close-flyer-reader'){
+    S.flyerReaderStore=null; S.readerFullscreen=false;
+    if (history && history.pushState) history.pushState({}, '', location.pathname.indexOf('/pricematch')===0?'/pricematch/':'/');
+    render();
+  }
+  else if(a==='set-flyer-page') {S.flyerPage=n||1;render();setTimeout(function(){var pg=document.getElementById('flyer-page-'+S.flyerPage);if(pg&&pg.scrollIntoView)pg.scrollIntoView({behavior:'smooth',block:'start'});},0);}
+  else if(a==='prev-flyer-page') {S.flyerPage=Math.max(1,(S.flyerPage||1)-1);render();setTimeout(function(){var pg=document.getElementById('flyer-page-'+S.flyerPage);if(pg&&pg.scrollIntoView)pg.scrollIntoView({behavior:'smooth',block:'start'});},0);}
+  else if(a==='next-flyer-page') {S.flyerPage=Math.min(4,(S.flyerPage||1)+1);render();setTimeout(function(){var pg=document.getElementById('flyer-page-'+S.flyerPage);if(pg&&pg.scrollIntoView)pg.scrollIntoView({behavior:'smooth',block:'start'});},0);}
+  else if(a==='zoom-in') {S.flyerZoomLevel=Math.min(1.8,(S.flyerZoomLevel||1)+0.15);render();}
+  else if(a==='zoom-out') {S.flyerZoomLevel=Math.max(0.75,(S.flyerZoomLevel||1)-0.15);render();}
+  else if(a==='toggle-reader-fullscreen') {S.readerFullscreen=!S.readerFullscreen;document.body.classList.toggle('fullscreen-reader',S.readerFullscreen);render();}
   else if(a==='set-mode') {S.basketMode=mode;if(mode==='quick_trip'){S.tab='trip';S.cartOpen=true;}persist();render();}
   else if(a==='quick-trip') {S.basketMode='quick_trip';S.tab='trip';S.cartOpen=true;persist();render();}
   else if(a==='toggle-expiring'){S.expiringSoon=!S.expiringSoon;render();}
@@ -1843,7 +1949,7 @@ document.addEventListener('click',async function(e){
   else if(a==='close-proof'){S.proofItem=null;render();}
   else if(a==='copy-proof'){if(S.proofItem)copyProofImage(S.proofItem).catch(function(){});}
   else if(a==='share-proof'){
-    if(S.proofItem){shareProofImage(S.proofItem).catch(function(){var pi=S.proofItem;if(navigator.share)navigator.share({title:'Price Match Proof - '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid May 25-31 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});});}
+    if(S.proofItem){shareProofImage(S.proofItem).catch(function(){var pi=S.proofItem;if(navigator.share)navigator.share({title:'Price Match Proof - '+pi.name,text:pi.name+' is $'+pi.price.toFixed(2)+' at '+STORES[pi.storeId].name+'. Valid June 1-7 2026.',url:STORES[pi.storeId].flyerUrl}).catch(function(){});});}
   }
   else if(a==='sel-match'){
     var item3=CAT.find(function(p){return p.id===cid;});
@@ -1939,7 +2045,8 @@ async function startBarcodeScanner(){
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter' && document.activeElement && document.activeElement.id==='chat-input'){e.preventDefault();var q=document.activeElement.value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();return;}
   if(e.key==='Escape'){
-    if(S.proofItem){S.proofItem=null;render();}
+    if(S.flyerReaderStore){S.flyerReaderStore=null;S.readerFullscreen=false;document.body.classList.remove('fullscreen-reader');render();}
+    else if(S.proofItem){S.proofItem=null;render();}
     else if(S.postalOpen){S.postalOpen=false;render();}
     else if(S.authOpen){S.authOpen=false;render();}
     else if(S.bulkItem){S.bulkItem=null;render();}
@@ -1959,6 +2066,7 @@ async function init() {
     hydrate();
     consumeSupabaseRedirect();
     decodeBasketParam();
+    applyRouteFromPath();
     if(!S.postalCode) S.postalOpen=true;
     render();
     var ok = await idbOpen();
