@@ -118,6 +118,7 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px}
 .fi-pct{position:absolute;top:7px;right:7px;background:var(--r);color:white;font-size:11px;font-weight:800;padding:3px 7px;border-radius:5px}
 .fi-va{position:absolute;bottom:6px;right:6px;font-size:9px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.3);padding:2px 5px;border-radius:4px}
+.fi-exp{position:absolute;bottom:6px;left:6px;font-size:9px;color:white;background:rgba(37,99,235,.9);padding:2px 6px;border-radius:4px;font-weight:800}.fi-exp.soon{background:var(--o)}.fi-exp.expired{background:#64748B}
 .fi-body{padding:10px 12px}
 .fi-name{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:4px}
 .fi-reg{font-size:11px;color:var(--t3);text-decoration:line-through}
@@ -372,8 +373,9 @@ const CAT=[
 const TODAY="2026-05-28";
 const WEEK_START="2026-05-25";
 const WEEK_END="2026-05-31";
-const SUPABASE_URL=""; // Set to https://YOUR_PROJECT.supabase.co
-const SUPABASE_ANON_KEY=""; // Public anon key only; never add service-role keys in the browser
+const SUPABASE_URL="https://trhdnjebprnducbzuuhl.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_8kipYqzyAlucPq5wNerI8g_jY8_E4ul";
+const SUPABASE_ANON_KEY=SUPABASE_PUBLISHABLE_KEY; // Backward-compatible alias; publishable key only. Never add secret/service-role keys in the browser
 const PREF_OPTIONS=["Produce","Dairy","Meat","Bakery","Pantry","Beverages","Flyer Deals","Price Match","Low-Carb","Family Staples","No Bulk"] ;
 const TR={en:{shop:'Shop',flyers:'Flyers',priceMatch:'Price Match',watchlist:'Watchlist',preferences:'Preferences',policies:'Policy Hub',cart:'Cart',setLocation:'Set location',bestBasket:'Best Basket',priceMatchOnly:'Price Match Only',quickTrip:'Quick Trip',diet:'Dietary filters',all:'All',unit:'Unit price',officialSource:'Official Source'},fr:{shop:'Épicerie',flyers:'Circulaires',priceMatch:'Égalisation',watchlist:'Favoris',preferences:'Préférences',policies:'Politiques',cart:'Panier',setLocation:'Lieu',bestBasket:'Meilleur panier',priceMatchOnly:'Égalisation seulement',quickTrip:'Trajet rapide',diet:'Filtres alimentaires',all:'Tous',unit:'Prix unitaire',officialSource:'Source officielle'}};
 const POLICY_EXTRA=[{id:'iga',name:'IGA',color:'#0F766E',supportsMatch:false,matchState:'match_no',matchNote:'Policies vary by Quebec banner and franchise; verify with your local IGA before checkout.',flyerUrl:'https://www.iga.net/en/online_grocery/flyer'},{id:'maxi',name:'Maxi',color:'#F59E0B',supportsMatch:true,matchState:'match_yes',matchNote:'Ad match style policies may require identical local competitor, same size/format, and valid flyer proof.',flyerUrl:'https://www.maxi.ca/flyer'}];
@@ -868,17 +870,62 @@ function personalizedPicks(limit) {
   }).filter(Boolean).sort(function(a,b){return b.score-a.score;}).slice(0,limit||6);
 }
 function supabaseConfigured() {
-  try { var u=new URL(SUPABASE_URL); return u.protocol==='https:' && /\.supabase\.co$/i.test(u.hostname) && SUPABASE_ANON_KEY.length > 20; } catch(e) { return false; }
+  try {
+    var u=new URL(SUPABASE_URL);
+    return u.protocol==='https:' && /\.supabase\.co$/i.test(u.hostname) && /^sb_publishable_[A-Za-z0-9_-]{20,}$/.test(SUPABASE_PUBLISHABLE_KEY);
+  } catch(e) { return false; }
 }
 function validEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+function supabaseHeaders(accessToken) {
+  var token = accessToken || SUPABASE_PUBLISHABLE_KEY;
+  return {
+    'Content-Type':'application/json',
+    'Authorization':'Bearer '+token,
+    'apikey':SUPABASE_PUBLISHABLE_KEY
+  };
+}
+function authErrorMessage(data) {
+  return data.msg || data.error_description || data.message || data.error || 'Supabase authentication failed';
+}
+async function saveProfileToSupabase(user, accessToken, name, email) {
+  if (!user || !user.id || !accessToken) return null;
+  var res = await fetch(SUPABASE_URL+'/rest/v1/profiles', {
+    method:'POST',
+    headers:Object.assign({}, supabaseHeaders(accessToken), {'Prefer':'resolution=ignore-duplicates,return=representation'}),
+    body:JSON.stringify({id:user.id,name:name||'',email:email||user.email||''})
+  });
+  var data = await res.json().catch(function(){return null;});
+  if (!res.ok && res.status !== 409) throw new Error(authErrorMessage(data||{}));
+  return Array.isArray(data) ? data[0] : data;
+}
+async function loadProfileFromSupabase(user, accessToken) {
+  if (!user || !user.id || !accessToken) return null;
+  var url = SUPABASE_URL+'/rest/v1/profiles?id=eq.'+encodeURIComponent(user.id)+'&select=id,name,email&limit=1';
+  var res = await fetch(url, {method:'GET',headers:supabaseHeaders(accessToken)});
+  var data = await res.json().catch(function(){return [];});
+  if (!res.ok) throw new Error(authErrorMessage(data||{}));
+  return Array.isArray(data) ? data[0] : null;
+}
 async function authWithSupabase(mode, email, password, name) {
   var endpoint = mode==='signin' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
   var body = mode==='signin' ? {email:email,password:password} : {email:email,password:password,data:{full_name:name,preferences:S.preferences}};
-  var res = await fetch(SUPABASE_URL+endpoint, {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_ANON_KEY,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify(body)});
+  var res = await fetch(SUPABASE_URL+endpoint, {method:'POST',headers:supabaseHeaders(),body:JSON.stringify(body)});
   var data = await res.json().catch(function(){return {};});
-  if (!res.ok) throw new Error(data.msg || data.error_description || data.message || 'Supabase authentication failed');
+  if (!res.ok) throw new Error(authErrorMessage(data));
+  var session = data.session || {};
+  var user = data.user || session.user || {};
+  var profile = null;
+  if (session.access_token && user.id) {
+    try {
+      if (mode==='signup') await saveProfileToSupabase(user, session.access_token, name, email);
+      profile = await loadProfileFromSupabase(user, session.access_token);
+    } catch(e) {
+      data.profileError = e.message;
+    }
+  }
+  data.profile = profile;
   return data;
 }
 function officialSearchUrl(q) {
@@ -1156,6 +1203,19 @@ function bFloat(items,tots) {
     +'<span class="fview">View &rarr;</span></button></div>';
 }
 /* ═══ FLYERS VIEW — Magazine + Search + Proof ═══════════════════════ */
+function daysLeft(dateText) {
+  var end = new Date(String(dateText||'')+'T23:59:59');
+  if (isNaN(end.getTime())) return 999;
+  var now = new Date();
+  return Math.ceil((end.getTime()-now.getTime())/86400000);
+}
+function expiryPill(validTo) {
+  var left = daysLeft(validTo);
+  if (left < 0) return '<div class="fi-exp expired">Expired</div>';
+  if (left <= 2) return '<div class="fi-exp soon">Ends '+(left===0?'today':left+'d')+'</div>';
+  return '<div class="fi-exp">'+left+'d left</div>';
+}
+
 function bIDBStatus() {
   var st = S.idbStatus;
   if (st==='loading') return '<span class="idb-status idb-loading">'+SVG.db+' <span class="spin">&#x21BB;</span> Downloading local flyers...</span>';
@@ -1301,7 +1361,6 @@ function bFlyers() {
     : '<div class="flyer-mag">'+flyerItems.map(function(fi,i){return bFlyerItemCard(fi,S.flyerStore,i*0.04);}).join('')+'</div>';
 
   return topBar+dietBar+storeTabs+flyerHdr+magGrid
-  return topBar+storeTabs+flyerHdr+magGrid
     +'<p style="font-size:11px;color:#CBD5E1;padding:12px 20px 80px">Flyers downloaded to this browser via IndexedDB &middot; Search works after the local flyer download finishes &middot; Verify prices in store &middot; Tap &#x1F9FE; Proof for price match certificate</p>';
 }
 
@@ -1605,24 +1664,29 @@ function bPostal(){
 
 /* ═══ RENDER ════════════════════════════════════════════════════════ */
 function render(){
-  var items=cartItems(),tots=sTotals(items);
-  var prevY=window.scrollY,fid=document.activeElement&&document.activeElement.id;
-  var html=bHdr()+bNav()+bDropBanner()+bInstallBanner();
-  if(S.view==='shop') html+=bShop(items,tots);
-  else if(S.view==='flyers') html+=bFlyers();
-  else if(S.view==='pricematch') html+=bPM();
-  else if(S.view==='watchlist') html+=bWL();
-  else if(S.view==='preferences') html+=bPreferences();
-  else if(S.view==='policies') html+=bPolicies();
-  if(S.cartOpen) html+=bCart(items,tots);
-  html+=bChatbot()+bAuth()+bPostal()+bProofModal()+bBulkModal()+bGenericModal()+bScannerModal()+bAISettings()+bProtectModal();
-  document.getElementById('app').innerHTML=html;
-  if (window.scrollTo) window.scrollTo(0,prevY);
-  if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
-  if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
-  if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
-  if(fid==='policy-srch'){var el9=document.getElementById('policy-srch');if(el9){el9.focus();el9.setSelectionRange(S.policySearch.length,S.policySearch.length);}}
-  if(fid==='chat-input'){var el7=document.getElementById('chat-input');if(el7){el7.focus();el7.setSelectionRange(S.chatInput.length,S.chatInput.length);}}
+  try {
+    var items=cartItems(),tots=sTotals(items);
+    var prevY=window.scrollY,fid=document.activeElement&&document.activeElement.id;
+    var html=bHdr()+bNav()+bDropBanner()+bInstallBanner();
+    if(S.view==='shop') html+=bShop(items,tots);
+    else if(S.view==='flyers') html+=bFlyers();
+    else if(S.view==='pricematch') html+=bPM();
+    else if(S.view==='watchlist') html+=bWL();
+    else if(S.view==='preferences') html+=bPreferences();
+    else if(S.view==='policies') html+=bPolicies();
+    else { S.view='shop'; html+=bShop(items,tots); }
+    if(S.cartOpen) html+=bCart(items,tots);
+    html+=bChatbot()+bAuth()+bPostal()+bProofModal()+bBulkModal()+bGenericModal()+bScannerModal()+bAISettings()+bProtectModal();
+    document.getElementById('app').innerHTML=html;
+    if (window.scrollTo) window.scrollTo(0,prevY);
+    if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
+    if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
+    if(fid==='flyer-srch'){var el3=document.getElementById('flyer-srch');if(el3){el3.focus();el3.setSelectionRange(S.flyerSearch.length,S.flyerSearch.length);}}
+    if(fid==='policy-srch'){var el9=document.getElementById('policy-srch');if(el9){el9.focus();el9.setSelectionRange(S.policySearch.length,S.policySearch.length);}}
+    if(fid==='chat-input'){var el7=document.getElementById('chat-input');if(el7){el7.focus();el7.setSelectionRange(S.chatInput.length,S.chatInput.length);}}
+  } catch(err) {
+    document.getElementById('app').innerHTML='<main><div class="empty-state" role="alert"><div class="empty-icon">&#x1F6E0;</div><h3>PriceMatch is recovering</h3><p>A section failed to load, but the app did not open a blank page. Use the button below to return to Shop.</p><button class="btn-add" style="padding:11px 24px;border-radius:12px;font-size:14px" data-act="set-view" data-view="shop">Back to Shop</button><p style="font-size:11px;color:#CBD5E1;margin-top:10px">'+esc(err.message||err)+'</p></div></main>';
+  }
 }
 
 function onSearch(v){ if(S.view==='flyers')S.flyerSearch=v; else S.search=v; render(); }
@@ -1725,8 +1789,9 @@ document.addEventListener('click',async function(e){
       if(!supabaseConfigured()){S.authMsg='Error: configure Supabase URL and anon key before real signup/login. Use Continue offline for a local-only profile.';render();return;}
       var data=await authWithSupabase(S.authMode,email,pass,nm);
         var u=data.user || (data.session&&data.session.user) || {};
-        S.user={name:(u.user_metadata&&u.user_metadata.full_name)||nm||email.split('@')[0],email:email,id:u.id||'',provider:'supabase'};
-      S.authMsg=S.authMode==='signin'?'Login successful.':'Signup successful. Check your email if Supabase confirmation is enabled.';
+        var profile=data.profile||{};
+        S.user={name:profile.name||(u.user_metadata&&u.user_metadata.full_name)||nm||email.split('@')[0],email:profile.email||u.email||email,id:u.id||'',provider:'supabase'};
+      S.authMsg=(S.authMode==='signin'?'Login successful.':'Signup successful. Check your email if Supabase confirmation is enabled.')+(data.profileError?' Profile sync warning: '+data.profileError:'');
       if(el8)el8.value='';S.authOpen=false;persist();render();
     }catch(err){S.authMsg='Error: '+err.message;render();}
   }
@@ -1795,16 +1860,21 @@ document.addEventListener('keydown',function(e){
 
 /* ═══ INIT ══════════════════════════════════════════════════════════ */
 async function init() {
-  updateVisitStreak();
-  initPWA();
-  hydrate();
-  decodeBasketParam();
-  if(!S.postalCode) S.postalOpen=true;
-  render();
-  var ok = await idbOpen();
-  if(ok) {
-    await loadFlyersFromIDB();
-  } else {
+  try {
+    updateVisitStreak();
+    initPWA();
+    hydrate();
+    decodeBasketParam();
+    if(!S.postalCode) S.postalOpen=true;
+    render();
+    var ok = await idbOpen();
+    if(ok) {
+      await loadFlyersFromIDB();
+    } else {
+      S.idbStatus='error';
+      render();
+    }
+  } catch(err) {
     S.idbStatus='error';
     render();
   }
