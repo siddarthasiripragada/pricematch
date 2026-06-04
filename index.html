@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="description" content="PriceMatch CA — Browse this week's Canadian grocery flyers, search structured flyer deals, compare basket prices, and generate price-match proof at checkout."/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://*.supabase.co https://world.openfoodfacts.org; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org https://images.openfoodfacts.org; connect-src 'self' https://*.supabase.co https://world.openfoodfacts.org; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
 <meta property="og:title" content="PriceMatch CA — Browse This Week's Flyers"/>
 <meta property="og:description" content="Discover Canadian grocery flyers, structured OCR deal records, and price-match proof in one fast mobile-first app."/>
@@ -124,6 +124,7 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .flyer-item:hover{transform:translateY(-3px);box-shadow:var(--shm)}
 .fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px;background:#F8FAFC;overflow:hidden}
 .fi-photo{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(1.05) contrast(1.02)}
+.fi-photo.is-loading,.reader-product-photo.is-loading{filter:saturate(.7);opacity:.78}.off-badge{position:absolute;top:7px;left:7px;background:rgba(5,150,105,.92);color:white;font-size:9px;font-weight:900;padding:3px 7px;border-radius:999px;z-index:2;box-shadow:0 6px 14px rgba(5,150,105,.22)}
 .fi-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(15,23,42,.08));pointer-events:none}
 .reader-real-badge{position:absolute;right:18px;top:18px;background:rgba(15,23,42,.72);color:white;border:1px solid rgba(255,255,255,.38);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:900;letter-spacing:.2px;backdrop-filter:blur(8px);z-index:2}
 .fi-pct{position:absolute;top:7px;right:7px;background:var(--r);color:white;font-size:11px;font-weight:800;padding:3px 7px;border-radius:5px;z-index:2}
@@ -352,7 +353,7 @@ body{background:radial-gradient(circle at 8% 0%,rgba(16,185,129,.14),transparent
 /* ── FLIPP-INSPIRED FLYER DISCOVERY ── */
 .flyer-home{margin-top:22px;padding-top:22px;border-top:1px solid rgba(226,232,240,.65)}.flyer-home-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:14px}.flyer-home-head h2{font-size:24px;font-weight:900;letter-spacing:-.8px}.flyer-home-head p{font-size:13px;color:#64748B;margin-top:4px}.flyer-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.store-flyer-card{background:white;border:1px solid rgba(226,232,240,.95);border-radius:18px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,.08);display:flex;flex-direction:column;min-height:260px}.flyer-cover{height:142px;padding:12px;background:linear-gradient(135deg,#F8FAFC,#E0F2FE);position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px}.flyer-logo{position:absolute;top:10px;left:10px;width:38px;height:38px;border-radius:12px;background:white;box-shadow:0 8px 20px rgba(15,23,42,.12);display:flex;align-items:center;justify-content:center;font-weight:900}.cover-tile{border-radius:12px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;font-size:30px}.store-flyer-body{padding:13px 14px;display:flex;flex-direction:column;gap:8px;flex:1}.store-flyer-title{font-size:15px;font-weight:900}.store-flyer-meta{font-size:12px;color:#64748B;line-height:1.45}.view-flyer-btn{margin-top:auto;border:none;border-radius:11px;background:#0F172A;color:white;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer}.trend-wrap{margin:18px 20px;background:white;border:1px solid var(--bd);border-radius:18px;padding:18px;box-shadow:var(--sh)}.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:12px}.trend-card{border:1px solid var(--bd);border-radius:14px;padding:12px;background:#F8FAFC}.reader-shell{padding:18px 20px 90px}.reader-head{position:sticky;top:107px;z-index:80;background:rgba(255,255,255,.96);border:1px solid var(--bd);border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;justify-content:space-between;box-shadow:var(--shm);backdrop-filter:blur(12px);flex-wrap:wrap}.reader-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.reader-btn{border:1px solid var(--bd);background:#F8FAFC;color:#334155;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:900;cursor:pointer}.reader-btn.primary{background:#2563EB;color:white;border-color:#2563EB}.reader-zoom-readout{min-width:62px;text-align:center;border:1px solid var(--bd);border-radius:10px;background:white;padding:9px 10px;font-size:12px;font-weight:900;color:#2563EB}.reader-main{display:grid;grid-template-columns:104px minmax(0,1fr) 272px;gap:14px;margin-top:16px;align-items:start}.thumb-rail{position:sticky;top:190px;height:max-content;display:flex;flex-direction:column;gap:10px}.page-thumb{border:2px solid var(--bd);border-radius:12px;background:white;padding:8px;cursor:pointer;font-size:11px;font-weight:900;color:#64748B;text-align:left}.page-thumb.on{border-color:#2563EB;color:#2563EB;background:#EFF6FF;box-shadow:0 8px 22px rgba(37,99,235,.14)}.reader-stage{overflow:auto;overscroll-behavior:contain;border:1px solid var(--bd);border-radius:22px;background:linear-gradient(135deg,#DBEAFE,#F8FAFC);padding:22px;max-height:calc(100dvh - 190px);box-shadow:inset 0 1px 0 rgba(255,255,255,.9);scrollbar-gutter:stable both-edges}.page-stack{display:flex;flex-direction:column;gap:26px;align-items:center;min-width:max-content}.flyer-reader-page{width:720px;max-width:none;aspect-ratio:3/4;background:white;border:1px solid #CBD5E1;border-radius:22px;box-shadow:0 18px 54px rgba(15,23,42,.18);position:relative;overflow:hidden;transition:width .18s ease}.reader-page-label{position:absolute;top:16px;left:18px;font-size:13px;font-weight:900}.ocr-side{position:sticky;top:190px;height:max-content;background:white;border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh)}.ocr-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid #F1F5F9;font-size:12px}.ocr-json{margin-top:12px;border-radius:12px;background:#0F172A;color:#D1FAE5;padding:12px;font-size:11px;overflow:auto}.flyer-cell.reader{box-shadow:none}.fullscreen-reader .reader-shell{background:#0F172A;min-height:100dvh}.fullscreen-reader .reader-head,.fullscreen-reader .ocr-side{background:#111827;color:white;border-color:#334155}.fullscreen-reader .reader-stage{max-height:calc(100dvh - 128px);background:#020617;border-color:#334155}.fullscreen-reader .flyer-reader-page{width:920px}
 
-.flyer-fav{position:absolute;top:10px;right:10px;border:none;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px rgba(15,23,42,.12);width:36px;height:36px;cursor:pointer;font-size:17px}.flyer-fav.on{background:#FEF3C7;color:#D97706}.flyer-cover-img{width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.85);grid-column:1/-1}.flyer-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:#64748B}.flyer-meta-grid strong{display:block;color:#0F172A;font-size:13px}.data-model-panel{margin:18px 20px;background:#0F172A;color:#D1FAE5;border-radius:18px;padding:18px;box-shadow:var(--shm)}.data-model-panel pre{overflow:auto;font-size:11px;line-height:1.55}.deal-cat-section{margin:0 20px 24px}.deal-cat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.store-hero{margin:0 20px 18px;border-radius:22px;padding:22px;background:white;border:1px solid var(--bd);box-shadow:var(--shm);display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.store-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.store-metric{background:#F8FAFC;border:1px solid var(--bd);border-radius:14px;padding:12px}.reader-page-img{width:100%;height:auto;display:block;border-radius:22px;touch-action:pan-x pan-y pinch-zoom;user-select:none;-webkit-user-drag:none;background:white}.flyer-reader-page.has-img{height:auto;aspect-ratio:auto;background:transparent;border:none;box-shadow:0 18px 54px rgba(15,23,42,.18)}.reader-hint{font-size:11px;color:#64748B;margin-top:5px}.fullscreen-reader .reader-hint{color:#CBD5E1}.route-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.route-pill{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.16);color:white;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:900;cursor:pointer}
+.flyer-fav{position:absolute;top:10px;right:10px;border:none;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px rgba(15,23,42,.12);width:36px;height:36px;cursor:pointer;font-size:17px}.flyer-fav.on{background:#FEF3C7;color:#D97706}.flyer-cover-img{width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.85);grid-column:1/-1}.flyer-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:#64748B}.flyer-meta-grid strong{display:block;color:#0F172A;font-size:13px}.data-model-panel{margin:18px 20px;background:#0F172A;color:#D1FAE5;border-radius:18px;padding:18px;box-shadow:var(--shm)}.data-model-panel pre{overflow:auto;font-size:11px;line-height:1.55}.deal-cat-section{margin:0 20px 24px}.deal-cat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.store-hero{margin:0 20px 18px;border-radius:22px;padding:22px;background:white;border:1px solid var(--bd);box-shadow:var(--shm);display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.store-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.store-metric{background:#F8FAFC;border:1px solid var(--bd);border-radius:14px;padding:12px}.reader-page-img{width:100%;height:auto;display:block;border-radius:22px;touch-action:pan-x pan-y pinch-zoom;user-select:none;-webkit-user-drag:none;background:white}.flyer-reader-page.has-img{height:auto;aspect-ratio:auto;background:transparent;border:none;box-shadow:0 18px 54px rgba(15,23,42,.18)}.flyer-reader-page.magazine{aspect-ratio:3/4;background:#fff;border:1px solid #CBD5E1;border-radius:22px;box-shadow:0 18px 54px rgba(15,23,42,.18);position:relative;overflow:hidden;touch-action:none}.flyer-page-sheet{position:absolute;inset:0;background:linear-gradient(135deg,#fff,#F8FAFC)}.magazine-masthead{position:absolute;left:5%;right:5%;top:4%;height:10%;border-radius:24px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;color:white;box-shadow:0 14px 36px rgba(15,23,42,.18)}.magazine-title{font-family:Georgia,serif;font-size:clamp(24px,4.8vw,48px);font-weight:900;letter-spacing:-1px}.magazine-sub{font-size:clamp(9px,1.4vw,17px);font-weight:900;opacity:.86}.reader-deal-tile{position:absolute;border:none;border-radius:18px;background:white;box-shadow:0 12px 28px rgba(15,23,42,.14);padding:1.6%;cursor:pointer;text-align:left;overflow:hidden;transition:transform .16s,box-shadow .16s}.reader-deal-tile:hover,.reader-deal-tile:focus-visible{transform:translateY(-2px);box-shadow:0 18px 38px rgba(15,23,42,.2)}.reader-product-photo{width:100%;height:52%;object-fit:cover;border-radius:13px;background:#F8FAFC;display:block}.reader-tile-copy{height:48%;display:flex;flex-direction:column;justify-content:space-between;padding-top:3%}.reader-tile-name{font-size:clamp(10px,1.55vw,18px);font-weight:900;line-height:1.12;color:#0F172A;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.reader-tile-unit{font-size:clamp(8px,1.1vw,13px);font-weight:800;color:#64748B}.reader-tile-price{font-size:clamp(17px,3.4vw,36px);font-weight:900;color:#059669;letter-spacing:-1px;line-height:1}.reader-tile-save{position:absolute;right:7%;top:7%;background:#DC2626;color:#fff;border-radius:999px;padding:3px 8px;font-size:clamp(8px,1.1vw,12px);font-weight:900}.reader-tap-note{position:absolute;left:5%;right:5%;bottom:3%;padding:1.4% 2%;border-radius:16px;background:#F8FAFC;border:1px solid #E2E8F0;color:#64748B;font-size:clamp(9px,1.25vw,14px);font-weight:800;text-align:center}.reader-stage.is-pinching{cursor:zoom-in}.reader-hint{font-size:11px;color:#64748B;margin-top:5px}.fullscreen-reader .reader-hint{color:#CBD5E1}.route-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.route-pill{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.16);color:white;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:900;cursor:pointer}
 @media(max-width:760px){.store-hero{grid-template-columns:1fr;margin:0 12px 14px}.store-metrics{grid-template-columns:1fr}.data-model-panel,.deal-cat-section{margin-left:12px;margin-right:12px}}
 @media(max-width:1100px){.reader-main{grid-template-columns:92px minmax(0,1fr)}.ocr-side{display:none}.reader-stage{max-height:calc(100dvh - 176px)}}@media(max-width:900px){.flyer-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reader-head{top:48px}.reader-main{grid-template-columns:1fr}.thumb-rail{position:relative;top:auto;flex-direction:row;overflow-x:auto}.reader-stage{padding:12px;max-height:calc(100dvh - 206px)}.flyer-reader-page{width:680px;touch-action:pan-x pan-y pinch-zoom}.flyer-home-head{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.flyer-card-grid{grid-template-columns:1fr}.reader-shell{padding:12px 12px 80px}.reader-actions .reader-btn{flex:1}.store-flyer-card{min-height:230px}}
@@ -548,8 +549,16 @@ function flyerProductPhotoUrl(fi) {
   drawFlyerProductPhoto(ctx,fi,28,24,584,332,0); fillRoundRect(ctx,28,352,584,52,18,'#FFFFFF','#E2E8F0',2); ctx.fillStyle='#0F172A'; ctx.font='900 25px DM Sans, Arial'; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText((fi.name||fi.product_name||'Flyer deal').slice(0,32),48,378);
   cache[key]=canvasToFlyerJpeg(canvas); return cache[key];
 }
+function productPhotoQuery(fi) {
+  var brand = fi && fi.brand && fi.brand !== 'Generic' ? fi.brand + ' ' : '';
+  return (brand + ((fi && (fi.name || fi.product_name)) || 'grocery product')).replace(/\b(bunch|head|bag|pk|pack|kg|g|lb|ml|l)\b/ig,'').replace(/\s+/g,' ').trim();
+}
+function flyerOffPhotoHtml(fi, cls) {
+  var fallback = flyerProductPhotoUrl(fi), q = productPhotoQuery(fi);
+  return '<img class="'+(cls||'fi-photo')+' off-photo is-loading" loading="lazy" decoding="async" src="'+fallback+'" data-fallback="'+fallback+'" data-query="'+esc(q)+'" alt="Product photo for '+esc(fi.name||fi.product_name||'flyer item')+'">';
+}
 function flyerCardPhotoHtml(fi) {
-  return '<img class="fi-photo" loading="lazy" decoding="async" src="'+flyerProductPhotoUrl(fi)+'" alt="Photo-style image of '+esc(fi.name||fi.product_name||'flyer item')+'">';
+  return flyerOffPhotoHtml(fi, 'fi-photo') + '<span class="off-badge">OFF photo</span>';
 }
 
 function flyerImageCacheEntry(item, deal, sid) {
@@ -644,13 +653,13 @@ function flyerPageImageUrl(sid, pageNumber, items) {
   var bg=ctx.createLinearGradient(0,0,1800,2400); bg.addColorStop(0,st.bg); bg.addColorStop(.52,'#FFFFFF'); bg.addColorStop(1,'#F8FAFC'); ctx.fillStyle=bg; ctx.fillRect(0,0,1800,2400);
   ctx.fillStyle='rgba(15,23,42,.04)'; for(var dot=0;dot<1800;dot+=42){for(var dy=0;dy<2400;dy+=42){ctx.beginPath();ctx.arc(dot+4,dy+4,3,0,Math.PI*2);ctx.fill();}}
   fillRoundRect(ctx,56,56,1688,2288,58,'rgba(255,255,255,.92)','#CBD5E1',4); fillRoundRect(ctx,84,84,1632,188,42,st.color,null,0);
-  ctx.fillStyle='white'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.font='900 58px Georgia, serif'; ctx.fillText(st.name+' Weekly Flyer',124,166); ctx.font='800 31px DM Sans, Arial'; ctx.globalAlpha=.82; ctx.fillText('Valid June 1 - June 7 · Page '+pageNumber+' of 4 · real JPEG flyer image',124,224); ctx.globalAlpha=1;
-  fillRoundRect(ctx,1264,112,420,54,27,'rgba(255,255,255,.22)',null,0); ctx.textAlign='center'; ctx.font='900 24px DM Sans, Arial'; ctx.fillText('REAL JPEG VIEW',1474,148); ctx.font='900 46px Georgia, serif'; ctx.fillText(st.logo||st.sh,1550,218);
+  ctx.fillStyle='white'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.font='900 58px Georgia, serif'; ctx.fillText(st.name+' Weekly Flyer',124,166); ctx.font='800 31px DM Sans, Arial'; ctx.globalAlpha=.82; ctx.fillText('Valid June 1 - June 7 · Page '+pageNumber+' of 4 · simulated flyer image',124,224); ctx.globalAlpha=1;
+  fillRoundRect(ctx,1264,112,420,54,27,'rgba(255,255,255,.22)',null,0); ctx.textAlign='center'; ctx.font='900 24px DM Sans, Arial'; ctx.fillText('SIMULATED VIEW',1474,148); ctx.font='900 46px Georgia, serif'; ctx.fillText(st.logo||st.sh,1550,218);
   pageItems.forEach(function(fi,i){var c=fi.imageCache||{x:8+(i%3)*28,y:14+Math.floor(i/3)*28,w:24,h:22}; var x=Math.round(c.x*18), y=Math.round(c.y*24), w=Math.round(c.w*18), h=Math.round(c.h*24), cx=x+w/2, photoH=Math.max(210,h*.5), priceY=y+h-70;
     ctx.save(); ctx.shadowColor='rgba(15,23,42,.14)'; ctx.shadowBlur=30; ctx.shadowOffsetY=18; fillRoundRect(ctx,x,y,w,h,30,'#FFFFFF','#CBD5E1',3); ctx.restore();
     drawFlyerProductPhoto(ctx,fi,x+20,y+20,w-40,photoH, i); ctx.fillStyle='#0F172A'; ctx.textAlign='center'; ctx.textBaseline='alphabetic'; ctx.font='900 27px DM Sans, Arial'; drawCanvasText(ctx,fi.name,cx,y+photoH+74,w-52,34,1); ctx.font='800 20px DM Sans, Arial'; ctx.fillStyle='#64748B'; ctx.fillText(fi.unit||fi.cat||'weekly deal',cx,y+photoH+116); fillRoundRect(ctx,x+28,priceY-54,w-56,76,22,'#ECFDF5',null,0); ctx.fillStyle='#059669'; ctx.font='900 50px DM Sans, Arial'; ctx.fillText('$'+fi.price.toFixed(2),cx,priceY); ctx.fillStyle='#DC2626'; ctx.font='900 22px DM Sans, Arial'; ctx.fillText('SAVE '+fi.pct+'%',cx,priceY+42);
   });
-  fillRoundRect(ctx,84,2238,1632,72,22,'#F8FAFC','#E2E8F0',2); ctx.fillStyle='#64748B'; ctx.font='800 27px DM Sans, Arial'; ctx.textAlign='center'; ctx.fillText('PriceMatch CA high-resolution JPEG flyer · OCR-searchable deal records',900,2285);
+  fillRoundRect(ctx,84,2238,1632,72,22,'#F8FAFC','#E2E8F0',2); ctx.fillStyle='#64748B'; ctx.font='800 27px DM Sans, Arial'; ctx.textAlign='center'; ctx.fillText('PriceMatch CA flyer simulation · OCR-searchable deal records',900,2285);
   cache[key]=canvasToFlyerJpeg(canvas); return cache[key];
 }
 function flyerDataModelExample() {
@@ -713,6 +722,26 @@ function applyRouteFromPath() {
   if (sm && STORES[decodeURIComponent(sm[1])]) { S.view='store'; S.storePage=decodeURIComponent(sm[1]); S.flyerReaderStore=null; return; }
   if (/^\/deals\/?$/.test(path)) { S.view='deals'; S.flyerReaderStore=null; return; }
 }
+function flyerReaderTile(fi, i, sid) {
+  var c = fi.imageCache || {x:8+(i%3)*28,y:14+Math.floor(i/3)*28,w:24,h:22};
+  var top = Math.max(16, Math.min(82, c.y + 3)), left = Math.max(5, Math.min(72, c.x));
+  var width = Math.min(30, Math.max(22, c.w + 3)), height = Math.min(25, Math.max(20, c.h + 3));
+  if (i === 0) { left = 5; top = 17; width = 42; height = 31; }
+  if (i === 1) { left = 51; top = 17; width = 44; height = 31; }
+  return '<button class="reader-deal-tile" style="left:'+left+'%;top:'+top+'%;width:'+width+'%;height:'+height+'%" data-act="show-proof" data-fid="'+fi.catalogId+'" data-fsid="'+sid+'" aria-label="Compare '+esc(fi.name)+'">'
+    +'<span class="reader-tile-save">-'+fi.pct+'%</span>'
+    +flyerOffPhotoHtml(fi, 'reader-product-photo')
+    +'<span class="reader-tile-copy"><span class="reader-tile-name">'+esc(fi.name)+'</span><span class="reader-tile-unit">'+esc(fi.unit||fi.cat||'weekly deal')+'</span><span class="reader-tile-price">$'+fi.price.toFixed(2)+'</span></span></button>';
+}
+function flyerMagazinePage(sid, pageNumber, pageItems, pageWidth, st) {
+  var items = pageItems.length ? pageItems : buildFlyerItems(sid).slice((pageNumber-1)*4,(pageNumber-1)*4+4);
+  return '<article id="flyer-page-'+pageNumber+'" class="flyer-reader-page magazine" data-base-width="'+(S.readerFullscreen ? 920 : 720)+'" style="width:'+pageWidth+'px">'
+    +'<div class="flyer-page-sheet">'
+    +'<div class="magazine-masthead" style="background:'+st.color+'"><div><div class="magazine-title">'+esc(st.name)+'</div><div class="magazine-sub">Valid June 1 - June 7 · Page '+pageNumber+' of 4</div></div><div style="font-size:clamp(20px,5vw,48px);font-weight:900">'+esc(st.logo||st.sh)+'</div></div>'
+    +items.slice(0,8).map(function(fi,i){return flyerReaderTile(fi,i,sid);}).join('')
+    +'<div class="reader-tap-note">Pinch or double-tap to zoom the whole flyer page. Tap any product tile to open price-match proof.</div>'
+    +'</div></article>';
+}
 function bFlyerReader() {
   var sid = S.flyerReaderStore || S.flyerStore, st = STORES[sid], items = buildFlyerItems(sid), zoom = S.flyerZoomLevel || 1, page = S.flyerPage || 1;
   var pages = [1,2,3,4].map(function(n){return items.filter(function(fi){return fi.flyer_page===n;});});
@@ -720,11 +749,11 @@ function bFlyerReader() {
   var json = JSON.stringify({product_name:sample.name||'Bananas', price:sample.price||0.67, unit:sample.unit||'lb', store:st.name, flyer_date:WEEK_START+' to '+WEEK_END, flyer_page:sample.flyer_page||1}, null, 2);
   var pageWidth = Math.round((S.readerFullscreen ? 920 : 720) * zoom);
   var zoomPct = Math.round(zoom * 100) + '%';
-  return '<div class="reader-shell"><div class="reader-head"><div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' / HD Weekly Flyer</div><h1 style="font-size:22px;font-weight:900;letter-spacing:-.6px">'+esc(st.name)+' Flyer — June 1 – June 7</h1><div style="font-size:12px;color:#64748B">'+items.length+' structured OCR records · real JPEG 1800×2400 flyer pages · official source linked · URL: '+routePathForStore(sid)+'</div><div class="reader-hint">Scroll inside the flyer pane when zoomed. Double-click a page to jump between fit and close-up.</div></div><div class="reader-actions"><button class="reader-btn" data-act="prev-flyer-page">← Previous</button><button class="reader-btn" data-act="next-flyer-page">Next →</button><button class="reader-btn primary" data-act="zoom-out">−</button><span class="reader-zoom-readout" aria-label="Current zoom">'+zoomPct+'</span><button class="reader-btn primary" data-act="zoom-in">+</button><a class="reader-btn" href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer">Official flyer</a><button class="reader-btn" data-act="toggle-reader-fullscreen">'+(S.readerFullscreen?'Exit full screen':'Full screen')+'</button><button class="reader-btn" data-act="close-flyer-reader">Back to hub</button></div></div><div class="reader-main"><aside class="thumb-rail" aria-label="Page thumbnails">'
+  return '<div class="reader-shell"><div class="reader-head"><div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' / Flipp-style Flyer Simulation</div><h1 style="font-size:22px;font-weight:900;letter-spacing:-.6px">'+esc(st.name)+' Flyer — June 1 – June 7</h1><div style="font-size:12px;color:#64748B">'+items.length+' structured deal records · Open Food Facts product photos · tap targets · URL: '+routePathForStore(sid)+'</div><div class="reader-hint">Pinch on mobile, double-tap a page, or use the zoom buttons. Tap a product tile for price compare.</div></div><div class="reader-actions"><button class="reader-btn" data-act="prev-flyer-page">← Previous</button><button class="reader-btn" data-act="next-flyer-page">Next →</button><button class="reader-btn primary" data-act="zoom-out">−</button><span class="reader-zoom-readout" aria-label="Current zoom">'+zoomPct+'</span><button class="reader-btn primary" data-act="zoom-in">+</button><a class="reader-btn" href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer">Retailer flyer</a><button class="reader-btn" data-act="toggle-reader-fullscreen">'+(S.readerFullscreen?'Exit full screen':'Full screen')+'</button><button class="reader-btn" data-act="close-flyer-reader">Back to hub</button></div></div><div class="reader-main"><aside class="thumb-rail" aria-label="Page thumbnails">'
     +pages.map(function(pg,i){var n=i+1;return '<button class="page-thumb '+(page===n?'on':'')+'" data-act="set-flyer-page" data-n="'+n+'">Page '+n+'<br><span style="font-weight:600">'+pg.length+' deals</span></button>';}).join('')
     +'</aside><section class="reader-stage" aria-label="Zoomable flyer viewer"><div class="page-stack" aria-label="Flyer pages">'
-    +pages.map(function(pg,i){var n=i+1, src=flyerPageImageUrl(sid,n,items);return '<article id="flyer-page-'+n+'" class="flyer-reader-page has-img" style="width:'+pageWidth+'px"><span class="reader-real-badge">Real JPEG</span><img class="reader-page-img" loading="lazy" decoding="async" src="'+src+'" alt="'+esc(st.name)+' flyer page '+n+' with product images"></article>';}).join('')
-    +'</div></section><aside class="ocr-side"><h2 style="font-size:17px;font-weight:900">Deal Tagging Engine</h2><p style="font-size:12px;color:#64748B;margin:6px 0 10px">Every HD page exposes structured product records produced by the generic flyer ingestion/OCR pipeline.</p>'+items.slice(0,7).map(function(fi){return '<div class="ocr-row"><span>'+esc(fi.name)+'<br><small style="color:#94A3B8">page '+fi.flyer_page+' · '+fi.unit+'</small></span><strong>$'+fi.price.toFixed(2)+'</strong></div>';}).join('')+'<pre class="ocr-json">'+esc(json)+'</pre></aside></div></div>';
+    +pages.map(function(pg,i){var n=i+1;return flyerMagazinePage(sid,n,pg,pageWidth,st);}).join('')
+    +'</div></section><aside class="ocr-side"><h2 style="font-size:17px;font-weight:900">Deal Tagging Engine</h2><p style="font-size:12px;color:#64748B;margin:6px 0 10px">This no-retailer-deal simulation renders a magazine-style flyer layer with invisible-style product tap targets and structured records.</p>'+items.slice(0,7).map(function(fi){return '<div class="ocr-row"><span>'+esc(fi.name)+'<br><small style="color:#94A3B8">page '+fi.flyer_page+' · '+fi.unit+'</small></span><strong>$'+fi.price.toFixed(2)+'</strong></div>';}).join('')+'<pre class="ocr-json">'+esc(json)+'</pre></aside></div></div>';
 }
 
 
@@ -1997,6 +2026,7 @@ function render(){
     if(S.cartOpen) html+=bCart(items,tots);
     html+=bChatbot()+bAuth()+bPostal()+bProofModal()+bBulkModal()+bGenericModal()+bScannerModal()+bAISettings()+bProtectModal();
     document.getElementById('app').innerHTML=html;
+    initOffLazyImages();
     if (window.scrollTo) window.scrollTo(0,prevY);
     if(fid==='srch'){var el=document.getElementById('srch');if(el){el.focus();var v=S.view==='flyers'?S.flyerSearch:S.search;el.setSelectionRange(v.length,v.length);}}
     if(fid==='f-postal'){var el2=document.getElementById('f-postal');if(el2)el2.focus();}
@@ -2012,6 +2042,63 @@ function onSearch(v){ if(S.view==='flyers')S.flyerSearch=v; else S.search=v; ren
 function onFlyerSearch(v){ S.flyerSearch=v; render(); }
 function onPolicySearch(v){ S.policySearch=v; render(); }
 function onStoreSearch(v){ S.storeSearch=v; render(); }
+
+
+var OFF_IMAGE_CACHE = loadLocal('pm_off_image_cache', {});
+function lookupOffImage(q) {
+  q = (q || '').trim();
+  if (!q) return Promise.resolve('');
+  var key = q.toLowerCase();
+  if (OFF_IMAGE_CACHE[key]) return Promise.resolve(OFF_IMAGE_CACHE[key]);
+  var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=1&fields=product_name,image_front_small_url,image_front_url,image_url';
+  return fetch(url).then(function(r){return r.ok?r.json():null;}).then(function(data){
+    var p = data && data.products && data.products[0];
+    var img = p && (p.image_front_small_url || p.image_front_url || p.image_url) || '';
+    if (img && /^https:\/\/images\.openfoodfacts\.org\//.test(img)) { OFF_IMAGE_CACHE[key] = img; saveLocal('pm_off_image_cache', OFF_IMAGE_CACHE); return img; }
+    return '';
+  }).catch(function(){ return ''; });
+}
+function hydrateOffImage(img) {
+  if (!img || img.dataset.loadingOff === '1') return;
+  img.dataset.loadingOff = '1';
+  lookupOffImage(img.dataset.query || '').then(function(src){
+    if (src) img.src = src;
+    img.classList.remove('is-loading');
+  });
+}
+function initOffLazyImages() {
+  var imgs = Array.prototype.slice.call(document.querySelectorAll('img.off-photo[data-query]'));
+  if (!imgs.length) return;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries, obs){entries.forEach(function(entry){if(entry.isIntersecting){hydrateOffImage(entry.target); obs.unobserve(entry.target);}});}, {rootMargin:'300px'});
+    imgs.forEach(function(img){io.observe(img);});
+  } else imgs.forEach(hydrateOffImage);
+}
+var PM_PINCH = {active:false,startDist:0,startZoom:1,lastTap:0,raf:0};
+function touchDistance(touches) { var dx=touches[0].clientX-touches[1].clientX, dy=touches[0].clientY-touches[1].clientY; return Math.sqrt(dx*dx+dy*dy); }
+function applyReaderZoomNoRender(z) {
+  S.flyerZoomLevel = Math.max(.5, Math.min(3, z));
+  var readout = document.querySelector('.reader-zoom-readout'); if (readout) readout.textContent = Math.round(S.flyerZoomLevel*100)+'%';
+  Array.prototype.forEach.call(document.querySelectorAll('.flyer-reader-page.magazine'), function(pg){ var base=+(pg.dataset.baseWidth||720); pg.style.width=Math.round(base*S.flyerZoomLevel)+'px'; });
+}
+document.addEventListener('touchstart', function(e){
+  var stage = e.target.closest && e.target.closest('.reader-stage'); if (!stage) return;
+  if (e.touches && e.touches.length === 2) { PM_PINCH.active=true; PM_PINCH.startDist=touchDistance(e.touches); PM_PINCH.startZoom=S.flyerZoomLevel||1; stage.classList.add('is-pinching'); }
+}, {passive:true});
+document.addEventListener('touchmove', function(e){
+  if (!PM_PINCH.active || !e.touches || e.touches.length !== 2) return;
+  e.preventDefault();
+  var z = PM_PINCH.startZoom * (touchDistance(e.touches) / Math.max(1, PM_PINCH.startDist));
+  if (!PM_PINCH.raf) PM_PINCH.raf = requestAnimationFrame(function(){PM_PINCH.raf=0; applyReaderZoomNoRender(z);});
+}, {passive:false});
+document.addEventListener('touchend', function(e){
+  var stage = e.target.closest && e.target.closest('.reader-stage');
+  if (PM_PINCH.active && (!e.touches || e.touches.length < 2)) { PM_PINCH.active=false; if(stage)stage.classList.remove('is-pinching'); persist(); }
+  var page = e.target.closest && e.target.closest('.flyer-reader-page.magazine');
+  if (page && (!e.touches || e.touches.length === 0) && !(e.target.closest && e.target.closest('[data-act]'))) {
+    var now = Date.now(); if (now - PM_PINCH.lastTap < 320) { applyReaderZoomNoRender((S.flyerZoomLevel||1)>1 ? 1 : 2); persist(); } PM_PINCH.lastTap = now;
+  }
+}, {passive:true});
 
 /* ═══ EVENTS ════════════════════════════════════════════════════════ */
 document.addEventListener('click',async function(e){
@@ -2182,7 +2269,7 @@ async function startBarcodeScanner(){
 
 
 document.addEventListener('dblclick', function(e){
-  if (e.target && e.target.classList && e.target.classList.contains('reader-page-img')) { S.flyerZoomLevel = (S.flyerZoomLevel||1) > 1 ? 1 : 2; render(); }
+  if (e.target && e.target.closest && e.target.closest('.flyer-reader-page')) { S.flyerZoomLevel = (S.flyerZoomLevel||1) > 1 ? 1 : 2; render(); }
 });
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter' && document.activeElement && document.activeElement.id==='chat-input'){e.preventDefault();var q=document.activeElement.value||S.chatInput;S.chatInput='';if(q.trim()){S.chatMessages.push({from:'me',text:q.trim()});S.chatMessages.push({from:'bot',text:chatAnswer(q)});S.chatMessages=S.chatMessages.slice(-20);}render();return;}
