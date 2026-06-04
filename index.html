@@ -122,8 +122,11 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .flyer-mag{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px;padding:20px}
 .flyer-item{background:var(--w);border-radius:12px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;cursor:pointer}
 .flyer-item:hover{transform:translateY(-3px);box-shadow:var(--shm)}
-.fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px}
-.fi-pct{position:absolute;top:7px;right:7px;background:var(--r);color:white;font-size:11px;font-weight:800;padding:3px 7px;border-radius:5px}
+.fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px;background:#F8FAFC;overflow:hidden}
+.fi-photo{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(1.05) contrast(1.02)}
+.fi-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(15,23,42,.08));pointer-events:none}
+.reader-real-badge{position:absolute;right:18px;top:18px;background:rgba(15,23,42,.72);color:white;border:1px solid rgba(255,255,255,.38);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:900;letter-spacing:.2px;backdrop-filter:blur(8px);z-index:2}
+.fi-pct{position:absolute;top:7px;right:7px;background:var(--r);color:white;font-size:11px;font-weight:800;padding:3px 7px;border-radius:5px;z-index:2}
 .fi-va{position:absolute;bottom:6px;right:6px;font-size:9px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.3);padding:2px 5px;border-radius:4px}
 .fi-exp{position:absolute;bottom:6px;left:6px;font-size:9px;color:white;background:rgba(37,99,235,.9);padding:2px 6px;border-radius:4px;font-weight:800}.fi-exp.soon{background:var(--o)}.fi-exp.expired{background:#64748B}
 .fi-body{padding:10px 12px}
@@ -485,6 +488,39 @@ function idbGetAll(storeName) {
   });
 }
 
+
+function productColorSet(fi) {
+  var name=(fi.name||fi.product_name||'').toLowerCase(), cat=fi.cat||fi.category||'';
+  if (/banana/.test(name)) return {a:'#FACC15',b:'#FDE68A',c:'#854D0E'};
+  if (/straw|blue|berr/.test(name)) return {a:'#DC2626',b:'#FECACA',c:'#15803D'};
+  if (/mango|orange|juice/.test(name)) return {a:'#F97316',b:'#FED7AA',c:'#9A3412'};
+  if (/avocado|broccoli|corn|carrot|lettuce|apple/.test(name) || cat==='Produce') return {a:'#16A34A',b:'#BBF7D0',c:'#166534'};
+  if (cat==='Meat') return {a:'#EF4444',b:'#FECACA',c:'#7F1D1D'};
+  if (cat==='Dairy') return {a:'#2563EB',b:'#DBEAFE',c:'#1E3A8A'};
+  if (cat==='Bakery') return {a:'#D97706',b:'#FDE68A',c:'#78350F'};
+  if (cat==='Beverages') return {a:'#0EA5E9',b:'#BAE6FD',c:'#075985'};
+  return {a:'#7C3AED',b:'#EDE9FE',c:'#4C1D95'};
+}
+function flyerProductPhotoGroup(fi, x, y, w, h, idx) {
+  var c=productColorSet(fi), name=esc((fi.name||fi.product_name||'Deal').slice(0,24)), cat=fi.cat||'';
+  var cx=x+w/2, cy=y+h/2, shadow='<ellipse cx="'+cx+'" cy="'+(y+h-24)+'" rx="'+Math.round(w*.29)+'" ry="22" fill="#0F172A" opacity=".14"/>';
+  if (cat==='Meat') return shadow+'<rect x="'+(x+w*.18)+'" y="'+(y+h*.2)+'" width="'+(w*.64)+'" height="'+(h*.55)+'" rx="36" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/><rect x="'+(x+w*.24)+'" y="'+(y+h*.28)+'" width="'+(w*.52)+'" height="'+(h*.36)+'" rx="42" fill="'+c.b+'"/><path d="M'+(x+w*.29)+' '+(y+h*.46)+' C'+(x+w*.44)+' '+(y+h*.18)+','+(x+w*.68)+' '+(y+h*.28)+','+(x+w*.69)+' '+(y+h*.5)+' C'+(x+w*.6)+' '+(y+h*.68)+','+(x+w*.35)+' '+(y+h*.66)+','+(x+w*.29)+' '+(y+h*.46)+'Z" fill="'+c.a+'"/><text x="'+cx+'" y="'+(y+h*.82)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+  if (cat==='Dairy') return shadow+'<path d="M'+(x+w*.27)+' '+(y+h*.22)+' L'+(x+w*.39)+' '+(y+h*.12)+' H'+(x+w*.66)+' L'+(x+w*.77)+' '+(y+h*.22)+' V'+(y+h*.75)+' H'+(x+w*.27)+' Z" fill="white" stroke="#CBD5E1" stroke-width="6"/><rect x="'+(x+w*.32)+'" y="'+(y+h*.33)+'" width="'+(w*.4)+'" height="'+(h*.22)+'" rx="18" fill="'+c.b+'"/><text x="'+cx+'" y="'+(y+h*.49)+'" font-size="34" font-weight="900" text-anchor="middle" fill="'+c.a+'">DAIRY</text><text x="'+cx+'" y="'+(y+h*.84)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+  if (cat==='Bakery') return shadow+'<path d="M'+(x+w*.22)+' '+(y+h*.54)+' C'+(x+w*.24)+' '+(y+h*.25)+','+(x+w*.75)+' '+(y+h*.23)+','+(x+w*.78)+' '+(y+h*.54)+' V'+(y+h*.7)+' H'+(x+w*.22)+' Z" fill="'+c.a+'"/><path d="M'+(x+w*.32)+' '+(y+h*.42)+' C'+(x+w*.42)+' '+(y+h*.35)+','+(x+w*.56)+' '+(y+h*.35)+','+(x+w*.67)+' '+(y+h*.42)+'" fill="none" stroke="'+c.b+'" stroke-width="12" stroke-linecap="round"/><text x="'+cx+'" y="'+(y+h*.84)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+  if (cat==='Beverages') return shadow+'<rect x="'+(x+w*.39)+'" y="'+(y+h*.15)+'" width="'+(w*.22)+'" height="'+(h*.62)+'" rx="28" fill="'+c.b+'" stroke="'+c.a+'" stroke-width="7"/><rect x="'+(x+w*.43)+'" y="'+(y+h*.06)+'" width="'+(w*.14)+'" height="'+(h*.14)+'" rx="10" fill="'+c.a+'"/><rect x="'+(x+w*.35)+'" y="'+(y+h*.38)+'" width="'+(w*.3)+'" height="'+(h*.18)+'" rx="18" fill="white" opacity=".9"/><text x="'+cx+'" y="'+(y+h*.5)+'" font-size="25" font-weight="900" text-anchor="middle" fill="'+c.c+'">JUICE</text><text x="'+cx+'" y="'+(y+h*.86)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+  if (cat==='Pantry') return shadow+'<rect x="'+(x+w*.28)+'" y="'+(y+h*.18)+'" width="'+(w*.44)+'" height="'+(h*.58)+'" rx="24" fill="'+c.a+'"/><rect x="'+(x+w*.34)+'" y="'+(y+h*.31)+'" width="'+(w*.32)+'" height="'+(h*.27)+'" rx="16" fill="white" opacity=".88"/><text x="'+cx+'" y="'+(y+h*.48)+'" font-size="31" font-weight="900" text-anchor="middle" fill="'+c.c+'">SALE</text><text x="'+cx+'" y="'+(y+h*.86)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+  var fruit='';
+  for (var i=0;i<5;i++){var ox=(i-2)*w*.095, oy=((i%2)?-1:1)*h*.055; fruit+='<circle cx="'+(cx+ox)+'" cy="'+(cy+oy)+'" r="'+Math.round(Math.min(w,h)*.13)+'" fill="'+(i%2?c.b:c.a)+'" stroke="'+c.c+'" stroke-width="5"/><circle cx="'+(cx+ox-w*.025)+'" cy="'+(cy+oy-h*.035)+'" r="10" fill="white" opacity=".55"/>';}
+  return shadow+fruit+'<path d="M'+(cx-10)+' '+(cy-h*.18)+' C'+(cx+10)+' '+(cy-h*.34)+','+(cx+58)+' '+(cy-h*.28)+','+(cx+62)+' '+(cy-h*.16)+'" fill="none" stroke="'+c.c+'" stroke-width="9" stroke-linecap="round"/><text x="'+cx+'" y="'+(y+h*.86)+'" font-size="22" font-weight="900" text-anchor="middle" fill="'+c.c+'">'+name+'</text>';
+}
+function flyerProductPhotoUrl(fi) {
+  var c=productColorSet(fi), svg='<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+c.b+'"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter></defs><rect width="640" height="420" fill="url(#bg)"/><rect width="640" height="420" filter="url(#grain)" opacity=".7"/>'+flyerProductPhotoGroup(fi,60,32,520,300,0)+'<rect x="28" y="332" width="584" height="58" rx="20" fill="rgba(255,255,255,.82)"/><text x="48" y="370" font-size="26" font-weight="900" fill="#0F172A">'+esc(fi.name||fi.product_name||'Flyer deal')+'</text></svg>';
+  return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+}
+function flyerCardPhotoHtml(fi) {
+  return '<img class="fi-photo" loading="lazy" decoding="async" src="'+flyerProductPhotoUrl(fi)+'" alt="Photo-style image of '+esc(fi.name||fi.product_name||'flyer item')+'">';
+}
+
 function flyerImageCacheEntry(item, deal, sid) {
   var slot = Math.abs((deal.id || String(deal.cid)).split('').reduce(function(sum,ch){return sum + ch.charCodeAt(0);},0)) % 8;
   var cols = [8, 36, 64, 18, 50, 8, 36, 64], rows = [10, 10, 10, 38, 38, 66, 66, 66];
@@ -579,15 +615,14 @@ function flyerPageImageUrl(sid, pageNumber, items) {
     var fill=palette[i%palette.length], priceY=y+h-70, nameY=y+photoH+74;
     return '<g filter="url(#cardShadow)"><rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="30" fill="white" stroke="#CBD5E1" stroke-width="3"/>'+
       '<rect x="'+(x+20)+'" y="'+(y+20)+'" width="'+(w-40)+'" height="'+photoH+'" rx="26" fill="'+fill+'"/>'+
-      '<circle cx="'+(x+w-72)+'" cy="'+(y+72)+'" r="48" fill="#FFFFFF" opacity=".72"/>'+
-      '<text x="'+cx+'" y="'+(y+photoH-46)+'" font-size="96" text-anchor="middle">'+esc(fi.e)+'</text>'+
+      flyerProductPhotoGroup(fi, x+26, y+26, w-52, photoH-18, i)+
       '<text x="'+cx+'" y="'+nameY+'" font-size="27" font-weight="900" text-anchor="middle" fill="#0F172A">'+esc(fi.name).slice(0,24)+'</text>'+
       '<text x="'+cx+'" y="'+(nameY+42)+'" font-size="20" font-weight="700" text-anchor="middle" fill="#64748B">'+esc(fi.unit||fi.cat||'weekly deal')+'</text>'+
       '<rect x="'+(x+28)+'" y="'+(priceY-54)+'" width="'+(w-56)+'" height="76" rx="22" fill="#ECFDF5"/>'+
       '<text x="'+cx+'" y="'+priceY+'" font-size="50" font-weight="900" text-anchor="middle" fill="#059669">$'+fi.price.toFixed(2)+'</text>'+
       '<text x="'+cx+'" y="'+(priceY+42)+'" font-size="22" font-weight="800" text-anchor="middle" fill="#DC2626">SAVE '+fi.pct+'%</text></g>';
   }).join('');
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2400" viewBox="0 0 1800 2400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+st.bg+'"/><stop offset=".52" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F8FAFC"/></linearGradient><filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0F172A" flood-opacity=".14"/></filter><pattern id="dots" width="42" height="42" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="3" fill="#0F172A" opacity=".055"/></pattern></defs><rect width="1800" height="2400" fill="url(#g)"/><rect width="1800" height="2400" fill="url(#dots)"/><rect x="56" y="56" width="1688" height="2288" rx="58" fill="#FFFFFF" opacity=".86" stroke="#CBD5E1" stroke-width="4"/><rect x="84" y="84" width="1632" height="188" rx="42" fill="'+st.color+'"/><text x="124" y="166" font-size="58" font-weight="900" fill="white">'+esc(st.name)+' Weekly Flyer</text><text x="124" y="224" font-size="31" font-weight="700" fill="#FFFFFF" opacity=".78">Valid June 1 - June 7 · Page '+pageNumber+' of 4 · HD flyer image cache</text><text x="1550" y="176" font-size="62" font-weight="900" text-anchor="middle" fill="white">'+esc(st.logo||st.sh)+'</text>'+cells+'<rect x="84" y="2238" width="1632" height="72" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/><text x="900" y="2285" font-size="27" font-weight="800" text-anchor="middle" fill="#64748B">PriceMatch CA high-resolution flyer image · OCR-searchable deal records</text></svg>';
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2400" viewBox="0 0 1800 2400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+st.bg+'"/><stop offset=".52" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F8FAFC"/></linearGradient><filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0F172A" flood-opacity=".14"/></filter><pattern id="dots" width="42" height="42" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="3" fill="#0F172A" opacity=".055"/></pattern></defs><rect width="1800" height="2400" fill="url(#g)"/><rect width="1800" height="2400" fill="url(#dots)"/><rect x="56" y="56" width="1688" height="2288" rx="58" fill="#FFFFFF" opacity=".86" stroke="#CBD5E1" stroke-width="4"/><rect x="84" y="84" width="1632" height="188" rx="42" fill="'+st.color+'"/><text x="124" y="166" font-size="58" font-weight="900" fill="white">'+esc(st.name)+' Weekly Flyer</text><text x="124" y="224" font-size="31" font-weight="700" fill="#FFFFFF" opacity=".78">Valid June 1 - June 7 · Page '+pageNumber+' of 4 · photo-style flyer images</text><rect x="1264" y="112" width="420" height="54" rx="27" fill="rgba(255,255,255,.22)"/><text x="1474" y="148" font-size="24" font-weight="900" text-anchor="middle" fill="white">REAL IMAGE VIEW</text><text x="1550" y="218" font-size="46" font-weight="900" text-anchor="middle" fill="white">'+esc(st.logo||st.sh)+'</text>'+cells+'<rect x="84" y="2238" width="1632" height="72" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/><text x="900" y="2285" font-size="27" font-weight="800" text-anchor="middle" fill="#64748B">PriceMatch CA high-resolution flyer image · OCR-searchable deal records</text></svg>';
   return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
 }
 function flyerDataModelExample() {
@@ -657,10 +692,10 @@ function bFlyerReader() {
   var json = JSON.stringify({product_name:sample.name||'Bananas', price:sample.price||0.67, unit:sample.unit||'lb', store:st.name, flyer_date:WEEK_START+' to '+WEEK_END, flyer_page:sample.flyer_page||1}, null, 2);
   var pageWidth = Math.round((S.readerFullscreen ? 920 : 720) * zoom);
   var zoomPct = Math.round(zoom * 100) + '%';
-  return '<div class="reader-shell"><div class="reader-head"><div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' / HD Weekly Flyer</div><h1 style="font-size:22px;font-weight:900;letter-spacing:-.6px">'+esc(st.name)+' Flyer — June 1 – June 7</h1><div style="font-size:12px;color:#64748B">'+items.length+' structured OCR records · photo-quality 1800×2400 flyer pages · URL: '+routePathForStore(sid)+'</div><div class="reader-hint">Scroll inside the flyer pane when zoomed. Double-click a page to jump between fit and close-up.</div></div><div class="reader-actions"><button class="reader-btn" data-act="prev-flyer-page">← Previous</button><button class="reader-btn" data-act="next-flyer-page">Next →</button><button class="reader-btn primary" data-act="zoom-out">−</button><span class="reader-zoom-readout" aria-label="Current zoom">'+zoomPct+'</span><button class="reader-btn primary" data-act="zoom-in">+</button><button class="reader-btn" data-act="toggle-reader-fullscreen">'+(S.readerFullscreen?'Exit full screen':'Full screen')+'</button><button class="reader-btn" data-act="close-flyer-reader">Back to hub</button></div></div><div class="reader-main"><aside class="thumb-rail" aria-label="Page thumbnails">'
+  return '<div class="reader-shell"><div class="reader-head"><div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+' / HD Weekly Flyer</div><h1 style="font-size:22px;font-weight:900;letter-spacing:-.6px">'+esc(st.name)+' Flyer — June 1 – June 7</h1><div style="font-size:12px;color:#64748B">'+items.length+' structured OCR records · real image-style 1800×2400 flyer pages · official source linked · URL: '+routePathForStore(sid)+'</div><div class="reader-hint">Scroll inside the flyer pane when zoomed. Double-click a page to jump between fit and close-up.</div></div><div class="reader-actions"><button class="reader-btn" data-act="prev-flyer-page">← Previous</button><button class="reader-btn" data-act="next-flyer-page">Next →</button><button class="reader-btn primary" data-act="zoom-out">−</button><span class="reader-zoom-readout" aria-label="Current zoom">'+zoomPct+'</span><button class="reader-btn primary" data-act="zoom-in">+</button><a class="reader-btn" href="'+st.flyerUrl+'" target="_blank" rel="noopener noreferrer">Official flyer</a><button class="reader-btn" data-act="toggle-reader-fullscreen">'+(S.readerFullscreen?'Exit full screen':'Full screen')+'</button><button class="reader-btn" data-act="close-flyer-reader">Back to hub</button></div></div><div class="reader-main"><aside class="thumb-rail" aria-label="Page thumbnails">'
     +pages.map(function(pg,i){var n=i+1;return '<button class="page-thumb '+(page===n?'on':'')+'" data-act="set-flyer-page" data-n="'+n+'">Page '+n+'<br><span style="font-weight:600">'+pg.length+' deals</span></button>';}).join('')
     +'</aside><section class="reader-stage" aria-label="Zoomable flyer viewer"><div class="page-stack" aria-label="Flyer pages">'
-    +pages.map(function(pg,i){var n=i+1, src=flyerPageImageUrl(sid,n,items);return '<article id="flyer-page-'+n+'" class="flyer-reader-page has-img" style="width:'+pageWidth+'px"><img class="reader-page-img" loading="lazy" decoding="async" src="'+src+'" alt="'+esc(st.name)+' flyer page '+n+'"></article>';}).join('')
+    +pages.map(function(pg,i){var n=i+1, src=flyerPageImageUrl(sid,n,items);return '<article id="flyer-page-'+n+'" class="flyer-reader-page has-img" style="width:'+pageWidth+'px"><span class="reader-real-badge">Real image view</span><img class="reader-page-img" loading="lazy" decoding="async" src="'+src+'" alt="'+esc(st.name)+' flyer page '+n+' with product images"></article>';}).join('')
     +'</div></section><aside class="ocr-side"><h2 style="font-size:17px;font-weight:900">Deal Tagging Engine</h2><p style="font-size:12px;color:#64748B;margin:6px 0 10px">Every HD page exposes structured product records produced by the generic flyer ingestion/OCR pipeline.</p>'+items.slice(0,7).map(function(fi){return '<div class="ocr-row"><span>'+esc(fi.name)+'<br><small style="color:#94A3B8">page '+fi.flyer_page+' · '+fi.unit+'</small></span><strong>$'+fi.price.toFixed(2)+'</strong></div>';}).join('')+'<pre class="ocr-json">'+esc(json)+'</pre></aside></div></div>';
 }
 
@@ -1465,8 +1500,8 @@ function bFlyerItemCard(fi, sid, delay) {
   var inC = S.cart[fi.catalogId] || 0;
   var st = STORES[sid];
   return '<article class="flyer-item fu" style="animation-delay:'+(delay||0)+'s">'
-    +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
-    +'<span>'+fi.e+'</span>'
+    +'<div class="fi-img">'
+    +flyerCardPhotoHtml(fi)
     +'<div class="fi-pct">-'+fi.pct+'%</div>'
     +'<div class="fi-va">valid til '+fi.validTo+'</div>'+expiryPill(fi.validTo)
     +'</div>'
@@ -1529,8 +1564,8 @@ function bFlyers() {
           var isCheapest = fi.price <= cheapByName[fi.name];
           var inC = S.cart[fi.catalogId] || 0;
           return '<article class="flyer-item fu" style="animation-delay:'+(i*0.04)+'s">'
-            +'<div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'">'
-            +'<span>'+fi.e+'</span>'
+            +'<div class="fi-img">'
+            +flyerCardPhotoHtml(fi)
             +'<div class="fi-pct">-'+fi.pct+'%</div>'+expiryPill(fi.validTo)
             +(isCheapest?'<div style="position:absolute;top:7px;left:7px;background:#059669;color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">CHEAPEST</div>':'')
             +'</div>'
@@ -1605,7 +1640,7 @@ function bFlyers() {
 
 function bDealCardFromFlyer(fi, i) {
   var st=STORES[fi.storeId], item=CAT.find(function(p){return p.id===fi.catalogId;})||fi, inC=S.cart[fi.catalogId]||0;
-  return '<article class="flyer-item fu" style="animation-delay:'+((i||0)*0.025)+'s"><div class="fi-img" style="background:'+(CBG[fi.cat]||'#F1F5F9')+'"><span>'+fi.e+'</span><div class="fi-pct">-'+fi.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+st.color+';color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">'+st.sh+'</div></div><div class="fi-body"><div class="fi-name">'+esc(fi.name)+'</div><div style="font-size:11px;color:'+st.color+';font-weight:800">'+esc(st.name)+' · page '+fi.flyer_page+'</div><div class="fi-price">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,fi.price)+'</div><div class="fi-acts"><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC?'✓ Added':'+ Add')+'</button><button class="bfp" data-act="open-store-page" data-store="'+fi.storeId+'">Store</button></div></div></article>';
+  return '<article class="flyer-item fu" style="animation-delay:'+((i||0)*0.025)+'s"><div class="fi-img">'+flyerCardPhotoHtml(fi)+'<div class="fi-pct">-'+fi.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+st.color+';color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">'+st.sh+'</div></div><div class="fi-body"><div class="fi-name">'+esc(fi.name)+'</div><div style="font-size:11px;color:'+st.color+';font-weight:800">'+esc(st.name)+' · page '+fi.flyer_page+'</div><div class="fi-price">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,fi.price)+'</div><div class="fi-acts"><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC?'✓ Added':'+ Add')+'</button><button class="bfp" data-act="open-store-page" data-store="'+fi.storeId+'">Store</button></div></div></article>';
 }
 function bDealsPage() {
   var cats=['Produce','Dairy','Meat','Frozen','Pantry','Beverages'];
@@ -1708,7 +1743,7 @@ function bPM() {
   var allC='<div class="flyer-mag">'+allD.map(function(deal){
     var item=CAT.find(function(p){return p.id===deal.cid;}),ist=STORES[deal.sid];if(!item)return '';
     var inC=S.cart[item.id]||0;
-    return '<article class="flyer-item fu"><div class="fi-img" style="background:'+(CBG[item.cat]||'#F1F5F9')+'"><span>'+item.e+'</span><div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
+    return '<article class="flyer-item fu"><div class="fi-img">'+flyerCardPhotoHtml(Object.assign({}, item, {name:item.name, product_name:item.name, price:deal.price, pct:deal.pct, storeId:deal.sid, flyer_page:1}))+'<div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
       +'<div class="fi-body"><div class="fi-name">'+esc(item.name)+'</div><div class="fi-reg">Reg. $'+deal.reg.toFixed(2)+'</div><div class="fi-price">$'+deal.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,deal.price)+'</div>'
       +'<div class="fi-acts"><button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+item.id+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button><button class="bfp" data-act="sel-match" data-cid="'+item.id+'" data-sid="'+deal.sid+'">&#x2696; Match</button></div></div></article>';
   }).join('')+'</div>';
