@@ -78,7 +78,7 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:16px}
 .pm-card{background:var(--w);border:1px solid var(--bd);border-radius:var(--ra);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}
 .pm-card:hover{transform:translateY(-3px);box-shadow:var(--shm);border-color:var(--bd2)}
-.pimg{height:158px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.pimg{height:170px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
 .pemoji{font-size:68px;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.1))}
 .pbadge{position:absolute;top:10px;left:10px;color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px}
 .pb-s{background:var(--r)}.pb-h{background:var(--o)}.pb-d{background:var(--g)}
@@ -123,7 +123,7 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .flyer-mag{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px;padding:20px}
 .flyer-item{background:var(--w);border-radius:12px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;cursor:pointer}
 .flyer-item:hover{transform:translateY(-3px);box-shadow:var(--shm)}
-.fi-img{height:120px;display:flex;align-items:center;justify-content:center;position:relative;font-size:52px;background:#F8FAFC;overflow:hidden}
+.fi-img{height:140px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#F8FAFC}
 .fi-photo{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(1.05) contrast(1.02)}
 .fi-photo.is-loading,.reader-product-photo.is-loading{filter:saturate(.7);opacity:.78}.off-badge{position:absolute;top:7px;left:7px;background:rgba(5,150,105,.92);color:white;font-size:9px;font-weight:900;padding:3px 7px;border-radius:999px;z-index:2;box-shadow:0 6px 14px rgba(5,150,105,.22)}
 .fi-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(15,23,42,.08));pointer-events:none}
@@ -152,7 +152,7 @@ main{max-width:1300px;margin:0 auto;padding:24px 20px 100px}
 .flyer-zoom-stage{min-height:330px;background:linear-gradient(135deg,#E0F2FE,#F8FAFC);display:flex;align-items:center;justify-content:center;padding:22px;overflow:hidden;position:relative}
 .flyer-sheet{width:min(420px,92%);aspect-ratio:3/4;background:white;border-radius:18px;border:1px solid #CBD5E1;box-shadow:0 18px 44px rgba(15,23,42,.18);position:relative;transform-origin:center;transition:transform .35s ease}
 .flyer-sheet.zoomed{transform:scale(1.38)}
-.flyer-cell{position:absolute;border-radius:14px;border:1.5px solid #E2E8F0;background:#F8FAFC;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;box-shadow:0 6px 18px rgba(15,23,42,.06)}
+.flyer-cell{position:absolute;border-radius:14px;border:1.5px solid #E2E8F0;background:white;display:flex;flex-direction:column;align-items:center;overflow:hidden;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
 .flyer-cell.hit{border:3px solid #2563EB;background:#EFF6FF;box-shadow:0 0 0 7px rgba(37,99,235,.16),0 18px 34px rgba(37,99,235,.18);z-index:2;animation:pop .28s ease both}
 .flyer-cell .emoji{font-size:34px;line-height:1}.flyer-cell .label{font-size:9px;font-weight:900;color:#334155;margin-top:4px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flyer-cell .price{font-size:13px;font-weight:900;color:#059669}
 .flyer-zoom-info{padding:20px;display:flex;flex-direction:column;justify-content:center}.cache-chip{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 10px;border-radius:999px;background:#ECFDF5;color:#047857;border:1px solid #6EE7B7;font-size:11px;font-weight:900;margin-bottom:10px}.zoom-title{font-size:22px;font-weight:900;letter-spacing:-.7px;margin-bottom:6px}.zoom-copy{font-size:13px;color:#64748B;line-height:1.55;margin-bottom:14px}.zoom-actions{display:flex;gap:8px;flex-wrap:wrap}.zoom-btn{border:none;border-radius:10px;background:#2563EB;color:white;font-size:12px;font-weight:900;padding:10px 13px;cursor:pointer}.zoom-btn.alt{background:#F8FAFC;color:#475569;border:1px solid #CBD5E1}
@@ -387,6 +387,12 @@ body{background:radial-gradient(circle at 8% 0%,rgba(16,185,129,.14),transparent
 @media(max-width:1100px){.reader-main{grid-template-columns:92px minmax(0,1fr)}.ocr-side{display:none}.reader-stage{max-height:calc(100dvh - 176px)}}@media(max-width:900px){.flyer-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reader-head{top:48px}.reader-main{grid-template-columns:1fr}.thumb-rail{position:relative;top:auto;flex-direction:row;overflow-x:auto}.reader-stage{padding:12px;max-height:calc(100dvh - 206px)}.flyer-reader-page{width:680px;touch-action:pan-x pan-y pinch-zoom}.flyer-home-head{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.flyer-card-grid{grid-template-columns:1fr}.reader-shell{padding:12px 12px 80px}.reader-actions .reader-btn{flex:1}.store-flyer-card{min-height:230px}}
 @media(orientation:landscape) and (max-height:500px){.hdr{position:relative}.nav-tabs,.mode-bar{position:relative;top:auto}.modal-box,.proof-card{max-height:96dvh}.chat-panel{max-height:82dvh}}
+
+.fi-img img{width:100%;height:100%;object-fit:contain;padding:10px;display:block}
+.pimg img{width:100%;height:100%;object-fit:contain;padding:12px;display:block}
+.flyer-cell:hover{transform:scale(1.04);box-shadow:0 12px 28px rgba(0,0,0,0.14);border-color:#A7F3D0;z-index:10}
+.photo-loading{background:linear-gradient(90deg,#F1F5F9 0%,#E2E8F0 50%,#F1F5F9 100%) !important;background-size:200% 100% !important;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 </style>
 </head>
 <body>
@@ -410,38 +416,38 @@ const DIETS=["All","Vegan","Halal","Kosher","Gluten-Free"];
 const CIC={All:"🛒",Produce:"🥬",Dairy:"🥛",Meat:"🥩",Bakery:"🍞",Pantry:"🥫",Beverages:"🧃"};
 const CBG={Produce:"linear-gradient(145deg,#BBF7D0,#6EE7B7)",Dairy:"linear-gradient(145deg,#BAE6FD,#7DD3FC)",Meat:"linear-gradient(145deg,#FECACA,#FCA5A5)",Bakery:"linear-gradient(145deg,#FDE68A,#FCD34D)",Pantry:"linear-gradient(145deg,#E9D5FF,#C4B5FD)",Beverages:"linear-gradient(145deg,#A5F3FC,#67E8F9)"};
 const CAT=[
-  {id:1, name:"Oranges 3 lb bag",    brand:"Generic",      cat:"Produce",  e:"🍊",prices:{freshco:3.49,superstore:3.88,nofrills:3.29,walmart:3.97,metro:4.49,costco:5.99},sale:"freshco",hot:true},
-  {id:2, name:"Whole Milk 4L",       brand:"Natrel",       cat:"Dairy",    e:"🥛",prices:{freshco:5.79,superstore:5.99,nofrills:5.69,walmart:5.97,metro:6.29,costco:7.49},sale:null,hot:false},
-  {id:3, name:"White Bread 675g",    brand:"Dempsters",    cat:"Bakery",   e:"🍞",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:5.99},sale:"freshco",hot:false},
-  {id:4, name:"Large Eggs 12 pk",    brand:"Generic",      cat:"Dairy",    e:"🥚",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:8.99},sale:null,hot:true},
-  {id:5, name:"Gala Apples 3 lb",    brand:"Generic",      cat:"Produce",  e:"🍎",prices:{freshco:3.99,superstore:4.27,nofrills:3.89,walmart:4.47,metro:4.99,costco:6.99},sale:null,hot:false},
-  {id:6, name:"Roma Tomatoes 1 kg",  brand:"Generic",      cat:"Produce",  e:"🍅",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
-  {id:7, name:"Bananas bunch",       brand:"Generic",      cat:"Produce",  e:"🍌",prices:{freshco:1.29,superstore:1.44,nofrills:1.19,walmart:1.49,metro:1.69,costco:1.79},sale:null,hot:false},
-  {id:8, name:"Chicken Breast 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",prices:{freshco:8.49,superstore:8.77,nofrills:8.29,walmart:8.97,metro:9.99,costco:6.99},sale:"costco",hot:true},
-  {id:9, name:"Spaghetti 900g",      brand:"Catelli",      cat:"Pantry",   e:"🍝",prices:{freshco:1.99,superstore:2.27,nofrills:1.89,walmart:2.47,metro:2.99,costco:4.99},sale:null,hot:false},
-  {id:10,name:"White Rice 5 kg",     brand:"Generic",      cat:"Pantry",   e:"🍚",prices:{freshco:8.99,superstore:9.77,nofrills:8.79,walmart:9.97,metro:11.49,costco:12.99},sale:null,hot:false},
-  {id:11,name:"Butter 454g",         brand:"Lactantia",    cat:"Dairy",    e:"🧈",prices:{freshco:4.99,superstore:5.27,nofrills:4.89,walmart:5.47,metro:5.99,costco:8.99},sale:null,hot:false},
-  {id:12,name:"Greek Yogurt 750g",   brand:"Oikos",        cat:"Dairy",    e:"🥛",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:6.99},sale:"freshco",hot:false},
-  {id:13,name:"Cheddar Cheese 400g", brand:"Cracker Barrel",cat:"Dairy",  e:"🧀",prices:{freshco:6.49,superstore:6.77,nofrills:6.29,walmart:6.97,metro:7.99,costco:9.99},sale:null,hot:false},
-  {id:14,name:"Ground Beef 500g",    brand:"Generic",      cat:"Meat",     e:"🥩",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:4.99},sale:"costco",hot:false},
-  {id:15,name:"Broccoli head",       brand:"Generic",      cat:"Produce",  e:"🥦",prices:{freshco:1.49,superstore:1.77,nofrills:1.39,walmart:1.97,metro:2.49,costco:3.99},sale:null,hot:false},
-  {id:16,name:"Baby Carrots 1 lb",   brand:"Generic",      cat:"Produce",  e:"🥕",prices:{freshco:1.79,superstore:1.88,nofrills:1.69,walmart:1.97,metro:2.29,costco:2.49},sale:null,hot:false},
-  {id:17,name:"Corn on Cob 3-pk",    brand:"Generic",      cat:"Produce",  e:"🌽",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
-  {id:18,name:"Orange Juice 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
-  {id:19,name:"Cheerios 520g",       brand:"General Mills",cat:"Pantry",   e:"🥣",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:8.99},sale:null,hot:false},
-  {id:20,name:"Ground Coffee 340g",  brand:"Maxwell House",cat:"Pantry",   e:"☕",prices:{freshco:9.49,superstore:9.77,nofrills:9.29,walmart:9.97,metro:11.49,costco:13.99},sale:null,hot:false},
-  {id:21,name:"Strawberries 1 lb",   brand:"Generic",      cat:"Produce",  e:"🍓",prices:{freshco:4.49,superstore:4.77,nofrills:3.99,walmart:4.97,metro:5.99,costco:null},sale:null,hot:false},
-  {id:22,name:"Blueberries 1 pint",  brand:"Generic",      cat:"Produce",  e:"🫐",prices:{freshco:5.49,superstore:5.77,nofrills:4.99,walmart:5.97,metro:5.99,costco:null},sale:null,hot:false},
-  {id:23,name:"Chicken Thighs 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",prices:{freshco:7.99,superstore:8.29,nofrills:7.49,walmart:8.49,metro:8.99,costco:5.99},sale:null,hot:false},
-  {id:24,name:"Tropicana OJ 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
-  {id:25,name:"Mangoes 3-pk",        brand:"Generic",      cat:"Produce",  e:"🥭",prices:{freshco:5.99,superstore:6.29,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
-  {id:26,name:"Pasta Sauce 680ml",   brand:"Classico",     cat:"Pantry",   e:"🍝",prices:{freshco:3.49,superstore:3.79,nofrills:3.19,walmart:3.49,metro:4.29,costco:null},sale:null,hot:false},
-  {id:27,name:"Avocados 4-pk",       brand:"Generic",      cat:"Produce",  e:"🥑",prices:{freshco:5.99,superstore:5.99,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
-  {id:28,name:"Atlantic Salmon 300g",brand:"Generic",      cat:"Meat",     e:"🐟",prices:{freshco:9.99,superstore:11.99,nofrills:9.49,walmart:10.49,metro:12.49,costco:null},sale:null,hot:false},
-  {id:29,name:"Kirkland Chicken 2kg",brand:"Kirkland",     cat:"Meat",     e:"🍗",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:19.99},sale:null,hot:false},
-  {id:30,name:"Organic Eggs 24-pk",  brand:"Kirkland",     cat:"Dairy",    e:"🥚",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:14.99},sale:null,hot:false},
+  {id:1, name:"Oranges 3 lb bag",    brand:"Generic",      cat:"Produce",  e:"🍊",barcode:"0033383600002",prices:{freshco:3.49,superstore:3.88,nofrills:3.29,walmart:3.97,metro:4.49,costco:5.99},sale:"freshco",hot:true},
+  {id:2, name:"Whole Milk 4L",       brand:"Natrel",       cat:"Dairy",    e:"🥛",barcode:"0068200000066",prices:{freshco:5.79,superstore:5.99,nofrills:5.69,walmart:5.97,metro:6.29,costco:7.49},sale:null,hot:false},
+  {id:3, name:"White Bread 675g",    brand:"Dempsters",    cat:"Bakery",   e:"🍞",barcode:"0065633108804",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:5.99},sale:"freshco",hot:false},
+  {id:4, name:"Large Eggs 12 pk",    brand:"Generic",      cat:"Dairy",    e:"🥚",barcode:"0055084400012",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:8.99},sale:null,hot:true},
+  {id:5, name:"Gala Apples 3 lb",    brand:"Generic",      cat:"Produce",  e:"🍎",barcode:"0033383510001",prices:{freshco:3.99,superstore:4.27,nofrills:3.89,walmart:4.47,metro:4.99,costco:6.99},sale:null,hot:false},
+  {id:6, name:"Roma Tomatoes 1 kg",  brand:"Generic",      cat:"Produce",  e:"🍅",barcode:"0033383200202",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
+  {id:7, name:"Bananas bunch",       brand:"Generic",      cat:"Produce",  e:"🍌",barcode:"0011110795007",prices:{freshco:1.29,superstore:1.44,nofrills:1.19,walmart:1.49,metro:1.69,costco:1.79},sale:null,hot:false},
+  {id:8, name:"Chicken Breast 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",barcode:"0020265400000",prices:{freshco:8.49,superstore:8.77,nofrills:8.29,walmart:8.97,metro:9.99,costco:6.99},sale:"costco",hot:true},
+  {id:9, name:"Spaghetti 900g",      brand:"Catelli",      cat:"Pantry",   e:"🍝",barcode:"0055742012014",prices:{freshco:1.99,superstore:2.27,nofrills:1.89,walmart:2.47,metro:2.99,costco:4.99},sale:null,hot:false},
+  {id:10,name:"White Rice 5 kg",     brand:"Generic",      cat:"Pantry",   e:"🍚",barcode:"0055742041014",prices:{freshco:8.99,superstore:9.77,nofrills:8.79,walmart:9.97,metro:11.49,costco:12.99},sale:null,hot:false},
+  {id:11,name:"Butter 454g",         brand:"Lactantia",    cat:"Dairy",    e:"🧈",barcode:"0057154721005",prices:{freshco:4.99,superstore:5.27,nofrills:4.89,walmart:5.47,metro:5.99,costco:8.99},sale:null,hot:false},
+  {id:12,name:"Greek Yogurt 750g",   brand:"Oikos",        cat:"Dairy",    e:"🥛",barcode:"0056800006253",prices:{freshco:4.49,superstore:4.77,nofrills:4.39,walmart:4.97,metro:5.49,costco:6.99},sale:"freshco",hot:false},
+  {id:13,name:"Cheddar Cheese 400g", brand:"Cracker Barrel",cat:"Dairy",  e:"🧀",barcode:"0076820000052",prices:{freshco:6.49,superstore:6.77,nofrills:6.29,walmart:6.97,metro:7.99,costco:9.99},sale:null,hot:false},
+  {id:14,name:"Ground Beef 500g",    brand:"Generic",      cat:"Meat",     e:"🥩",barcode:"0020265200000",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:4.99},sale:"costco",hot:false},
+  {id:15,name:"Broccoli head",       brand:"Generic",      cat:"Produce",  e:"🥦",barcode:"0033383200001",prices:{freshco:1.49,superstore:1.77,nofrills:1.39,walmart:1.97,metro:2.49,costco:3.99},sale:null,hot:false},
+  {id:16,name:"Baby Carrots 1 lb",   brand:"Generic",      cat:"Produce",  e:"🥕",barcode:"0071140003512",prices:{freshco:1.79,superstore:1.88,nofrills:1.69,walmart:1.97,metro:2.29,costco:2.49},sale:null,hot:false},
+  {id:17,name:"Corn on Cob 3-pk",    brand:"Generic",      cat:"Produce",  e:"🌽",barcode:"0033383100072",prices:{freshco:2.49,superstore:2.77,nofrills:2.39,walmart:2.97,metro:3.49,costco:3.99},sale:"freshco",hot:false},
+  {id:18,name:"Orange Juice 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",barcode:"0048500001219",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
+  {id:19,name:"Cheerios 520g",       brand:"General Mills",cat:"Pantry",   e:"🥣",barcode:"0016000275287",prices:{freshco:5.49,superstore:5.77,nofrills:5.29,walmart:5.97,metro:6.99,costco:8.99},sale:null,hot:false},
+  {id:20,name:"Ground Coffee 340g",  brand:"Maxwell House",cat:"Pantry",   e:"☕",barcode:"0043000187890",prices:{freshco:9.49,superstore:9.77,nofrills:9.29,walmart:9.97,metro:11.49,costco:13.99},sale:null,hot:false},
+  {id:21,name:"Strawberries 1 lb",   brand:"Generic",      cat:"Produce",  e:"🍓",barcode:"0033383100002",prices:{freshco:4.49,superstore:4.77,nofrills:3.99,walmart:4.97,metro:5.99,costco:null},sale:null,hot:false},
+  {id:22,name:"Blueberries 1 pint",  brand:"Generic",      cat:"Produce",  e:"🫐",barcode:"0033383050002",prices:{freshco:5.49,superstore:5.77,nofrills:4.99,walmart:5.97,metro:5.99,costco:null},sale:null,hot:false},
+  {id:23,name:"Chicken Thighs 1 kg", brand:"Generic",      cat:"Meat",     e:"🍗",barcode:"0020265400001",prices:{freshco:7.99,superstore:8.29,nofrills:7.49,walmart:8.49,metro:8.99,costco:5.99},sale:null,hot:false},
+  {id:24,name:"Tropicana OJ 1.75L",  brand:"Tropicana",    cat:"Beverages",e:"🧃",barcode:"0048500001219",prices:{freshco:4.99,superstore:5.27,nofrills:4.79,walmart:5.47,metro:5.99,costco:7.99},sale:null,hot:false},
+  {id:25,name:"Mangoes 3-pk",        brand:"Generic",      cat:"Produce",  e:"🥭",barcode:"0033383100082",prices:{freshco:5.99,superstore:6.29,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
+  {id:26,name:"Pasta Sauce 680ml",   brand:"Classico",     cat:"Pantry",   e:"🍝",barcode:"0013000003810",prices:{freshco:3.49,superstore:3.79,nofrills:3.19,walmart:3.49,metro:4.29,costco:null},sale:null,hot:false},
+  {id:27,name:"Avocados 4-pk",       brand:"Generic",      cat:"Produce",  e:"🥑",barcode:"0033383050012",prices:{freshco:5.99,superstore:5.99,nofrills:5.49,walmart:6.49,metro:6.99,costco:null},sale:null,hot:false},
+  {id:28,name:"Atlantic Salmon 300g",brand:"Generic",      cat:"Meat",     e:"🐟",barcode:"0020265600000",prices:{freshco:9.99,superstore:11.99,nofrills:9.49,walmart:10.49,metro:12.49,costco:null},sale:null,hot:false},
+  {id:29,name:"Kirkland Chicken 2kg",brand:"Kirkland",     cat:"Meat",     e:"🍗",barcode:"0096619173174",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:19.99},sale:null,hot:false},
+  {id:30,name:"Organic Eggs 24-pk",  brand:"Kirkland",     cat:"Dairy",    e:"🥚",barcode:"0096619014743",prices:{freshco:null,superstore:null,nofrills:null,walmart:null,metro:null,costco:14.99},sale:null,hot:false},
 ];
-const CAT_BARCODES={1:"0033383600019",2:"0068200000066",3:"0065633108804",4:"0068200000012",5:"0033383510001",6:"0033383300008",7:"0033383600002",8:"0068200005535",9:"0055742012014",10:"0055742041014",11:"0057154721005",12:"0056800006253",13:"0076820000052",14:"0068200003104",15:"0033383200001",16:"0071140003512",17:"0033383700009",18:"0048500001219",19:"0016000275287",20:"0043000187890",21:"0033383100002",22:"0033383050002",23:"0068200005535",24:"0048500001219",25:"0033383800006",26:"0013000003810",27:"0033383900003",28:"0068200009014",29:"0068200005535",30:"0068200000012"};
+const CAT_BARCODES={1:"0033383600002",2:"0068200000066",3:"0065633108804",4:"0055084400012",5:"0033383510001",6:"0033383200202",7:"0011110795007",8:"0020265400000",9:"0055742012014",10:"0055742041014",11:"0057154721005",12:"0056800006253",13:"0076820000052",14:"0020265200000",15:"0033383200001",16:"0071140003512",17:"0033383100072",18:"0048500001219",19:"0016000275287",20:"0043000187890",21:"0033383100002",22:"0033383050002",23:"0020265400001",24:"0048500001219",25:"0033383100082",26:"0013000003810",27:"0033383050012",28:"0020265600000",29:"0096619173174",30:"0096619014743"};
 CAT.forEach(function(item){ item.barcode = CAT_BARCODES[item.id] || item.barcode || ''; });
 const TODAY="2026-06-04";
 const WEEK_START="2026-06-01";
@@ -600,8 +606,8 @@ function productPhotoHtml(item, cls) {
   var alt = esc((item && (item.name || item.product_name)) || (catItem && catItem.name) || 'product');
   return '<img class="'+(cls||'fi-photo')+'" loading="lazy" decoding="async" src="'+esc(photoUrl || flyerProductPhotoUrl(item||catItem||{}))+'" alt="'+alt+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" style="width:100%;height:100%;object-fit:contain"><div class="flyer-img-fallback" style="display:none">'+emoji+'</div>';
 }
-function flyerOffPhotoHtml(fi, cls) { return productPhotoHtml(fi, cls || 'fi-photo'); }
-function flyerCardPhotoHtml(fi) { return productPhotoHtml(fi, 'fi-photo') + '<span class="off-badge">OFF photo</span>'; }
+function flyerOffPhotoHtml(fi, cls) { return productPhotoHtml(fi, cls || 'width:100%;height:100%;object-fit:contain;padding:10px;display:block'); }
+function flyerCardPhotoHtml(fi) { var item = CAT.find(function(p){return p.id===fi.catalogId;})||fi; return productPhotoHtml(item, 'width:100%;height:100%;object-fit:contain;padding:8px;display:block'); }
 
 function flyerImageCacheEntry(item, deal, sid) {
   var slot = Math.abs((deal.id || String(deal.cid)).split('').reduce(function(sum,ch){return sum + ch.charCodeAt(0);},0)) % 8;
@@ -616,7 +622,11 @@ function flyerVisualItems(storeId, hit) {
   return items.map(function(fi, idx){
     var cache = fi.imageCache || flyerImageCacheEntry(CAT.find(function(p){return p.id===fi.catalogId;}), {id:fi.dealId || String(fi.catalogId), cid:fi.catalogId}, storeId);
     var isHit = hit && hit.catalogId === fi.catalogId && hit.storeId === storeId;
-    return '<div class="flyer-cell'+(isHit?' hit':'')+'" style="left:'+cache.x+'%;top:'+cache.y+'%;width:'+cache.w+'%;height:'+cache.h+'%"><div class="emoji">'+fi.e+'</div><div class="label">'+esc(fi.name)+'</div><div class="price">$'+fi.price.toFixed(2)+'</div></div>';
+    var item = CAT.find(function(p){return p.id===fi.catalogId;})||fi;
+    return '<div class="flyer-cell'+(isHit?' hit':'')+' photo-loading" style="left:'+cache.x+'%;top:'+cache.y+'%;width:'+cache.w+'%;height:'+cache.h+'%">'
+      +productPhotoHtml(item,
+        'width:100%;height:100%;object-fit:contain;max-height:90px;display:block')
+      +'<div class="label">'+esc(fi.name)+'</div><div class="price">$'+fi.price.toFixed(2)+'</div></div>';
   }).join('');
 }
 
@@ -803,7 +813,8 @@ function liveFlyerItems(sid) {
 function liveFlyerCell(fi, i, sid, size) {
   var st=STORES[sid], unit=unitPriceText(fi,fi.price), was=fi.reg ? '$'+fi.reg.toFixed(2) : '', badge=fi.pct ? '-'+fi.pct+'%' : 'SALE';
   return '<button class="flyer-hotspot '+size+'" data-act="open-flyer-item" data-id="'+fi.id+'" data-sid="'+sid+'" data-idx="'+i+'" aria-label="Open '+esc(fi.name)+' details">'
-    +'<span class="sale-badge" style="background:'+st.color+'">'+badge+'</span><div class="flyer-photo-box">'+productPhotoHtml(fi,'')+'</div>'
+    +'<span class="sale-badge" style="background:'+st.color+'">'+badge+'</span><div class="flyer-photo-box photo-loading" style="position:relative;overflow:hidden">'+productPhotoHtml(fi,
+      'width:100%;height:100%;object-fit:contain;max-height:90px;display:block')+'</div>'
     +'<div class="flyer-copy"><div class="flyer-name">'+esc(fi.name)+'</div><div class="flyer-brand">'+esc(fi.brand||'Generic')+'</div><div class="flyer-price" style="color:'+st.color+'">$'+fi.price.toFixed(2)+'</div><span class="flyer-was">'+was+'</span><span class="flyer-unit">'+esc(unit)+'</span></div></button>';
 }
 function flyerSearchMatchesFor(sid) {
@@ -824,7 +835,8 @@ function bFlyerReader() {
     +'<section class="gen-row medium">'+rows[1].map(function(fi,i){return liveFlyerCell(fi,i+3,sid,'medium');}).join('')+'</section>'
     +'<section class="gen-row small">'+rows[2].map(function(fi,i){return liveFlyerCell(fi,i+7,sid,'small');}).join('')+'</section>'
     +'<footer class="gen-footer"><span>* All prices subject to change</span><span>Valid June 1–7, 2026</span></footer></div>';
-  var quick='<div class="quick-deal-strip">'+items.map(function(fi){var inC=S.cart[fi.id]||0;return '<article class="quick-deal-card"><div class="quick-photo">'+productPhotoHtml(fi,'')+'</div><div class="quick-name">'+esc(fi.name)+'</div><div class="quick-price" style="color:'+st.color+'">$'+fi.price.toFixed(2)+'</div><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.id+'">'+(inC?'✓ Added':'+ Add')+'</button></article>';}).join('')+'</div>';
+  var quick='<div class="quick-deal-strip">'+items.map(function(fi){var inC=S.cart[fi.id]||0;return '<article class="quick-deal-card"><div class="quick-photo photo-loading" style="position:relative">'+productPhotoHtml(fi,
+          'width:100%;height:100%;object-fit:contain;padding:10px;display:block')+'</div><div class="quick-name">'+esc(fi.name)+'</div><div class="quick-price" style="color:'+st.color+'">$'+fi.price.toFixed(2)+'</div><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.id+'">'+(inC?'✓ Added':'+ Add')+'</button></article>';}).join('')+'</div>';
   return '<div class="live-reader-shell generated"><div class="live-reader-top"><div class="live-store-tabs">'+tabs+'</div><div class="live-search-wrap">'+nav+'<div class="flyer-srch-icon">'+SVG.srch+'</div><input id="flyer-srch" class="flyer-srch live-search" value="'+q+'" placeholder="Search this flyer — milk, bread, eggs..." oninput="onFlyerSearch(this.value)" aria-label="Search this flyer">'+(S.flyerSearch?'<button class="live-clear" data-act="clr-fsearch" aria-label="Clear flyer search">'+SVG.x14+'</button>':'')+'<div class="ocr-status" id="live-ocr-status">Generated flyer: search uses known item positions, no OCR required.</div></div><button class="reader-btn" data-act="close-flyer-reader">Back</button></div><div class="live-reader-title">'+flyerLogoHtml(st)+'<div><div style="font-size:12px;font-weight:900;color:'+st.color+'">'+esc(st.name)+'</div><h1>'+esc(st.name)+' generated weekly flyer</h1></div></div><div class="flyer-viewer-wrap"><section id="live-flyer-stage" class="live-flyer-stage generated-stage" aria-label="Zoomable generated flyer"><div id="live-flyer-transform" class="live-flyer-transform generated-transform" style="transform:scale('+zoom+') translate('+(window.PM_LIVE_VIEW&&window.PM_LIVE_VIEW.x||0)+'px,'+(window.PM_LIVE_VIEW&&window.PM_LIVE_VIEW.y||0)+'px)">'+page+'</div><div class="flyer-zoom-controls"><button data-act="zoom-out">−</button><button id="zoom-readout" aria-label="Current zoom">'+zoom.toFixed(1)+'x</button><button data-act="zoom-in">+</button><button data-act="reset-reader-zoom">⊡ Reset</button></div></section></div>'+quick+'</div>';
 }
 function bFlyerItemPopup(){
@@ -1074,6 +1086,58 @@ function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function tr(k) { return (TR[S.lang]&&TR[S.lang][k])||TR.en[k]||k; }
+
+function barcodeToPath(barcode) {
+  var b = String(barcode || '').replace(/\D/g, '').padStart(13, '0');
+  return b.slice(0,3)+'/'+b.slice(3,6)+'/'+b.slice(6,9)+'/'+b.slice(9);
+}
+
+function productPhotoUrls(item) {
+  if (!item || !item.barcode) return [];
+  var base = 'https://images.openfoodfacts.org/images/products/'
+             + barcodeToPath(item.barcode) + '/';
+  return [
+    base + 'front_en.400.jpg',
+    base + 'front_en.jpg',
+    base + 'front.400.jpg',
+    base + 'front.jpg',
+    base + '1.400.jpg',
+    base + '1.jpg'
+  ];
+}
+
+function buildOnerrorChain(urls) {
+  return "var idx=(this._fi=(this._fi||0)+1);"
+    + "var fb=['" + urls.slice(1).join("','") + "'];"
+    + "if(idx-1<fb.length){this.src=fb[idx-1];}"
+    + "else{this.style.display='none';"
+    + "var n=this.nextElementSibling;"
+    + "if(n)n.style.display='flex';}";
+}
+
+function productPhotoHtml(item, cssStyle) {
+  var style = cssStyle ||
+    'width:100%;height:100%;object-fit:contain;padding:10px;display:block';
+  var emoji = item ? (item.e || '🛒') : '🛒';
+  var urls = productPhotoUrls(item);
+  if (!urls.length) {
+    return '<div style="display:flex;align-items:center;'
+      + 'justify-content:center;width:100%;height:100%;font-size:52px">'
+      + emoji + '</div>';
+  }
+  var escaped = urls.map(function(u){ return u.replace(/'/g,"%27"); });
+  return '<img src="' + escaped[0] + '"'
+    + ' style="' + style + '"'
+    + ' loading="lazy"'
+    + ' crossorigin="anonymous"'
+    + ' alt="' + (item.name||'product') + '"'
+    + ' onload="this.parentElement.classList.remove(\'photo-loading\')"'
+    + ' onerror="' + buildOnerrorChain(escaped) + '"'
+    + '/>'
+    + '<div style="display:none;align-items:center;justify-content:center;'
+    + 'width:100%;height:100%;font-size:52px;position:absolute;inset:0">'
+    + emoji + '</div>';
+}
 function itemMeasure(item) {
   var n=(item.name||'').toLowerCase(), m;
   if ((m=n.match(/(\d+(?:\.\d+)?)\s*kg/))) return {amount:+m[1]*1000,unit:'g',base:100,label:'100g'};
@@ -1518,8 +1582,9 @@ function bGrid(filt) {
     var sv=wp&&wp.price>bp.price?(wp.price-bp.price).toFixed(2):null;
     var pct=wp&&wp.price>bp.price?Math.round((wp.price-bp.price)/wp.price*100):null;
     return '<article class="pm-card fu" style="animation-delay:'+(i%12*.04)+'s">'
-      +'<div class="pimg" style="background:'+CBG[p.cat]+'">'
-      +'<span class="pemoji" aria-hidden="true">'+p.e+'</span>'
+      +'<div class="pimg photo-loading" style="background:'+CBG[p.cat]+';position:relative;overflow:hidden">'
+      +productPhotoHtml(p,
+        'width:100%;height:100%;object-fit:contain;padding:10px;display:block')
       +(deal?'<div class="pbadge pb-d">&#x1F3F7; DEAL</div>':p.sale?'<div class="pbadge pb-s">&#x1F3F7; SALE</div>':p.hot?'<div class="pbadge pb-h">'+SVG.trend+' HOT</div>':'')
       +(inC>0?'<div class="pcn pop">'+inC+'</div>':'')
       +'<button class="wbtn" data-act="toggle-watch" data-id="'+p.id+'" aria-label="'+(watched?'Remove from':'Add to')+' watchlist">'+(watched?'&#x1F514;':'&#x1F515;')+'</button>'
@@ -1560,7 +1625,9 @@ function bDeals() {
       var bp=bestP(p.id,SIDS);if(!bp)return '';
       var deal=getDeal(p.id,bp.sid),bst=STORES[bp.sid],inC=S.cart[p.id]||0;
       return '<article style="min-width:165px;width:165px;background:white;border-radius:12px;border:1px solid var(--bd);overflow:hidden;flex-shrink:0;box-shadow:var(--sh)">'
-        +'<div style="height:106px;background:'+CBG[p.cat]+';display:flex;align-items:center;justify-content:center;position:relative;font-size:48px">'+p.e
+        +'<div class="photo-loading" style="height:106px;background:'+CBG[p.cat]+';display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">'
+        +productPhotoHtml(p,
+          'width:100%;height:100%;object-fit:contain;padding:8px;display:block')
         +'<div style="position:absolute;top:7px;left:7px;background:var(--r);color:white;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px">DEAL</div>'
         +'<div style="position:absolute;bottom:7px;right:7px;background:'+bst.color+';color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px">'+bst.sh+'</div></div>'
         +'<div style="padding:10px 12px"><div style="font-size:12px;font-weight:700;margin-bottom:2px;line-height:1.3">'+esc(p.name)+'</div>'
@@ -1638,8 +1705,9 @@ function bFlyerItemCard(fi, sid, delay) {
   var inC = S.cart[fi.catalogId] || 0;
   var st = STORES[sid];
   return '<article class="flyer-item fu" style="animation-delay:'+(delay||0)+'s">'
-    +'<div class="fi-img">'
-    +flyerCardPhotoHtml(fi)
+    +'<div class="fi-img photo-loading" style="background:'+CBG[fi.cat]+';position:relative;overflow:hidden">'
+    +productPhotoHtml(CAT.find(function(p){return p.id===fi.catalogId;})||fi,
+      'width:100%;height:100%;object-fit:contain;padding:8px;display:block')
     +'<div class="fi-pct">-'+fi.pct+'%</div>'
     +'<div class="fi-va">valid til '+fi.validTo+'</div>'+expiryPill(fi.validTo)
     +'</div>'
@@ -1702,7 +1770,7 @@ function bFlyers() {
           var isCheapest = fi.price <= cheapByName[fi.name];
           var inC = S.cart[fi.catalogId] || 0;
           return '<article class="flyer-item fu" style="animation-delay:'+(i*0.04)+'s">'
-            +'<div class="fi-img">'
+            +'<div class="fi-img photo-loading">'
             +flyerCardPhotoHtml(fi)
             +'<div class="fi-pct">-'+fi.pct+'%</div>'+expiryPill(fi.validTo)
             +(isCheapest?'<div style="position:absolute;top:7px;left:7px;background:#059669;color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">CHEAPEST</div>':'')
@@ -1778,7 +1846,7 @@ function bFlyers() {
 
 function bDealCardFromFlyer(fi, i) {
   var st=STORES[fi.storeId], item=CAT.find(function(p){return p.id===fi.catalogId;})||fi, inC=S.cart[fi.catalogId]||0;
-  return '<article class="flyer-item fu" style="animation-delay:'+((i||0)*0.025)+'s"><div class="fi-img">'+flyerCardPhotoHtml(fi)+'<div class="fi-pct">-'+fi.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+st.color+';color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">'+st.sh+'</div></div><div class="fi-body"><div class="fi-name">'+esc(fi.name)+'</div><div style="font-size:11px;color:'+st.color+';font-weight:800">'+esc(st.name)+' · page '+fi.flyer_page+'</div><div class="fi-price">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,fi.price)+'</div><div class="fi-acts"><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC?'✓ Added':'+ Add')+'</button><button class="bfp" data-act="open-store-page" data-store="'+fi.storeId+'">Store</button></div></div></article>';
+  return '<article class="flyer-item fu" style="animation-delay:'+((i||0)*0.025)+'s"><div class="fi-img photo-loading">'+flyerCardPhotoHtml(fi)+'<div class="fi-pct">-'+fi.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+st.color+';color:white;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px">'+st.sh+'</div></div><div class="fi-body"><div class="fi-name">'+esc(fi.name)+'</div><div style="font-size:11px;color:'+st.color+';font-weight:800">'+esc(st.name)+' · page '+fi.flyer_page+'</div><div class="fi-price">$'+fi.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,fi.price)+'</div><div class="fi-acts"><button class="bfa'+(inC?' added':'')+'" data-act="add" data-id="'+fi.catalogId+'">'+(inC?'✓ Added':'+ Add')+'</button><button class="bfp" data-act="open-store-page" data-store="'+fi.storeId+'">Store</button></div></div></article>';
 }
 function bDealsPage() {
   var cats=['Produce','Dairy','Meat','Frozen','Pantry','Beverages'];
@@ -1881,7 +1949,7 @@ function bPM() {
   var allC='<div class="flyer-mag">'+allD.map(function(deal){
     var item=CAT.find(function(p){return p.id===deal.cid;}),ist=STORES[deal.sid];if(!item)return '';
     var inC=S.cart[item.id]||0;
-    return '<article class="flyer-item fu"><div class="fi-img">'+flyerCardPhotoHtml(Object.assign({}, item, {name:item.name, product_name:item.name, price:deal.price, pct:deal.pct, storeId:deal.sid, flyer_page:1}))+'<div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
+    return '<article class="flyer-item fu"><div class="fi-img photo-loading">'+flyerCardPhotoHtml(Object.assign({}, item, {name:item.name, product_name:item.name, price:deal.price, pct:deal.pct, storeId:deal.sid, flyer_page:1}))+'<div class="fi-pct">-'+deal.pct+'%</div><div style="position:absolute;bottom:6px;left:6px;background:'+ist.color+';color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px">'+ist.sh+'</div></div>'
       +'<div class="fi-body"><div class="fi-name">'+esc(item.name)+'</div><div class="fi-reg">Reg. $'+deal.reg.toFixed(2)+'</div><div class="fi-price">$'+deal.price.toFixed(2)+'</div><div class="unit-price">'+unitPriceText(item,deal.price)+'</div>'
       +'<div class="fi-acts"><button class="bfa'+(inC>0?' added':'')+'" data-act="add" data-id="'+item.id+'">'+(inC>0?'&#x2713; Added':'+ Add')+'</button><button class="bfp" data-act="sel-match" data-cid="'+item.id+'" data-sid="'+deal.sid+'">&#x2696; Match</button></div></div></article>';
   }).join('')+'</div>';
