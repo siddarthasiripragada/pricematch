@@ -1,6 +1,6 @@
-import type { Flyer, FlyerItem, FlyerSearchMatch } from '@/lib/types';
+import type { Flyer, FlyerProduct, FlyerSearchMatch } from '@/lib/types';
 
-const baseItems: Array<Omit<FlyerItem, 'id' | 'bbox'> & { key: string }> = [
+const baseItems: Array<Omit<FlyerProduct, 'id' | 'bbox' | 'store' | 'flyerId' | 'pageNumber'> & { key: string }> = [
   { key: 'milk', name: 'Milk', brand: 'Neilson', price: 4.99, unit: '4L', category: 'Dairy' },
   { key: 'eggs', name: 'Large Eggs', brand: 'Burnbrae', price: 3.49, unit: '12 pack', category: 'Dairy' },
   { key: 'bread', name: 'Whole Wheat Bread', brand: 'Dempster\'s', price: 2.99, unit: '675g', category: 'Bakery' },
@@ -31,32 +31,36 @@ const storeData = [
 export const flyers: Flyer[] = storeData.map(([store, storeKey, title, prices]) => ({
   store,
   storeKey,
-  flyerId: `${storeKey}-weekly-2026-06-23`,
+  id: `${storeKey}-weekly-2026-06-23`,
   title,
   validFrom: '2026-06-23',
   validTo: '2026-06-29',
-  thumbnailUrl: `/flyers/${storeKey}/page-1.svg`,
+  coverImageUrl: `/flyers/${storeKey}/page-1.svg`,
+  logoText: store.split(' ').map((word) => word[0]).join('').slice(0, 3),
   pages: [1, 2].map((pageNumber) => ({
     pageNumber,
     imageUrl: `/flyers/${storeKey}/page-${pageNumber}.svg`,
     width: 960,
     height: 720,
-    items: baseItems.map((item, index) => ({
+    products: baseItems.map((item, index) => ({
       ...item,
       id: `${storeKey}-${pageNumber}-${item.key}`,
+      store,
+      flyerId: `${storeKey}-weekly-2026-06-23`,
+      pageNumber,
       price: Number((prices[index] + (pageNumber === 2 ? 0.5 : 0)).toFixed(2)),
       bbox: boxes[index]
     }))
   }))
 }));
 
-export function findFlyer(flyerId: string) {
-  return flyers.find((flyer) => flyer.flyerId === flyerId);
+export function findFlyer(id: string) {
+  return flyers.find((flyer) => flyer.id === id);
 }
 
-export function findItem(flyerId: string, pageNumber: number, itemId: string): FlyerSearchMatch | undefined {
-  const flyer = findFlyer(flyerId);
+export function findItem(id: string, pageNumber: number, itemId: string): FlyerSearchMatch | undefined {
+  const flyer = findFlyer(id);
   const page = flyer?.pages.find((candidate) => candidate.pageNumber === pageNumber);
-  const item = page?.items.find((candidate) => candidate.id === itemId);
-  return flyer && page && item ? { flyer, page, item } : undefined;
+  const item = page?.products.find((candidate) => candidate.id === itemId);
+  return flyer && page && item ? { flyer, page, product: item } : undefined;
 }

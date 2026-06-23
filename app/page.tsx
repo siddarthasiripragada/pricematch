@@ -30,13 +30,13 @@ export default function Home() {
 
       <section className="flyerGrid" aria-label="Available flyers">
         {flyers.map((flyer) => (
-          <article key={flyer.flyerId} className="flyerCard">
-            <Image src={flyer.thumbnailUrl} alt={`${flyer.store} flyer thumbnail`} width={480} height={360} />
+          <article key={flyer.id} className="flyerCard">
+            <div className="flyerCover"><span className="logoPlaceholder">{flyer.logoText}</span><Image src={flyer.coverImageUrl} alt={`${flyer.store} flyer cover`} width={480} height={360} /></div>
             <div className="flyerCardBody">
               <p className="storeName">{flyer.store}</p>
               <h3>{flyer.title}</h3>
               <p className="muted">Valid {formatDateRange(flyer.validFrom, flyer.validTo)}</p>
-              <Link className="button" href={`/flyers/${flyer.flyerId}`}>Open Flyer</Link>
+              <Link className="button" href={`/flyers/${flyer.id}`}>Open Flyer</Link>
             </div>
           </article>
         ))}
