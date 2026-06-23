@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { ResultsClient } from './results-client';
+import { getRoutePath } from '@/lib/assets';
 
 export default function ResultsPage() {
   return (
@@ -12,7 +13,7 @@ export default function ResultsPage() {
       <section className="heroPanel compact">
         <p className="eyebrow">Cross-flyer price comparison</p>
         <h1>Compare prices</h1>
-        <form action="/results" className="heroSearch">
+        <form action={getRoutePath('/results')} className="heroSearch">
           <input name="q" placeholder="Search product e.g. milk" />
           <button type="submit">Search</button>
         </form>
