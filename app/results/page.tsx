@@ -1,5 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import { flyers } from '@/data/mock-data';
 import { searchProducts } from '@/lib/search';
+
+const logoForStore = (storeName: string) => flyers.find((flyer) => flyer.storeName === storeName)?.logo ?? storeName.slice(0, 2).toUpperCase();
 
 export default async function ResultsPage({ searchParams }: { searchParams: { q?: string; flyer?: string; x?: string; y?: string } }) {
   const query = searchParams.q ?? '';
@@ -9,28 +13,34 @@ export default async function ResultsPage({ searchParams }: { searchParams: { q?
   return (
     <main className="resultsShell">
       <Link href={searchParams.flyer ? `/flyers/${searchParams.flyer}` : '/'} className="backLink">← Back to flyer</Link>
-      <h1>Price comparison</h1>
-      <p className="muted">
-        Matched OCR query: <strong>{query || 'produce'}</strong>
-        {searchParams.x && searchParams.y ? <span> from flyer point ({searchParams.x}, {searchParams.y})</span> : null}
-      </p>
-      <div className="tableCard" role="table" aria-label="Produce price comparison">
-        <div className="tableHeader" role="row"><span>Store</span><span>Product</span><span>Price</span><span>Unit</span></div>
-        {results.map((result) => {
+      <section className="resultsHero">
+        <p className="eyebrow">Lowest price first</p>
+        <h1>Price comparison</h1>
+        <p className="muted">
+          Matched OCR query: <strong>{query || 'produce'}</strong>
+          {searchParams.x && searchParams.y ? <span> from flyer point ({searchParams.x}, {searchParams.y})</span> : null}
+        </p>
+      </section>
+      <div className="comparisonGrid" aria-label="Produce price comparison">
+        {results.map((result, index) => {
           const isLowest = result.price_value === lowestPrice;
           return (
-            <details className={`tableRow ${isLowest ? 'lowestPrice' : ''}`} key={result.id} role="row">
-              <summary>
-                <span>{result.store_name}</span>
-                <span>{result.product.name}</span>
-                <strong>${result.price_value.toFixed(2)}</strong>
-                <span>{result.price_unit}</span>
-              </summary>
-              <div className="resultDetails">
-                <p><strong>{result.product.name}</strong> is a {result.product.category} at {result.store_name}.</p>
-                <Link href={result.flyer_image_url} target="_blank">Open source flyer image</Link>
+            <article className={`dealCard ${isLowest ? 'bestDeal' : ''}`} key={result.id} style={{ animationDelay: `${index * 70}ms` }}>
+              {isLowest && <span className="bestDealBadge">Best Deal</span>}
+              <div className="productImageWrap">
+                {result.product.image_url ? <Image src={result.product.image_url} alt={result.product.name} width={112} height={112} /> : <span>{result.product.name[0]}</span>}
               </div>
-            </details>
+              <div className="dealInfo">
+                <div className="storeLine"><span className="storeLogo">{logoForStore(result.store_name)}</span>{result.store_name}</div>
+                <h2>{result.product.name}</h2>
+                <p className="muted">{result.product.category} • source weekly flyer</p>
+              </div>
+              <div className="priceBlock">
+                <strong>${result.price_value.toFixed(2)}</strong>
+                <span>/{result.price_unit}</span>
+                <Link href={result.flyer_image_url} target="_blank">Open flyer</Link>
+              </div>
+            </article>
           );
         })}
         {!results.length && <p className="emptyState">No fruit or vegetable matches found. Try tapping directly on a clearer item name or price block.</p>}
