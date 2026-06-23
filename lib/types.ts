@@ -25,11 +25,19 @@ export type FlyerProduct = {
   flyerId: string;
   pageNumber: number;
   bbox: BoundingBox;
+  confidence?: number;
+  source?: 'manual' | 'ocr' | 'ai-detected' | 'mock';
 };
+
+export type FlyerSourceType = 'real-image' | 'real-pdf-page' | 'mock-svg';
 
 export type FlyerPage = {
   pageNumber: number;
   imageUrl: string;
+  realImageUrl?: string;
+  sourceType: FlyerSourceType;
+  sourceName?: string;
+  sourceUrl?: string;
   width: number;
   height: number;
   products: FlyerProduct[];
