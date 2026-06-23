@@ -45,6 +45,13 @@ export function FlyerClient({ flyer, initialPage, initialItemId }: { flyer: Flye
     window.setTimeout(() => transformToProduct(product), 40);
   }
 
+  function changePage(nextPage: number) {
+    const boundedPage = Math.min(flyer.pages.length, Math.max(1, nextPage));
+    setPageNumber(boundedPage);
+    setActiveProductId(undefined);
+    zoomRef.current?.resetTransform(250, 'easeOut');
+  }
+
   useEffect(() => {
     if (!pendingFocus || pendingFocus.pageNumber !== page.pageNumber) return;
     const product = page.products.find((candidate) => candidate.id === pendingFocus.productId);
@@ -78,10 +85,24 @@ export function FlyerClient({ flyer, initialPage, initialItemId }: { flyer: Flye
             ))}
           </div>
         ) : null}
+        <div className="pageStrip" aria-label="Flyer page thumbnails">
+          {flyer.pages.map((candidatePage) => (
+            <button
+              key={candidatePage.pageNumber}
+              type="button"
+              className={candidatePage.pageNumber === page.pageNumber ? 'selected' : ''}
+              onClick={() => changePage(candidatePage.pageNumber)}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={candidatePage.imageUrl} alt="" />
+              <span>Page {candidatePage.pageNumber}</span>
+            </button>
+          ))}
+        </div>
         <div className="pageControls">
-          <button type="button" disabled={page.pageNumber === 1} onClick={() => { setPageNumber(page.pageNumber - 1); setActiveProductId(undefined); }}>Previous page</button>
+          <button type="button" disabled={page.pageNumber === 1} onClick={() => changePage(page.pageNumber - 1)}>Previous page</button>
           <span>Page {page.pageNumber} of {flyer.pages.length}</span>
-          <button type="button" disabled={page.pageNumber === flyer.pages.length} onClick={() => { setPageNumber(page.pageNumber + 1); setActiveProductId(undefined); }}>Next page</button>
+          <button type="button" disabled={page.pageNumber === flyer.pages.length} onClick={() => changePage(page.pageNumber + 1)}>Next page</button>
         </div>
       </aside>
 

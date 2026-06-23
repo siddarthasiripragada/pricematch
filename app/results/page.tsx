@@ -3,7 +3,13 @@ import { searchFlyerItems, formatDateRange } from '@/lib/search';
 
 export default function ResultsPage({ searchParams }: { searchParams: { q?: string } }) {
   const query = searchParams.q ?? '';
-  const results = searchFlyerItems(query).sort((a, b) => a.product.price - b.product.price);
+  const results = Object.values(
+    searchFlyerItems(query).reduce<Record<string, ReturnType<typeof searchFlyerItems>[number]>>((lowestByFlyer, match) => {
+      const current = lowestByFlyer[match.flyer.id];
+      if (!current || match.product.price < current.product.price) lowestByFlyer[match.flyer.id] = match;
+      return lowestByFlyer;
+    }, {})
+  ).sort((a, b) => a.product.price - b.product.price);
 
   return (
     <main className="appShell">
@@ -20,6 +26,11 @@ export default function ResultsPage({ searchParams }: { searchParams: { q?: stri
         </form>
       </section>
       <section className="comparisonGrid">
+        {query && results.length ? (
+          <p className="comparisonIntro">
+            Lowest matching deal per flyer, sorted by price. Open any result to jump straight to the mapped product box in the flyer image.
+          </p>
+        ) : null}
         {results.map(({ flyer, page, product }) => (
           <article key={product.id} className="dealCard">
             <div>
