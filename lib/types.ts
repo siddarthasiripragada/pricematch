@@ -14,37 +14,41 @@ export type BoundingBox = {
   height: number;
 };
 
-export type FlyerItem = {
+export type FlyerProduct = {
   id: string;
   name: string;
-  brand: string;
-  price: number;
-  unit: string;
+  brand?: string;
   category: string;
+  price: number;
+  unit?: string;
+  store: string;
+  flyerId: string;
+  pageNumber: number;
   bbox: BoundingBox;
 };
 
-export type FlyerPageData = {
+export type FlyerPage = {
   pageNumber: number;
   imageUrl: string;
   width: number;
   height: number;
-  items: FlyerItem[];
+  products: FlyerProduct[];
 };
 
 export type Flyer = {
+  id: string;
   store: string;
   storeKey: StoreKey;
-  flyerId: string;
   title: string;
   validFrom: string;
   validTo: string;
-  thumbnailUrl: string;
-  pages: FlyerPageData[];
+  coverImageUrl: string;
+  logoText: string;
+  pages: FlyerPage[];
 };
 
 export type FlyerSearchMatch = {
   flyer: Flyer;
-  page: FlyerPageData;
-  item: FlyerItem;
+  page: FlyerPage;
+  product: FlyerProduct;
 };
