@@ -21,6 +21,7 @@ export type Flyer = {
   storeName: string;
   imageUrl: string;
   thumbnailUrl: string;
+  logo: string;
 };
 
 export type SearchResult = Price & {

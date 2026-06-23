@@ -11,7 +11,7 @@ export default function FlyerPage({ params }: { params: { id: string } }) {
     <main className="viewerShell">
       <header className="viewerTopbar">
         <Link href="/">← Flyers</Link>
-        <strong>{flyer.storeName}</strong>
+        <div className="viewerBrand"><span>{flyer.logo}</span><strong>{flyer.storeName}</strong></div>
       </header>
       <FlyerClient flyer={flyer} />
     </main>
