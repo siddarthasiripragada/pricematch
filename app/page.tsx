@@ -7,14 +7,22 @@ const produceChips = ['Apples', 'Avocados', 'Tomatoes', 'Lettuce'];
 export default function Home() {
   return (
     <main className="homeShell">
+      <header className="siteHeader">
+        <Link href="/" className="freshLogo" aria-label="PriceMatch FreshCo-style home">PRICE<span>MATCH</span></Link>
+        <nav aria-label="Primary navigation" className="siteNav">
+          <Link href="/">Flyers</Link>
+          <Link href="/results?q=produce">Deals</Link>
+          <Link href={`/flyers/${flyers[0].id}`}>Scan</Link>
+        </nav>
+      </header>
       <section className="hero">
         <div className="heroCopy">
-          <p className="eyebrow">Premium flyer price matching</p>
-          <h1>Find the Lowest Grocery Prices Instantly</h1>
-          <p className="heroSubtext">Tap any flyer item → OCR → Compare prices across stores</p>
+          <p className="eyebrow">FRESH DEALS • PRICE MATCH</p>
+          <h1>Flyer prices, loud and clear.</h1>
+          <p className="heroSubtext">Tap any item on a flyer, scan it with OCR, and compare FreshCo-style price tags sorted lowest first.</p>
           <div className="heroActions" aria-label="Primary actions">
-            <Link className="button primaryButton" href={`/flyers/${flyers[0].id}`}>Open flyer scanner</Link>
-            <Link className="button ghostButton" href="/results?q=apples">Compare apples</Link>
+            <Link className="button primaryButton" href={`/flyers/${flyers[0].id}`}>SCAN A FLYER</Link>
+            <Link className="button ghostButton" href="/results?q=apples">COMPARE APPLES</Link>
           </div>
           <div className="produceChips" aria-label="Popular produce searches">
             {produceChips.map((chip) => <span key={chip}>{chip}</span>)}
@@ -33,8 +41,8 @@ export default function Home() {
       </section>
 
       <section className="sectionHeader">
-        <p className="eyebrow">Weekly flyers</p>
-        <h2>Choose a store and tap produce to compare.</h2>
+        <p className="eyebrow">WEEKLY FLYERS</p>
+        <h2>Choose a flyer. Tap a product. Find the lowest price.</h2>
       </section>
       <section className="flyerGrid" aria-label="Available store flyers">
         {flyers.map((flyer, index) => (

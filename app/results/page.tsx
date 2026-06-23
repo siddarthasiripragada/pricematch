@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { flyers } from '@/data/mock-data';
 import { searchProducts } from '@/lib/search';
+import { PriceTag } from '@/components/PriceTag';
 
 const logoForStore = (storeName: string) => flyers.find((flyer) => flyer.storeName === storeName)?.logo ?? storeName.slice(0, 2).toUpperCase();
 
@@ -26,7 +27,6 @@ export default async function ResultsPage({ searchParams }: { searchParams: { q?
           const isLowest = result.price_value === lowestPrice;
           return (
             <article className={`dealCard ${isLowest ? 'bestDeal' : ''}`} key={result.id} style={{ animationDelay: `${index * 70}ms` }}>
-              {isLowest && <span className="bestDealBadge">Best Deal</span>}
               <div className="productImageWrap">
                 {result.product.image_url ? <Image src={result.product.image_url} alt={result.product.name} width={112} height={112} /> : <span>{result.product.name[0]}</span>}
               </div>
@@ -35,11 +35,7 @@ export default async function ResultsPage({ searchParams }: { searchParams: { q?
                 <h2>{result.product.name}</h2>
                 <p className="muted">{result.product.category} • source weekly flyer</p>
               </div>
-              <div className="priceBlock">
-                <strong>${result.price_value.toFixed(2)}</strong>
-                <span>/{result.price_unit}</span>
-                <Link href={result.flyer_image_url} target="_blank">Open flyer</Link>
-              </div>
+              <PriceTag price={result.price_value} unit={result.price_unit} label={result.store_name} href={result.flyer_image_url} lowest={isLowest} className="dealPriceTag" />
             </article>
           );
         })}

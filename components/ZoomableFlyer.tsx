@@ -23,11 +23,37 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const activePointers = useRef(new Map<number, { x: number; y: number }>());
   const pinchStart = useRef<{ distance: number; transform: Transform } | null>(null);
+  const velocity = useRef({ x: 0, y: 0, time: 0 });
+  const inertiaFrame = useRef<number | null>(null);
   const [isSelecting, setIsSelecting] = useState(false);
   const [tapMarker, setTapMarker] = useState<TapMarker>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, x: 0, y: 0 });
 
+  const stopInertia = useCallback(() => {
+    if (inertiaFrame.current) window.cancelAnimationFrame(inertiaFrame.current);
+    inertiaFrame.current = null;
+  }, []);
+
+  const startInertia = useCallback(() => {
+    if (transform.scale <= 1) return;
+    let vx = velocity.current.x;
+    let vy = velocity.current.y;
+    const step = () => {
+      vx *= 0.92;
+      vy *= 0.92;
+      if (Math.abs(vx) < 0.08 && Math.abs(vy) < 0.08) {
+        inertiaFrame.current = null;
+        return;
+      }
+      setTransform((current) => ({ ...current, x: current.x + vx, y: current.y + vy }));
+      inertiaFrame.current = window.requestAnimationFrame(step);
+    };
+    stopInertia();
+    inertiaFrame.current = window.requestAnimationFrame(step);
+  }, [stopInertia, transform.scale]);
+
   const updateScale = useCallback((nextScale: number, centerX = window.innerWidth / 2, centerY = window.innerHeight / 2) => {
+    stopInertia();
     setTransform((current) => {
       const scale = clamp(nextScale, MIN_SCALE, MAX_SCALE);
       const ratio = scale / current.scale;
@@ -37,7 +63,7 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
         y: scale === 1 ? 0 : centerY - (centerY - current.y) * ratio
       };
     });
-  }, []);
+  }, [stopInertia]);
 
   const cropRegion = useCallback(async (clientX: number, clientY: number) => {
     const image = imageRef.current;
@@ -73,9 +99,11 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
 
   function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
+    stopInertia();
     event.currentTarget.setPointerCapture(event.pointerId);
     activePointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     pointerStart.current = { x: event.clientX, y: event.clientY };
+    velocity.current = { x: 0, y: 0, time: performance.now() };
 
     if (activePointers.current.size === 2) {
       const points = Array.from(activePointers.current.values());
@@ -96,7 +124,12 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
     }
 
     if (transform.scale > 1) {
-      setTransform((current) => ({ ...current, x: current.x + event.clientX - previous.x, y: current.y + event.clientY - previous.y }));
+      const now = performance.now();
+      const elapsed = Math.max(now - velocity.current.time, 16);
+      const dx = event.clientX - previous.x;
+      const dy = event.clientY - previous.y;
+      velocity.current = { x: (dx / elapsed) * 16, y: (dy / elapsed) * 16, time: now };
+      setTransform((current) => ({ ...current, x: current.x + dx, y: current.y + dy }));
     }
   }
 
@@ -108,7 +141,10 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
     if (!start || activePointers.current.size > 0) return;
 
     const moved = Math.hypot(event.clientX - start.x, event.clientY - start.y);
-    if (moved > TAP_MOVE_TOLERANCE) return;
+    if (moved > TAP_MOVE_TOLERANCE) {
+      startInertia();
+      return;
+    }
 
     const now = Date.now();
     const previousTap = lastTap.current;
@@ -136,7 +172,7 @@ export function ZoomableFlyer({ src, alt, onRegionSelected }: Props) {
     <div className="viewer" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp} onWheel={handleWheel}>
       <div className="transformWrapper">
         <div className="transformContent" style={{ transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(${transform.scale})` }}>
-          <img id="flyer-image" ref={imageRef} className="flyerImageElement" src={src} alt={alt} crossOrigin="anonymous" decoding="async" draggable={false} />
+          <img id="flyer-image" ref={imageRef} className="flyerImageElement" src={src} alt={alt} crossOrigin="anonymous" decoding="async" loading="lazy" draggable={false} />
         </div>
       </div>
       <div className="floatingToolbar" aria-label="Flyer zoom controls">
