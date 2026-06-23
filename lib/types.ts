@@ -1,29 +1,50 @@
-export type ProductCategory = 'vegetable' | 'fruit';
+export type StoreKey =
+  | 'walmart'
+  | 'freshco'
+  | 'real-canadian-superstore'
+  | 'loblaws'
+  | 'no-frills'
+  | 'metro'
+  | 'costco';
 
-export type Product = {
-  id: string;
-  name: string;
-  category: ProductCategory;
-  image_url?: string | null;
+export type BoundingBox = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 };
 
-export type Price = {
+export type FlyerItem = {
   id: string;
-  product_id: string;
-  store_name: string;
-  price_value: number;
-  price_unit: 'per lb' | 'per kg' | 'per item' | string;
-  flyer_image_url: string;
+  name: string;
+  brand: string;
+  price: number;
+  unit: string;
+  category: string;
+  bbox: BoundingBox;
+};
+
+export type FlyerPageData = {
+  pageNumber: number;
+  imageUrl: string;
+  width: number;
+  height: number;
+  items: FlyerItem[];
 };
 
 export type Flyer = {
-  id: string;
-  storeName: string;
-  imageUrl: string;
+  store: string;
+  storeKey: StoreKey;
+  flyerId: string;
+  title: string;
+  validFrom: string;
+  validTo: string;
   thumbnailUrl: string;
-  logo: string;
+  pages: FlyerPageData[];
 };
 
-export type SearchResult = Price & {
-  product: Product;
+export type FlyerSearchMatch = {
+  flyer: Flyer;
+  page: FlyerPageData;
+  item: FlyerItem;
 };
