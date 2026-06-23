@@ -1,4 +1,4 @@
-import type { Flyer, FlyerProduct, FlyerSearchMatch } from '@/lib/types';
+import type { Flyer, FlyerProduct, FlyerSearchMatch, FlyerPage } from '@/lib/types';
 
 const baseItems: Array<Omit<FlyerProduct, 'id' | 'bbox' | 'store' | 'flyerId' | 'pageNumber'> & { key: string }> = [
   { key: 'milk', name: 'Milk', brand: 'Neilson', price: 4.99, unit: '4L', category: 'Dairy' },
@@ -28,6 +28,23 @@ const storeData = [
   ['Costco', 'costco', 'Warehouse grocery values', [12.49, 8.99, 6.99, 24.99, 6.49, 9.99]]
 ] as const;
 
+const availableRealFlyerImages = new Set<string>([
+  // Add licensed/user-provided images here, for example:
+  // '/real-flyers/walmart/page-1.jpg'
+]);
+
+function pageImage(storeKey: string, pageNumber: number): Pick<FlyerPage, 'imageUrl' | 'realImageUrl' | 'sourceType' | 'sourceName'> {
+  const realPath = `/real-flyers/${storeKey}/page-${pageNumber}.jpg`;
+  const mockPath = `/flyers/${storeKey}/page-${pageNumber}.svg`;
+  const hasRealImage = availableRealFlyerImages.has(realPath);
+  return {
+    imageUrl: hasRealImage ? realPath : mockPath,
+    realImageUrl: hasRealImage ? realPath : undefined,
+    sourceType: hasRealImage ? 'real-image' : 'mock-svg',
+    sourceName: hasRealImage ? 'User-provided or licensed flyer image' : 'Demo flyer SVG'
+  };
+}
+
 export const flyers: Flyer[] = storeData.map(([store, storeKey, title, prices]) => ({
   store,
   storeKey,
@@ -35,11 +52,11 @@ export const flyers: Flyer[] = storeData.map(([store, storeKey, title, prices]) 
   title,
   validFrom: '2026-06-23',
   validTo: '2026-06-29',
-  coverImageUrl: `/flyers/${storeKey}/page-1.svg`,
+  coverImageUrl: pageImage(storeKey, 1).imageUrl,
   logoText: store.split(' ').map((word) => word[0]).join('').slice(0, 3),
   pages: [1, 2].map((pageNumber) => ({
     pageNumber,
-    imageUrl: `/flyers/${storeKey}/page-${pageNumber}.svg`,
+    ...pageImage(storeKey, pageNumber),
     width: 960,
     height: 720,
     products: baseItems.map((item, index) => ({
@@ -49,7 +66,9 @@ export const flyers: Flyer[] = storeData.map(([store, storeKey, title, prices]) 
       flyerId: `${storeKey}-weekly-2026-06-23`,
       pageNumber,
       price: Number((prices[index] + (pageNumber === 2 ? 0.5 : 0)).toFixed(2)),
-      bbox: boxes[index]
+      bbox: boxes[index],
+      confidence: 0.95,
+      source: 'mock'
     }))
   }))
 }));

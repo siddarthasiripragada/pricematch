@@ -1,10 +1,15 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { findFlyer } from '@/data/mock-data';
+import { findFlyer, flyers } from '@/data/mock-data';
 import { formatDateRange } from '@/lib/search';
 import { FlyerClient } from './viewer-client';
 
-export default function FlyerPage({ params, searchParams }: { params: { id: string }; searchParams: { page?: string; item?: string } }) {
+export function generateStaticParams() {
+  return flyers.map((flyer) => ({ id: flyer.id }));
+}
+
+export default function FlyerPage({ params }: { params: { id: string } }) {
   const flyer = findFlyer(params.id);
   if (!flyer) notFound();
 
@@ -18,7 +23,7 @@ export default function FlyerPage({ params, searchParams }: { params: { id: stri
         </div>
         <Link href="/results?q=milk">Compare</Link>
       </header>
-      <FlyerClient flyer={flyer} initialPage={Number(searchParams.page ?? 1)} initialItemId={searchParams.item} />
+      <Suspense fallback={<div className="emptyState">Loading flyer viewer…</div>}><FlyerClient flyer={flyer} allFlyers={flyers} /></Suspense>
     </main>
   );
 }
