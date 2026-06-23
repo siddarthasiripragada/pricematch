@@ -1,19 +1,24 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { findFlyer } from '@/data/mock-data';
+import { formatDateRange } from '@/lib/search';
 import { FlyerClient } from './viewer-client';
-import { flyers } from '@/data/mock-data';
 
-export default function FlyerPage({ params }: { params: { id: string } }) {
-  const flyer = flyers.find((item) => item.id === params.id);
+export default function FlyerPage({ params, searchParams }: { params: { id: string }; searchParams: { page?: string; item?: string } }) {
+  const flyer = findFlyer(params.id);
   if (!flyer) notFound();
 
   return (
     <main className="viewerShell">
       <header className="viewerTopbar">
         <Link href="/">← Flyers</Link>
-        <div className="viewerBrand"><span>{flyer.logo}</span><strong>{flyer.storeName}</strong></div>
+        <div>
+          <strong>{flyer.store}</strong>
+          <span>{flyer.title} • {formatDateRange(flyer.validFrom, flyer.validTo)}</span>
+        </div>
+        <Link href="/results?q=milk">Compare</Link>
       </header>
-      <FlyerClient flyer={flyer} />
+      <FlyerClient flyer={flyer} initialPage={Number(searchParams.page ?? 1)} initialItemId={searchParams.item} />
     </main>
   );
 }

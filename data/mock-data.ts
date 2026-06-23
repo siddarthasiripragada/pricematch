@@ -1,51 +1,62 @@
-import type { Flyer, Price, Product } from '@/lib/types';
+import type { Flyer, FlyerItem, FlyerSearchMatch } from '@/lib/types';
 
-export const flyers: Flyer[] = [
-  {
-    id: 'fresh-market-weekly',
-    storeName: 'Fresh Market',
-    logo: 'FM',
-    imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=2200&q=92',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=78'
-  },
-  {
-    id: 'green-grocer-deals',
-    storeName: 'Green Grocer',
-    logo: 'GG',
-    imageUrl: 'https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=2200&q=92',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=700&q=78'
-  },
-  {
-    id: 'city-produce-flyer',
-    storeName: 'City Produce',
-    logo: 'CP',
-    imageUrl: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=2200&q=92',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=700&q=78'
-  }
+const baseItems: Array<Omit<FlyerItem, 'id' | 'bbox'> & { key: string }> = [
+  { key: 'milk', name: 'Milk', brand: 'Neilson', price: 4.99, unit: '4L', category: 'Dairy' },
+  { key: 'eggs', name: 'Large Eggs', brand: 'Burnbrae', price: 3.49, unit: '12 pack', category: 'Dairy' },
+  { key: 'bread', name: 'Whole Wheat Bread', brand: 'Dempster\'s', price: 2.99, unit: '675g', category: 'Bakery' },
+  { key: 'chicken', name: 'Chicken Breast', brand: 'Maple Leaf', price: 5.99, unit: 'per lb', category: 'Meat' },
+  { key: 'apples', name: 'Gala Apples', brand: 'Fresh', price: 1.49, unit: 'per lb', category: 'Produce' },
+  { key: 'cereal', name: 'Cereal', brand: 'Cheerios', price: 4.49, unit: '430g', category: 'Pantry' }
 ];
 
-export const products: Product[] = [
-  { id: 'apple', name: 'Apples', category: 'fruit', image_url: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=320&q=80' },
-  { id: 'banana', name: 'Bananas', category: 'fruit', image_url: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=320&q=80' },
-  { id: 'tomato', name: 'Tomatoes', category: 'vegetable', image_url: 'https://images.unsplash.com/photo-1546470427-e5ac89f5c508?auto=format&fit=crop&w=320&q=80' },
-  { id: 'lettuce', name: 'Romaine Lettuce', category: 'vegetable', image_url: 'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=320&q=80' },
-  { id: 'carrot', name: 'Carrots', category: 'vegetable', image_url: 'https://images.unsplash.com/photo-1447175008436-054170c2e979?auto=format&fit=crop&w=320&q=80' },
-  { id: 'strawberry', name: 'Strawberries', category: 'fruit', image_url: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=320&q=80' },
-  { id: 'avocado', name: 'Avocados', category: 'fruit', image_url: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=320&q=80' },
-  { id: 'pepper', name: 'Bell Peppers', category: 'vegetable', image_url: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=320&q=80' }
+const boxes = [
+  { x: 70, y: 210, width: 250, height: 170 },
+  { x: 350, y: 210, width: 250, height: 170 },
+  { x: 630, y: 210, width: 250, height: 170 },
+  { x: 70, y: 430, width: 250, height: 170 },
+  { x: 350, y: 430, width: 250, height: 170 },
+  { x: 630, y: 430, width: 250, height: 170 }
 ];
 
-export const prices: Price[] = [
-  { id: 'p1', product_id: 'apple', store_name: 'Fresh Market', price_value: 1.49, price_unit: 'lb', flyer_image_url: flyers[0].imageUrl },
-  { id: 'p2', product_id: 'apple', store_name: 'Green Grocer', price_value: 1.29, price_unit: 'lb', flyer_image_url: flyers[1].imageUrl },
-  { id: 'p3', product_id: 'banana', store_name: 'Fresh Market', price_value: 0.59, price_unit: 'lb', flyer_image_url: flyers[0].imageUrl },
-  { id: 'p4', product_id: 'banana', store_name: 'City Produce', price_value: 0.49, price_unit: 'lb', flyer_image_url: flyers[2].imageUrl },
-  { id: 'p5', product_id: 'tomato', store_name: 'Green Grocer', price_value: 2.29, price_unit: 'lb', flyer_image_url: flyers[1].imageUrl },
-  { id: 'p6', product_id: 'tomato', store_name: 'City Produce', price_value: 1.99, price_unit: 'lb', flyer_image_url: flyers[2].imageUrl },
-  { id: 'p7', product_id: 'lettuce', store_name: 'Fresh Market', price_value: 1.79, price_unit: 'each', flyer_image_url: flyers[0].imageUrl },
-  { id: 'p8', product_id: 'carrot', store_name: 'Green Grocer', price_value: 1.19, price_unit: 'lb', flyer_image_url: flyers[1].imageUrl },
-  { id: 'p9', product_id: 'strawberry', store_name: 'City Produce', price_value: 3.99, price_unit: 'each', flyer_image_url: flyers[2].imageUrl },
-  { id: 'p10', product_id: 'avocado', store_name: 'Fresh Market', price_value: 0.99, price_unit: 'each', flyer_image_url: flyers[0].imageUrl },
-  { id: 'p11', product_id: 'pepper', store_name: 'Green Grocer', price_value: 1.49, price_unit: 'each', flyer_image_url: flyers[1].imageUrl },
-  { id: 'p12', product_id: 'carrot', store_name: 'City Produce', price_value: 1.09, price_unit: 'lb', flyer_image_url: flyers[2].imageUrl }
-];
+const storeData = [
+  ['Walmart', 'walmart', 'Rollback grocery deals', [4.99, 3.49, 2.47, 5.97, 1.67, 3.97]],
+  ['FreshCo', 'freshco', 'FreshCo lowest price flyer', [4.88, 3.29, 2.49, 5.49, 1.49, 4.29]],
+  ['Real Canadian Superstore', 'real-canadian-superstore', 'PC Optimum weekly offers', [5.29, 3.79, 2.79, 5.99, 1.39, 4.99]],
+  ['Loblaws', 'loblaws', 'Market fresh weekly flyer', [5.49, 3.99, 3.29, 6.49, 1.99, 5.49]],
+  ['No Frills', 'no-frills', 'Won’t be beat flyer', [4.79, 3.19, 2.29, 5.29, 1.29, 3.99]],
+  ['Metro', 'metro', 'Metro weekly savings', [5.19, 3.69, 2.99, 6.29, 1.79, 4.79]],
+  ['Costco', 'costco', 'Warehouse grocery values', [12.49, 8.99, 6.99, 24.99, 6.49, 9.99]]
+] as const;
+
+export const flyers: Flyer[] = storeData.map(([store, storeKey, title, prices]) => ({
+  store,
+  storeKey,
+  flyerId: `${storeKey}-weekly-2026-06-23`,
+  title,
+  validFrom: '2026-06-23',
+  validTo: '2026-06-29',
+  thumbnailUrl: `/flyers/${storeKey}/page-1.svg`,
+  pages: [1, 2].map((pageNumber) => ({
+    pageNumber,
+    imageUrl: `/flyers/${storeKey}/page-${pageNumber}.svg`,
+    width: 960,
+    height: 720,
+    items: baseItems.map((item, index) => ({
+      ...item,
+      id: `${storeKey}-${pageNumber}-${item.key}`,
+      price: Number((prices[index] + (pageNumber === 2 ? 0.5 : 0)).toFixed(2)),
+      bbox: boxes[index]
+    }))
+  }))
+}));
+
+export function findFlyer(flyerId: string) {
+  return flyers.find((flyer) => flyer.flyerId === flyerId);
+}
+
+export function findItem(flyerId: string, pageNumber: number, itemId: string): FlyerSearchMatch | undefined {
+  const flyer = findFlyer(flyerId);
+  const page = flyer?.pages.find((candidate) => candidate.pageNumber === pageNumber);
+  const item = page?.items.find((candidate) => candidate.id === itemId);
+  return flyer && page && item ? { flyer, page, item } : undefined;
+}
