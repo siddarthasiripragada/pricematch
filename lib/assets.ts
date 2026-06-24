@@ -19,13 +19,3 @@ export function getAssetPath(path: string): string {
 
   return isGitHubPages ? `${GITHUB_PAGES_BASE_PATH}${cleaned}` : cleaned;
 }
-
-
-export function getRoutePath(path: string): string {
-  const cleaned = cleanPath(path);
-  if (/^(https?:|data:|blob:)/.test(cleaned)) return cleaned;
-  if (cleaned === GITHUB_PAGES_BASE_PATH || cleaned.startsWith(`${GITHUB_PAGES_BASE_PATH}/`)) return cleaned;
-
-  const isGitHubPages = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GITHUB_PAGES !== 'false';
-  return isGitHubPages ? `${GITHUB_PAGES_BASE_PATH}${cleaned}` : cleaned;
-}
