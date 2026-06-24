@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { flyers } from '@/data/mock-data';
 import { formatDateRange } from '@/lib/search';
-import { getAssetPath, getRoutePath } from '@/lib/assets';
+import { getAssetPath } from '@/lib/assets';
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
       <section className="heroPanel">
         <p className="eyebrow">Canadian grocery flyer browser</p>
         <h1>Browse flyers, search products, jump to the exact deal.</h1>
-        <form action={getRoutePath('/results')} className="heroSearch">
+        <form action="/results" className="heroSearch">
           <input name="q" placeholder="Compare milk, eggs, chicken…" aria-label="Search all flyers" />
           <button type="submit">Compare</button>
         </form>
